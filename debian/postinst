@@ -9,14 +9,14 @@
 
 set -e
 
-NAME=killer-e3100u
+NAME=killer-e3100
 PACKAGE_NAME=$NAME-dkms
 DEB_NAME=$(echo $PACKAGE_NAME | sed 's,_,-,')
 CVERSION=`dpkg-query -W -f='${Version}' $DEB_NAME | awk -F "-" '{print $1}' | cut -d\: -f2`
 ARCH=`dpkg --print-architecture`
 
 msg() {
-	echo "killer-e3100u-dkms: $@"
+	echo "killer-e3100-dkms: $@"
 }
 
 dkms_configure () {
@@ -36,7 +36,7 @@ dkms_configure () {
 
 udev_configure() {
 	msg "Installing udev rules to prevent from loading built-in old driver..."
-	cp -f /tmp/killer-e3100u-dkms/rules.d/50-usb-killer-net.rules /etc/udev/rules.d/
+	cp -f /tmp/killer-e3100-dkms/rules.d/50-usb-killer-net.rules /etc/udev/rules.d/
 
 	msg "Reload udev..."
 	[ -x "$(command -v udevadm)" ] \
@@ -44,7 +44,7 @@ udev_configure() {
 		|| msg "udevadm not found. Please reboot to take effect."
 
 	msg "Remove temporary files..."
-	rm -rf /tmp/killer-e3100u-driver
+	rm -rf /tmp/killer-e3100-driver
 }
 
 case "$1" in

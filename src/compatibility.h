@@ -10,9 +10,9 @@
 #include <linux/in.h>
 #include <linux/acpi.h>
 
-#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
+#if defined(E3100_S5_WOL) && defined(CONFIG_PM)
 #include <linux/reboot.h>
-#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(E3100_S5_WOL) && defined(CONFIG_PM) */
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
 	#include <linux/mdio.h>

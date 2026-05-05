@@ -5,7 +5,7 @@
 CONFIG_CTAP_SHORT = ON
 
 ifneq ($(KERNELRELEASE),)
-	obj-m	 := e3100u.o
+	obj-m	 := e3100.o
 
 	ifneq (,$(filter OFF off, $(CONFIG_CTAP_SHORT)))
 		ccflags-y += -DCONFIG_CTAP_SHORT_OFF
@@ -21,7 +21,7 @@ else
 	KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 	PWD :=$(shell pwd)
 	TARGET_PATH := kernel/drivers/net/usb
-	INBOXDRIVER := $(shell find $(subst build,$(TARGET_PATH),$(KERNELDIR)) -name e3100u.ko.* -type f)
+	INBOXDRIVER := $(shell find $(subst build,$(TARGET_PATH),$(KERNELDIR)) -name e3100.ko.* -type f)
 	RULEFILE = 50-usb-killer-net.rules
 	RULEDIR = /etc/udev/rules.d/
 
@@ -38,14 +38,14 @@ clean:
 
 .PHONY: install
 install:
-ifneq ($(shell lsmod | grep e3100u),)
-	rmmod e3100u
+ifneq ($(shell lsmod | grep e3100),)
+	rmmod e3100
 endif
 ifneq ($(INBOXDRIVER),)
 	rm -f $(INBOXDRIVER)
 endif
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) INSTALL_MOD_DIR=$(TARGET_PATH) modules_install
-	modprobe e3100u
+	modprobe e3100
 
 .PHONY: install_rules
 install_rules:

@@ -1,4 +1,4 @@
-killer-e3100u-dkms (1.0.0) stable; urgency=medium
+killer-e3100-dkms (1.0.0) stable; urgency=medium
 
   * Initial release with Intel Killer E3100U 1.0.0 driver
 

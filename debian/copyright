@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: killer-e3100u-dkms
+Upstream-Name: killer-e3100-dkms
 Source: https://github.com/AstromanGaming/killer-e3100u-dkms
 
 Files: *

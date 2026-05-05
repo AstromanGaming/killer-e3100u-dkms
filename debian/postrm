@@ -6,7 +6,7 @@
 set -e
 
 msg() {
-	echo "killer-e3100u-dkms: $@"
+	echo "killer-e3100-dkms: $@"
 }
 
 case "$1" in

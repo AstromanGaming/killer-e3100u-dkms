@@ -5,11 +5,11 @@
 
 set -e
 
-NAME=killer-e3100u
+NAME=killer-e3100
 VERSION=1.0.0
 
 msg() {
-	echo "killer-e3100u-dkms: $@"
+	echo "killer-e3100-dkms: $@"
 }
 
 case "$1" in

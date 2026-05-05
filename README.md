@@ -31,7 +31,7 @@ Download the latest Debian package from the Release tab on the Github repository
 Then enter the following command.
 
 ```bash
-sudo dpkg -i killer-e3100u-dkms-*.deb
+sudo dpkg -i killer-e3100-dkms-*.deb
 ```
 
 If dependency error occurs, try to fix that with `apt` command.

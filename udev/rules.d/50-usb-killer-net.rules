@@ -7,7 +7,7 @@ ENV{DEVTYPE}!="usb_device", GOTO="usb_killer_net_end"
 # Modify this to change the default value
 ENV{KILLER_MODE1}="1"
 
-# Intel/Rivet
+# Rivet
 ATTR{idVendor}=="1a56", ATTR{idProduct}=="3100", ATTR{bConfigurationValue}!="$env{KILLER_MODE1}", ATTR{bConfigurationValue}="$env{KILLER_MODE1}"
 
 LABEL="usb_killer_net_end"

@@ -42,13 +42,13 @@
 #define DRIVER_VERSION "1.0.0"DRIVER_SUFFIX" (2026/5/5)"
 #define DRIVER_AUTHOR "Sam Bélanger <contact@astromangaming.ca>"
 #define DRIVER_DESC "Intel Killer E3100U USB Ethernet Adapter"
-#define MODULENAME "e3100u"
+#define MODULENAME "e3100"
 
 #define PATENTS		"This product is covered by one or more of the " \
 			"following patents:\n" \
 			"\t\tUS6,570,884, US6,115,776, and US6,327,625.\n"
 
-#define e3100u_PHY_ID		32
+#define E3100_PHY_ID		32
 
 #define PLA_IDR			0xc000
 #define PLA_RCR			0xc010
@@ -127,7 +127,7 @@
 #define PLA_BP_6		0xfc34
 #define PLA_BP_7		0xfc36
 #define PLA_BP_EN		0xfc38
-#define PLA_BP_8		0xfc38		/* RTL8153C */
+#define PLA_BP_8		0xfc38		/* RTL8153-OLDC */
 #define PLA_BP_9		0xfc3a
 #define PLA_BP_10		0xfc3c
 #define PLA_BP_11		0xfc3e
@@ -156,12 +156,12 @@
 #define USB_LPM_CONFIG		0xcfd8
 #define USB_EFUSE		0xcfdb
 #define USB_ECM_OPTION		0xcfee
-#define USB_CSTMR		0xcfef	/* RTL8153A */
+#define USB_CSTMR		0xcfef	/* RTL8153-OLDA */
 #define USB_MISC_2		0xcfff
 #define USB_ECM_OP		0xd26b
 #define USB_GPHY_CTRL		0xd284
 #define USB_SPEED_OPTION	0xd32a
-#define USB_FW_CTRL		0xd334	/* RTL8153B */
+#define USB_FW_CTRL		0xd334	/* RTL8153B-OLD */
 #define USB_FC_TIMER		0xd340
 #define USB_OUTSIDE_FW_VER	0xd3cc
 #define USB_USB_CTRL		0xd406
@@ -171,8 +171,8 @@
 #define USB_USB_TIMER		0xd428
 #define USB_RX_EARLY_TIMEOUT	0xd42c
 #define USB_RX_EARLY_SIZE	0xd42e
-#define USB_PM_CTRL_STATUS	0xd432	/* RTL8153A */
-#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
+#define USB_PM_CTRL_STATUS	0xd432	/* RTL8153-OLDA */
+#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B-OLD */
 #define USB_TX_DMA		0xd434
 #define USB_UPT_RXDMA_OWN	0xd437
 #define USB_UPHY3_MDCMDIO	0xd480
@@ -181,7 +181,7 @@
 #define USB_BMU_RESET		0xd4b0
 #define USB_BMU_CONFIG		0xd4b4
 #define USB_U1U2_TIMER		0xd4da
-#define USB_FW_TASK		0xd4e8	/* RTL8153B */
+#define USB_FW_TASK		0xd4e8	/* RTL8153B-OLD */
 #define USB_RX_AGGR_NUM		0xd4ee
 #define USB_ADV_ADDR		0xd5d6
 #define USB_ADV_DATA		0xd5d8
@@ -208,8 +208,8 @@
 #define USB_BP_5		PLA_BP_5
 #define USB_BP_6		PLA_BP_6
 #define USB_BP_7		PLA_BP_7
-#define USB_BP_EN		PLA_BP_EN	/* RTL8153A */
-#define USB_BP_8		0xfc38		/* RTL8153B */
+#define USB_BP_EN		PLA_BP_EN	/* RTL8153-OLDA */
+#define USB_BP_8		0xfc38		/* RTL8153B-OLD */
 #define USB_BP_9		0xfc3a
 #define USB_BP_10		0xfc3c
 #define USB_BP_11		0xfc3e
@@ -631,7 +631,7 @@
 
 /* USB_UPS_CFG */
 #define SAW_CNT_1MS_MASK	0x0fff
-#define MID_REVERSE		BIT(5)	/* KILLER8156A */
+#define MID_REVERSE		BIT(5)	/* RTL8156A */
 
 /* USB_UPS_FLAGS */
 #define UPS_FLAGS_R_TUNE		BIT(0)
@@ -793,20 +793,20 @@ enum killer_register_content {
 #define is_speed_2500(_speed)	(((_speed) & (_2500bps | LINK_STATUS)) == (_2500bps | LINK_STATUS))
 #define is_flow_control(_speed)	(((_speed) & (_tx_flow | _rx_flow)) == (_tx_flow | _rx_flow))
 
-#define E3100U_MAX_TX		4
-#define E3100U_MAX_RX		10
+#define RTE3100_MAX_TX		4
+#define RTE3100_MAX_RX		10
 #define INTBUFSIZE		2
 
-#define E3100U_RX_MAX_PENDING	4096
-#define E3100U_RXFG_HEADSZ	256
-#define E3100U_TXFG_HEADSZ	256
+#define RTE3100_RX_MAX_PENDING	4096
+#define RTE3100_RXFG_HEADSZ	256
+#define RTE3100_TXFG_HEADSZ	256
 
 #define INTR_LINK		0x0004
 
-#define E3100U_REQT_READ	0xc0
-#define E3100U_REQT_WRITE	0x40
-#define E3100U_REQ_GET_REGS	0x05
-#define E3100U_REQ_SET_REGS	0x05
+#define RTE3100_REQT_READ	0xc0
+#define RTE3100_REQT_WRITE	0x40
+#define RTE3100_REQ_GET_REGS	0x05
+#define RTE3100_REQ_SET_REGS	0x05
 
 #define BYTE_EN_DWORD		0xff
 #define BYTE_EN_WORD		0x33
@@ -815,20 +815,20 @@ enum killer_register_content {
 #define BYTE_EN_START_MASK	0x0f
 #define BYTE_EN_END_MASK	0xf0
 
-#define E3100U_RMS		(VLAN_ETH_FRAME_LEN + ETH_FCS_LEN)
-#define RTL8153_RMS		RTL8153_MAX_PACKET
-#define E3100U_TX_TIMEOUT	(5 * HZ)
+#define RTE3100_RMS		(VLAN_ETH_FRAME_LEN + ETH_FCS_LEN)
+#define RTL8153-OLD_RMS		RTL8153-OLD_MAX_PACKET
+#define RTE3100_TX_TIMEOUT	(5 * HZ)
 #define mtu_to_size(m)		((m) + VLAN_ETH_HLEN + ETH_FCS_LEN)
 #define size_to_mtu(s)		((s) - VLAN_ETH_HLEN - ETH_FCS_LEN)
 
 #define KILLER_MAX_SG_NUM		(MAX_SKB_FRAGS + 1)
 
-/* e3100u flags */
-enum e3100u_flags {
-	E3100U_UNPLUG = 0,
-	E3100U_SET_RX_MODE,
+/* rte3100 flags */
+enum rte3100_flags {
+	RTE3100_UNPLUG = 0,
+	RTE3100_SET_RX_MODE,
 	WORK_ENABLE,
-	E3100U_LINK_CHG,
+	RTE3100_LINK_CHG,
 	SELECTIVE_SUSPEND,
 	PHY_RESET,
 	SCHEDULE_TASKLET,
@@ -947,12 +947,12 @@ struct tx_desc_v2 {
 #define TX_SIG			(0x15 << 27)
 };
 
-struct e3100u;
+struct e3100;
 
 struct rx_agg {
 	struct list_head list, info_list;
 	struct urb *urb;
-	struct e3100u *context;
+	struct e3100 *context;
 	struct page *page;
 	void *buffer;
 };
@@ -960,7 +960,7 @@ struct rx_agg {
 struct tx_agg {
 	struct list_head list;
 	struct urb *urb;
-	struct e3100u *context;
+	struct e3100 *context;
 	struct sk_buff_head tx_skb;
 	void *buffer;
 	void *head;
@@ -969,14 +969,14 @@ struct tx_agg {
 	u32 skb_bytes;
 };
 
-struct e3100u {
+struct e3100 {
 	unsigned long flags;
 	struct usb_device *udev;
 	struct napi_struct napi;
 	struct usb_interface *intf;
 	struct net_device *netdev;
 	struct urb *intr_urb;
-	struct tx_agg tx_info[E3100U_MAX_TX];
+	struct tx_agg tx_info[RTE3100_MAX_TX];
 	struct list_head rx_info, rx_used;
 	struct list_head rx_done, tx_free;
 	struct sk_buff_head tx_queue, rx_queue;
@@ -993,28 +993,28 @@ struct e3100u {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 	struct notifier_block pm_notifier;
 #endif
-#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 	struct notifier_block reboot_notifier;
-#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 	struct tasklet_struct tx_tl;
 
 	struct killer_ops {
-		int (*init)(struct e3100u *tp);
-		int (*enable)(struct e3100u *tp);
-		int (*disable)(struct e3100u *tp);
-		int (*up)(struct e3100u *tp);
-		int (*down)(struct e3100u *tp);
-		void (*unload)(struct e3100u *tp);
+		int (*init)(struct e3100 *tp);
+		int (*enable)(struct e3100 *tp);
+		int (*disable)(struct e3100 *tp);
+		int (*up)(struct e3100 *tp);
+		int (*down)(struct e3100 *tp);
+		void (*unload)(struct e3100 *tp);
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		int (*eee_get)(struct e3100u *tp, struct ethtool_keee *eee);
-		int (*eee_set)(struct e3100u *tp, struct ethtool_keee *eee);
+		int (*eee_get)(struct e3100 *tp, struct ethtool_keee *eee);
+		int (*eee_set)(struct e3100 *tp, struct ethtool_keee *eee);
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		bool (*in_nway)(struct e3100u *tp);
-		void (*hw_phy_cfg)(struct e3100u *tp);
-		int (*autosuspend_en)(struct e3100u *tp, bool enable);
-		int (*change_mtu)(struct e3100u *tp);
-		int (*phy_read)(struct e3100u *tp, u16 addr, u16 *data);
-		int (*phy_write)(struct e3100u *tp, u16 addr, u16 data);
+		bool (*in_nway)(struct e3100 *tp);
+		void (*hw_phy_cfg)(struct e3100 *tp);
+		int (*autosuspend_en)(struct e3100 *tp, bool enable);
+		int (*change_mtu)(struct e3100 *tp);
+		int (*phy_read)(struct e3100 *tp, u16 addr, u16 *data);
+		int (*phy_write)(struct e3100 *tp, u16 addr, u16 data);
 	} killer_ops;
 
 	struct ups_info {
@@ -1036,16 +1036,16 @@ struct e3100u {
 	} ups_info;
 
 	struct desc_info {
-		bool (*vlan_tag)(struct e3100u *tp, void *desc,
+		bool (*vlan_tag)(struct e3100 *tp, void *desc,
 				 struct sk_buff *skb);
-		int (*csum)(struct e3100u *tp, void *desc, struct sk_buff *skb);
-		void (*len)(struct e3100u *tp, void *desc, u32 *len);
+		int (*csum)(struct e3100 *tp, void *desc, struct sk_buff *skb);
+		void (*len)(struct e3100 *tp, void *desc, u32 *len);
 		u8 align;
 		u8 size;
 	} rx_desc, tx_desc;
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	void (*vlan_put_tag)(struct e3100u *tp, void *desc, struct sk_buff *skb);
+	void (*vlan_put_tag)(struct e3100 *tp, void *desc, struct sk_buff *skb);
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0) */
 
 	u64 tx_submit, tx_back;
@@ -1135,7 +1135,7 @@ enum adv_access_type {
 #define KILLER_ADVERTISED_10GT_FULL		BIT(8)
 
 /* Maximum number of multicast addresses to filter (vs. Rx-all-multicast).
- * The KILLER chips use a 64 element hash table based on the Ethernet CRC.
+ * The RTL chips use a 64 element hash table based on the Ethernet CRC.
  */
 static const int multicast_filter_limit = 32;
 static unsigned int agg_buf_sz = 16384;
@@ -1143,7 +1143,7 @@ static unsigned int agg_buf_sz = 16384;
 #define KILLER_LIMITED_TSO_SIZE	(size_to_mtu(agg_buf_sz) - tp->tx_desc.size)
 
 static
-int get_registers(struct e3100u *tp, u16 value, u16 index, u16 size, void *data)
+int get_registers(struct e3100 *tp, u16 value, u16 index, u16 size, void *data)
 {
 	int ret;
 	void *tmp;
@@ -1153,7 +1153,7 @@ int get_registers(struct e3100u *tp, u16 value, u16 index, u16 size, void *data)
 		return -ENOMEM;
 
 	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_in,
-			      E3100U_REQ_GET_REGS, E3100U_REQT_READ,
+			      RTE3100_REQ_GET_REGS, RTE3100_REQT_READ,
 			      value, index, tmp, size, USB_CTRL_GET_TIMEOUT);
 	if (ret < 0)
 		memset(data, 0xff, size);
@@ -1166,7 +1166,7 @@ int get_registers(struct e3100u *tp, u16 value, u16 index, u16 size, void *data)
 }
 
 static
-int set_registers(struct e3100u *tp, u16 value, u16 index, u16 size, void *data)
+int set_registers(struct e3100 *tp, u16 value, u16 index, u16 size, void *data)
 {
 	int ret;
 	void *tmp;
@@ -1176,7 +1176,7 @@ int set_registers(struct e3100u *tp, u16 value, u16 index, u16 size, void *data)
 		return -ENOMEM;
 
 	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_out,
-			      E3100U_REQ_SET_REGS, E3100U_REQT_WRITE,
+			      RTE3100_REQ_SET_REGS, RTE3100_REQT_WRITE,
 			      value, index, tmp, size, USB_CTRL_SET_TIMEOUT);
 
 	kfree(tmp);
@@ -1184,21 +1184,21 @@ int set_registers(struct e3100u *tp, u16 value, u16 index, u16 size, void *data)
 	return ret;
 }
 
-static void killer_set_unplug(struct e3100u *tp)
+static void killer_set_unplug(struct e3100 *tp)
 {
 	if (tp->udev->state == USB_STATE_NOTATTACHED) {
-		set_bit(E3100U_UNPLUG, &tp->flags);
+		set_bit(RTE3100_UNPLUG, &tp->flags);
 		smp_mb__after_atomic();
 	}
 }
 
-static int generic_ocp_read(struct e3100u *tp, u16 index, u16 size,
+static int generic_ocp_read(struct e3100 *tp, u16 index, u16 size,
 			    void *data, u16 type)
 {
 	u16 limit = 64;
 	int ret = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	/* both size and indix must be 4 bytes align */
@@ -1242,14 +1242,14 @@ static int generic_ocp_read(struct e3100u *tp, u16 index, u16 size,
 	return ret;
 }
 
-static int generic_ocp_write(struct e3100u *tp, u16 index, u16 byteen,
+static int generic_ocp_write(struct e3100 *tp, u16 index, u16 byteen,
 			     u16 size, void *data, u16 type)
 {
 	int ret;
 	u16 byteen_start, byteen_end, byen;
 	u16 limit = 512;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	/* both size and indix must be 4 bytes align */
@@ -1327,30 +1327,30 @@ error1:
 }
 
 static inline
-int pla_ocp_read(struct e3100u *tp, u16 index, u16 size, void *data)
+int pla_ocp_read(struct e3100 *tp, u16 index, u16 size, void *data)
 {
 	return generic_ocp_read(tp, index, size, data, MCU_TYPE_PLA);
 }
 
 static inline
-int pla_ocp_write(struct e3100u *tp, u16 index, u16 byteen, u16 size, void *data)
+int pla_ocp_write(struct e3100 *tp, u16 index, u16 byteen, u16 size, void *data)
 {
 	return generic_ocp_write(tp, index, byteen, size, data, MCU_TYPE_PLA);
 }
 
 static inline
-int usb_ocp_read(struct e3100u *tp, u16 index, u16 size, void *data)
+int usb_ocp_read(struct e3100 *tp, u16 index, u16 size, void *data)
 {
 	return generic_ocp_read(tp, index, size, data, MCU_TYPE_USB);
 }
 
 static inline
-int usb_ocp_write(struct e3100u *tp, u16 index, u16 byteen, u16 size, void *data)
+int usb_ocp_write(struct e3100 *tp, u16 index, u16 byteen, u16 size, void *data)
 {
 	return generic_ocp_write(tp, index, byteen, size, data, MCU_TYPE_USB);
 }
 
-static int ocp_read_dword(struct e3100u *tp, u16 type, u16 index, u32 *value)
+static int ocp_read_dword(struct e3100 *tp, u16 type, u16 index, u32 *value)
 {
 	__le32 data;
 	int ret;
@@ -1363,7 +1363,7 @@ static int ocp_read_dword(struct e3100u *tp, u16 type, u16 index, u32 *value)
 	return ret;
 }
 
-static int ocp_write_dword(struct e3100u *tp, u16 type, u16 index, u32 data)
+static int ocp_write_dword(struct e3100 *tp, u16 type, u16 index, u32 data)
 {
 	__le32 tmp = __cpu_to_le32(data);
 	int ret;
@@ -1374,7 +1374,7 @@ static int ocp_write_dword(struct e3100u *tp, u16 type, u16 index, u32 data)
 	return ret;
 }
 
-static int ocp_read_word(struct e3100u *tp, u16 type, u16 index, u32 *value)
+static int ocp_read_word(struct e3100 *tp, u16 type, u16 index, u32 *value)
 {
 	u16 byen = BYTE_EN_WORD;
 	u8 shift = index & 2;
@@ -1397,7 +1397,7 @@ static int ocp_read_word(struct e3100u *tp, u16 type, u16 index, u32 *value)
 	return ret;
 }
 
-static int ocp_write_word(struct e3100u *tp, u16 type, u16 index, u32 data)
+static int ocp_write_word(struct e3100 *tp, u16 type, u16 index, u32 data)
 {
 	u16 byen = BYTE_EN_WORD;
 	u8 shift = index & 2;
@@ -1421,7 +1421,7 @@ static int ocp_write_word(struct e3100u *tp, u16 type, u16 index, u32 data)
 	return ret;
 }
 
-static int ocp_read_byte(struct e3100u *tp, u16 type, u16 index, u32 *value)
+static int ocp_read_byte(struct e3100 *tp, u16 type, u16 index, u32 *value)
 {
 	u8 shift = index & 3;
 	__le32 tmp;
@@ -1442,7 +1442,7 @@ static int ocp_read_byte(struct e3100u *tp, u16 type, u16 index, u32 *value)
 	return ret;
 }
 
-static int ocp_write_byte(struct e3100u *tp, u16 type, u16 index, u32 data)
+static int ocp_write_byte(struct e3100 *tp, u16 type, u16 index, u32 data)
 {
 	u16 byen = BYTE_EN_BYTE;
 	u8 shift = index & 3;
@@ -1466,7 +1466,7 @@ static int ocp_write_byte(struct e3100u *tp, u16 type, u16 index, u32 data)
 	return ret;
 }
 
-static int e3100u_phy_read(struct e3100u *tp, u16 addr, u16 *data)
+static int e3100_phy_read(struct e3100 *tp, u16 addr, u16 *data)
 {
 	u16 ocp_base, ocp_index;
 	u32 ocp_data;
@@ -1491,7 +1491,7 @@ out:
 	return ret;
 }
 
-static int e3100u_phy_write(struct e3100u *tp, u16 addr, u16 data)
+static int e3100_phy_write(struct e3100 *tp, u16 addr, u16 data)
 {
 	u16 ocp_base, ocp_index;
 	int ret;
@@ -1514,22 +1514,22 @@ out:
 	return ret;
 }
 
-static int ocp_reg_read(struct e3100u *tp, u16 addr, u16 *data)
+static int ocp_reg_read(struct e3100 *tp, u16 addr, u16 *data)
 {
 	return tp->killer_ops.phy_read(tp, addr, data);
 }
 
-static int ocp_reg_write(struct e3100u *tp, u16 addr, u16 data)
+static int ocp_reg_write(struct e3100 *tp, u16 addr, u16 data)
 {
 	return tp->killer_ops.phy_write(tp, addr, data);
 }
 
-static int e3100u_mdio_write(struct e3100u *tp, u32 reg_addr, u32 value)
+static int e3100_mdio_write(struct e3100 *tp, u32 reg_addr, u32 value)
 {
 	return ocp_reg_write(tp, OCP_BASE_MII + reg_addr * 2, value);
 }
 
-static int e3100u_mdio_read(struct e3100u *tp, u32 reg_addr)
+static int e3100_mdio_read(struct e3100 *tp, u32 reg_addr)
 {
 	int ret;
 	u16 var;
@@ -1539,7 +1539,7 @@ static int e3100u_mdio_read(struct e3100u *tp, u32 reg_addr)
 	return (ret < 0) ? ret : var;
 }
 
-static int sram_write(struct e3100u *tp, u16 addr, u16 data)
+static int sram_write(struct e3100 *tp, u16 addr, u16 data)
 {
 	int ret;
 
@@ -1553,7 +1553,7 @@ out:
 	return ret;
 }
 
-static int sram_read(struct e3100u *tp, u16 addr, u16 *data)
+static int sram_read(struct e3100 *tp, u16 addr, u16 *data)
 {
 	int ret;
 
@@ -1569,18 +1569,18 @@ out:
 
 static int read_mii_word(struct net_device *netdev, int phy_id, int reg)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int ret, lock;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	if (phy_id != e3100u_PHY_ID)
+	if (phy_id != E3100_PHY_ID)
 		return -EINVAL;
 
 	lock = mutex_trylock(&tp->control);
 
-	ret = e3100u_mdio_read(tp, reg);
+	ret = e3100_mdio_read(tp, reg);
 
 	if (lock) {
 		mutex_unlock(&tp->control);
@@ -1593,18 +1593,18 @@ static int read_mii_word(struct net_device *netdev, int phy_id, int reg)
 static
 void write_mii_word(struct net_device *netdev, int phy_id, int reg, int val)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int lock;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	if (phy_id != e3100u_PHY_ID)
+	if (phy_id != E3100_PHY_ID)
 		return;
 
 	lock = mutex_trylock(&tp->control);
 
-	e3100u_mdio_write(tp, reg, val);
+	e3100_mdio_write(tp, reg, val);
 
 	if (lock) {
 		mutex_unlock(&tp->control);
@@ -1613,7 +1613,7 @@ void write_mii_word(struct net_device *netdev, int phy_id, int reg, int val)
 }
 
 static int
-ocp_dword_w0w1(struct e3100u *tp, u16 type, u16 index, u32 clear, u32 set)
+ocp_dword_w0w1(struct e3100 *tp, u16 type, u16 index, u32 clear, u32 set)
 {
 	u32 ocp_data;
 	int ret;
@@ -1630,7 +1630,7 @@ out:
 }
 
 static int
-ocp_word_w0w1(struct e3100u *tp, u16 type, u16 index, u16 clear, u16 set)
+ocp_word_w0w1(struct e3100 *tp, u16 type, u16 index, u16 clear, u16 set)
 {
 	u32 ocp_data;
 	int ret;
@@ -1647,7 +1647,7 @@ out:
 }
 
 static int
-ocp_byte_w0w1(struct e3100u *tp, u16 type, u16 index, u8 clear, u8 set)
+ocp_byte_w0w1(struct e3100 *tp, u16 type, u16 index, u8 clear, u8 set)
 {
 	u32 ocp_data;
 	int ret;
@@ -1664,31 +1664,31 @@ out:
 }
 
 static int
-ocp_dword_clr_bits(struct e3100u *tp, u16 type, u16 index, u32 clear)
+ocp_dword_clr_bits(struct e3100 *tp, u16 type, u16 index, u32 clear)
 {
 	return ocp_dword_w0w1(tp, type, index, clear, 0);
 }
 
 static int
-ocp_dword_set_bits(struct e3100u *tp, u16 type, u16 index, u32 set)
+ocp_dword_set_bits(struct e3100 *tp, u16 type, u16 index, u32 set)
 {
 	return ocp_dword_w0w1(tp, type, index, 0, set);
 }
 
 static int
-ocp_word_clr_bits(struct e3100u *tp, u16 type, u16 index, u16 clear)
+ocp_word_clr_bits(struct e3100 *tp, u16 type, u16 index, u16 clear)
 {
 	return ocp_word_w0w1(tp, type, index, clear, 0);
 }
 
 static int
-ocp_word_set_bits(struct e3100u *tp, u16 type, u16 index, u16 set)
+ocp_word_set_bits(struct e3100 *tp, u16 type, u16 index, u16 set)
 {
 	return ocp_word_w0w1(tp, type, index, 0, set);
 }
 
 static int
-ocp_word_test_and_clr_bits(struct e3100u *tp, u16 type, u16 index, u16 clear)
+ocp_word_test_and_clr_bits(struct e3100 *tp, u16 type, u16 index, u16 clear)
 {
 	u32 ocp_data;
 	int ret;
@@ -1709,18 +1709,18 @@ out:
 }
 
 static int
-ocp_byte_clr_bits(struct e3100u *tp, u16 type, u16 index, u8 clear)
+ocp_byte_clr_bits(struct e3100 *tp, u16 type, u16 index, u8 clear)
 {
 	return ocp_byte_w0w1(tp, type, index, clear, 0);
 }
 
 static int
-ocp_byte_set_bits(struct e3100u *tp, u16 type, u16 index, u8 set)
+ocp_byte_set_bits(struct e3100 *tp, u16 type, u16 index, u8 set)
 {
 	return ocp_byte_w0w1(tp, type, index, 0, set);
 }
 
-static int ocp_reg_w0w1(struct e3100u *tp, u16 addr, u16 clear, u16 set)
+static int ocp_reg_w0w1(struct e3100 *tp, u16 addr, u16 clear, u16 set)
 {
 	u16 data;
 	int ret;
@@ -1735,17 +1735,17 @@ out:
 	return ret;
 }
 
-static int ocp_reg_clr_bits(struct e3100u *tp, u16 addr, u16 clear)
+static int ocp_reg_clr_bits(struct e3100 *tp, u16 addr, u16 clear)
 {
 	return ocp_reg_w0w1(tp, addr, clear, 0);
 }
 
-static int ocp_reg_set_bits(struct e3100u *tp, u16 addr, u16 set)
+static int ocp_reg_set_bits(struct e3100 *tp, u16 addr, u16 set)
 {
 	return ocp_reg_w0w1(tp, addr, 0, set);
 }
 
-static int sram_write_w0w1(struct e3100u *tp, u16 addr, u16 clear, u16 set)
+static int sram_write_w0w1(struct e3100 *tp, u16 addr, u16 clear, u16 set)
 {
 	u16 data;
 	int ret;
@@ -1761,17 +1761,17 @@ out:
 	return ret;
 }
 
-static int sram_set_bits(struct e3100u *tp, u16 addr, u16 set)
+static int sram_set_bits(struct e3100 *tp, u16 addr, u16 set)
 {
 	return sram_write_w0w1(tp, addr, 0, set);
 }
 
-static int sram_clr_bits(struct e3100u *tp, u16 addr, u16 clear)
+static int sram_clr_bits(struct e3100 *tp, u16 addr, u16 clear)
 {
 	return sram_write_w0w1(tp, addr, clear, 0);
 }
 
-static int sram2_write(struct e3100u *tp, u16 addr, u16 data)
+static int sram2_write(struct e3100 *tp, u16 addr, u16 data)
 {
 	int ret;
 
@@ -1785,7 +1785,7 @@ out:
 	return ret;
 }
 
-static int sram2_read(struct e3100u *tp, u16 addr, u16 *data)
+static int sram2_read(struct e3100 *tp, u16 addr, u16 *data)
 {
 	int ret;
 
@@ -1799,7 +1799,7 @@ out:
 	return ret;
 }
 
-static int sram2_write_w0w1(struct e3100u *tp, u16 addr, u16 clear, u16 set)
+static int sram2_write_w0w1(struct e3100 *tp, u16 addr, u16 clear, u16 set)
 {
 	u16 data;
 	int ret;
@@ -1815,56 +1815,56 @@ out:
 	return ret;
 }
 
-static int sram2_set_bits(struct e3100u *tp, u16 addr, u16 set)
+static int sram2_set_bits(struct e3100 *tp, u16 addr, u16 set)
 {
 	return sram2_write_w0w1(tp, addr, 0, set);
 }
 
-static int sram2_clr_bits(struct e3100u *tp, u16 addr, u16 clear)
+static int sram2_clr_bits(struct e3100 *tp, u16 addr, u16 clear)
 {
 	return sram2_write_w0w1(tp, addr, clear, 0);
 }
 
-static int e3100u_mdio_set_bit(struct e3100u *tp, u16 addr, u16 set)
+static int e3100_mdio_set_bit(struct e3100 *tp, u16 addr, u16 set)
 {
 	int data;
 
-	data = e3100u_mdio_read(tp, addr);
+	data = e3100_mdio_read(tp, addr);
 	if (data < 0)
 		goto out;
 
-	data = e3100u_mdio_write(tp, addr, data | set);
+	data = e3100_mdio_write(tp, addr, data | set);
 
 out:
 	return data;
 }
 
-static int e3100u_mdio_clr_bit(struct e3100u *tp, u16 addr, u16 clear)
+static int e3100_mdio_clr_bit(struct e3100 *tp, u16 addr, u16 clear)
 {
 	int data;
 
-	data = e3100u_mdio_read(tp, addr);
+	data = e3100_mdio_read(tp, addr);
 	if (data < 0)
 		goto out;
 
-	data = e3100u_mdio_write(tp, addr, data & ~clear);
+	data = e3100_mdio_write(tp, addr, data & ~clear);
 
 out:
 	return data;
 }
 
-static int e3100u_mdio_test_and_clr_bit(struct e3100u *tp, u16 addr, u16 clear)
+static int e3100_mdio_test_and_clr_bit(struct e3100 *tp, u16 addr, u16 clear)
 {
 	int data, ret;
 
-	ret = e3100u_mdio_read(tp, addr);
+	ret = e3100_mdio_read(tp, addr);
 	if (ret < 0)
 		goto out;
 
 	data = ret;
 	if (data & clear) {
 		data &= ~clear;
-		ret = e3100u_mdio_write(tp, addr, data);
+		ret = e3100_mdio_write(tp, addr, data);
 		if (ret < 0)
 			goto out;
 	}
@@ -1875,7 +1875,7 @@ out:
 	return ret;
 }
 
-static int wait_adv_cmd_ready(struct e3100u *tp)
+static int wait_adv_cmd_ready(struct e3100 *tp)
 {
 	int i, ret;
 
@@ -1897,7 +1897,7 @@ static int wait_adv_cmd_ready(struct e3100u *tp)
 }
 
 static int
-ocp_adv_access(struct e3100u *tp, int type, u16 addr, u32 *data, bool write)
+ocp_adv_access(struct e3100 *tp, int type, u16 addr, u32 *data, bool write)
 {
 	u16 cmd;
 	int ret;
@@ -1946,17 +1946,17 @@ out:
 	return ret;
 }
 
-static int killer_bmu_read(struct e3100u *tp, u16 addr, u32 *data)
+static int killer_bmu_read(struct e3100 *tp, u16 addr, u32 *data)
 {
 	return ocp_adv_access(tp, ADV_TYPE_BMU, addr, data, false);
 }
 
-static int killer_bmu_write(struct e3100u *tp, u16 addr, u32 data)
+static int killer_bmu_write(struct e3100 *tp, u16 addr, u32 data)
 {
 	return ocp_adv_access(tp, ADV_TYPE_BMU, addr, &data, true);
 }
 
-static int killer_bmu_w0w1(struct e3100u *tp, u16 addr, u32 clear, u32 set)
+static int killer_bmu_w0w1(struct e3100 *tp, u16 addr, u32 clear, u32 set)
 {
 	u32 bmu;
 	int ret;
@@ -1972,27 +1972,27 @@ out:
 	return ret;
 }
 
-static int killer_bmu_clr_bits(struct e3100u *tp, u16 addr, u32 clear)
+static int killer_bmu_clr_bits(struct e3100 *tp, u16 addr, u32 clear)
 {
 	return killer_bmu_w0w1(tp, addr, clear, 0);
 }
 
-static int killer_bmu_set_bits(struct e3100u *tp, u16 addr, u32 set)
+static int killer_bmu_set_bits(struct e3100 *tp, u16 addr, u32 set)
 {
 	return killer_bmu_w0w1(tp, addr, 0, set);
 }
 
-static int killer_ip_read(struct e3100u *tp, u16 addr, u32 *data)
+static int killer_ip_read(struct e3100 *tp, u16 addr, u32 *data)
 {
 	return ocp_adv_access(tp, ADV_TYPE_IP, addr, data, false);
 }
 
-static int killer_ip_write(struct e3100u *tp, u16 addr, u32 data)
+static int killer_ip_write(struct e3100 *tp, u16 addr, u32 data)
 {
 	return ocp_adv_access(tp, ADV_TYPE_IP, addr, &data, true);
 }
 
-static int killer_ip_w0w1(struct e3100u *tp, u16 addr, u32 clear, u32 set)
+static int killer_ip_w0w1(struct e3100 *tp, u16 addr, u32 clear, u32 set)
 {
 	int ret;
 	u32 ip;
@@ -2008,17 +2008,17 @@ out:
 	return ret;
 }
 
-static int killer_ip_clr_bits(struct e3100u *tp, u16 addr, u32 clear)
+static int killer_ip_clr_bits(struct e3100 *tp, u16 addr, u32 clear)
 {
 	return killer_ip_w0w1(tp, addr, clear, 0);
 }
 
-static int killer_ip_set_bits(struct e3100u *tp, u16 addr, u32 set)
+static int killer_ip_set_bits(struct e3100 *tp, u16 addr, u32 set)
 {
 	return killer_ip_w0w1(tp, addr, 0, set);
 }
 
-static int wait_tgphy_cmd_ready(struct e3100u *tp)
+static int wait_tgphy_cmd_ready(struct e3100 *tp)
 {
 	int i, ret;
 
@@ -2039,7 +2039,7 @@ static int wait_tgphy_cmd_ready(struct e3100u *tp)
 	return ret;
 }
 
-static int killer_tgphy_access(struct e3100u *tp, u16 addr, u16 *data, bool write)
+static int killer_tgphy_access(struct e3100 *tp, u16 addr, u16 *data, bool write)
 {
 	u16 cmd = 0;
 	int ret;
@@ -2083,28 +2083,28 @@ out:
 	return ret;
 }
 
-static int r8157_phy_read(struct e3100u *tp, u16 addr, u16 *data)
+static int r8157-old_phy_read(struct e3100 *tp, u16 addr, u16 *data)
 {
 	return killer_tgphy_access(tp, addr, data, false);
 }
 
-static int r8157_phy_write(struct e3100u *tp, u16 addr, u16 data)
+static int r8157-old_phy_write(struct e3100 *tp, u16 addr, u16 data)
 {
 	return killer_tgphy_access(tp, addr, &data, true);
 }
 
 static int
-e3100u_submit_rx(struct e3100u *tp, struct rx_agg *agg, gfp_t mem_flags);
+e3100_submit_rx(struct e3100 *tp, struct rx_agg *agg, gfp_t mem_flags);
 
 static int
-e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
+rte3100_set_speed(struct e3100 *tp, u8 autoneg, u32 speed, u8 duplex,
 		  u32 advertising);
 
-static int __e3100u_set_mac_address(struct net_device *netdev,
+static int __rte3100_set_mac_address(struct net_device *netdev,
 				     struct sockaddr_storage *addr,
 				     bool in_resume)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int ret = -EADDRNOTAVAIL;
 
 	if (unlikely(tp->rtk_enable_diag))
@@ -2135,12 +2135,12 @@ out1:
 	return ret;
 }
 
-static int e3100u_set_mac_address(struct net_device *netdev, void *p)
+static int rte3100_set_mac_address(struct net_device *netdev, void *p)
 {
-	return __e3100u_set_mac_address(netdev, p, false);
+	return __rte3100_set_mac_address(netdev, p, false);
 }
 
-static int killer_mapt_read(struct e3100u *tp, char *mac_obj_name,
+static int killer_mapt_read(struct e3100 *tp, char *mac_obj_name,
 			 acpi_object_type mac_obj_type, int mac_strlen,
 			 struct sockaddr_storage *ss)
 {
@@ -2191,7 +2191,7 @@ amacout:
  * host system provided MAC address.
  * Examples of this are Dell TB15 and Dell WD15 docks
  */
-static int vendor_mac_passthru_addr_read(struct e3100u *tp,
+static int vendor_mac_passthru_addr_read(struct e3100 *tp,
 					 struct sockaddr_storage *ss)
 {
 	int ret = -EOPNOTSUPP;
@@ -2205,7 +2205,7 @@ static int vendor_mac_passthru_addr_read(struct e3100u *tp,
 	return ret;
 }
 
-static int killer_hw_ether_addr(struct e3100u *tp, struct sockaddr_storage *ss)
+static int killer_hw_ether_addr(struct e3100 *tp, struct sockaddr_storage *ss)
 {
 	u32 ocp_data = 0;
 	int ret;
@@ -2249,7 +2249,7 @@ out:
 	return ret;
 }
 
-static int determine_ethernet_addr(struct e3100u *tp,
+static int determine_ethernet_addr(struct e3100 *tp,
 				   struct sockaddr_storage *ss)
 {
 	struct net_device *dev = tp->netdev;
@@ -2286,7 +2286,7 @@ static int determine_ethernet_addr(struct e3100u *tp,
 	return ret;
 }
 
-static int set_ethernet_addr(struct e3100u *tp, bool in_resume)
+static int set_ethernet_addr(struct e3100 *tp, bool in_resume)
 {
 	struct net_device *dev = tp->netdev;
 	struct sockaddr_storage ss;
@@ -2299,15 +2299,15 @@ static int set_ethernet_addr(struct e3100u *tp, bool in_resume)
 	if (tp->version == KILLER_VER_01)
 		eth_hw_addr_set(dev, ss.__data);
 	else
-		ret = __e3100u_set_mac_address(dev, &ss, in_resume);
+		ret = __rte3100_set_mac_address(dev, &ss, in_resume);
 
 	return ret;
 }
 
-static inline struct net_device_stats *e3100u_get_stats(struct net_device *dev)
+static inline struct net_device_stats *rte3100_get_stats(struct net_device *dev)
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	struct e3100u *tp = netdev_priv(dev);
+	struct rte3100 *tp = netdev_priv(dev);
 
 	return (struct net_device_stats *)&tp->stats;
 #else
@@ -2320,7 +2320,7 @@ static void read_bulk_callback(struct urb *urb)
 	struct net_device *netdev;
 	int status = urb->status;
 	struct rx_agg *agg;
-	struct e3100u *tp;
+	struct e3100 *tp;
 	unsigned long flags;
 
 	agg = urb->context;
@@ -2331,7 +2331,7 @@ static void read_bulk_callback(struct urb *urb)
 	if (!tp)
 		return;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!test_bit(WORK_ENABLE, &tp->flags))
@@ -2382,7 +2382,7 @@ static void read_bulk_callback(struct urb *urb)
 		break;
 	}
 
-	e3100u_submit_rx(tp, agg, GFP_ATOMIC);
+	e3100_submit_rx(tp, agg, GFP_ATOMIC);
 }
 
 static void write_bulk_callback(struct urb *urb)
@@ -2390,7 +2390,7 @@ static void write_bulk_callback(struct urb *urb)
 	struct net_device_stats *stats;
 	struct net_device *netdev;
 	struct tx_agg *agg;
-	struct e3100u *tp;
+	struct e3100 *tp;
 	unsigned long flags;
 	int status = urb->status;
 
@@ -2403,7 +2403,7 @@ static void write_bulk_callback(struct urb *urb)
 		return;
 
 	netdev = tp->netdev;
-	stats = e3100u_get_stats(netdev);
+	stats = rte3100_get_stats(netdev);
 	if (status) {
 		if (net_ratelimit())
 			netif_warn(tp, tx_err, netdev,
@@ -2430,7 +2430,7 @@ static void write_bulk_callback(struct urb *urb)
 	if (!test_bit(WORK_ENABLE, &tp->flags))
 		return;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!skb_queue_empty_lockless(&tp->tx_queue))
@@ -2444,7 +2444,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 	int status = urb->status;
 	unsigned long flags;
 	struct tx_agg *agg;
-	struct e3100u *tp;
+	struct e3100 *tp;
 
 	agg = urb->context;
 	if (!agg)
@@ -2458,7 +2458,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 	if (status && net_ratelimit())
 		netif_warn(tp, tx_err, netdev, "Tx status %d\n", status);
 
-	stats = e3100u_get_stats(netdev);
+	stats = rte3100_get_stats(netdev);
 
 	while (!skb_queue_empty(&agg->tx_skb)) {
 		struct sk_buff *skb = __skb_dequeue(&agg->tx_skb);
@@ -2492,7 +2492,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 	if (!test_bit(WORK_ENABLE, &tp->flags))
 		return;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!skb_queue_empty_lockless(&tp->tx_queue))
@@ -2501,7 +2501,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 
 static void intr_callback(struct urb *urb)
 {
-	struct e3100u *tp;
+	struct e3100 *tp;
 	__le16 *d;
 	int status = urb->status;
 	int res;
@@ -2513,7 +2513,7 @@ static void intr_callback(struct urb *urb)
 	if (!test_bit(WORK_ENABLE, &tp->flags))
 		return;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	switch (status) {
@@ -2542,13 +2542,13 @@ static void intr_callback(struct urb *urb)
 	d = urb->transfer_buffer;
 	if (INTR_LINK & __le16_to_cpu(d[0])) {
 		if (!netif_carrier_ok(tp->netdev)) {
-			set_bit(E3100U_LINK_CHG, &tp->flags);
+			set_bit(RTE3100_LINK_CHG, &tp->flags);
 			schedule_delayed_work(&tp->schedule, 0);
 		}
 	} else {
 		if (netif_carrier_ok(tp->netdev)) {
 			netif_stop_queue(tp->netdev);
-			set_bit(E3100U_LINK_CHG, &tp->flags);
+			set_bit(RTE3100_LINK_CHG, &tp->flags);
 			schedule_delayed_work(&tp->schedule, 0);
 		}
 	}
@@ -2564,17 +2564,17 @@ resubmit:
 	}
 }
 
-static void *rx_agg_align(struct e3100u *tp, void *data)
+static void *rx_agg_align(struct e3100 *tp, void *data)
 {
 	return (void *)ALIGN((uintptr_t)data, tp->rx_desc.align);
 }
 
-static void *tx_agg_align(struct e3100u *tp, void *data)
+static void *tx_agg_align(struct e3100 *tp, void *data)
 {
 	return (void *)ALIGN((uintptr_t)data, tp->tx_desc.align);
 }
 
-static void free_rx_agg(struct e3100u *tp, struct rx_agg *agg)
+static void free_rx_agg(struct e3100 *tp, struct rx_agg *agg)
 {
 	list_del(&agg->info_list);
 
@@ -2585,7 +2585,7 @@ static void free_rx_agg(struct e3100u *tp, struct rx_agg *agg)
 	atomic_dec(&tp->rx_count);
 }
 
-static struct rx_agg *alloc_rx_agg(struct e3100u *tp, gfp_t mflags)
+static struct rx_agg *alloc_rx_agg(struct e3100 *tp, gfp_t mflags)
 {
 	struct net_device *netdev = tp->netdev;
 	int node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
@@ -2626,7 +2626,7 @@ free_rx:
 	return NULL;
 }
 
-static void free_all_mem(struct e3100u *tp)
+static void free_all_mem(struct e3100 *tp)
 {
 	struct rx_agg *agg, *agg_next;
 	unsigned long flags;
@@ -2641,7 +2641,7 @@ static void free_all_mem(struct e3100u *tp)
 
 	WARN_ON(atomic_read(&tp->rx_count));
 
-	for (i = 0; i < E3100U_MAX_TX; i++) {
+	for (i = 0; i < RTE3100_MAX_TX; i++) {
 		usb_free_urb(tp->tx_info[i].urb);
 		tp->tx_info[i].urb = NULL;
 
@@ -2658,7 +2658,7 @@ static void free_all_mem(struct e3100u *tp)
 	tp->intr_buff = NULL;
 }
 
-static int alloc_all_mem(struct e3100u *tp)
+static int alloc_all_mem(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 	struct usb_interface *intf = tp->intf;
@@ -2677,12 +2677,12 @@ static int alloc_all_mem(struct e3100u *tp)
 	skb_queue_head_init(&tp->rx_queue);
 	atomic_set(&tp->rx_count, 0);
 
-	for (i = 0; i < E3100U_MAX_RX; i++) {
+	for (i = 0; i < RTE3100_MAX_RX; i++) {
 		if (!alloc_rx_agg(tp, GFP_KERNEL))
 			goto err1;
 	}
 
-	for (i = 0; i < E3100U_MAX_TX; i++) {
+	for (i = 0; i < RTE3100_MAX_TX; i++) {
 		struct urb *urb;
 		u8 *buf;
 
@@ -2737,7 +2737,7 @@ err1:
 	return -ENOMEM;
 }
 
-static struct tx_agg *e3100u_get_tx_agg(struct e3100u *tp)
+static struct tx_agg *e3100_get_tx_agg(struct e3100 *tp)
 {
 	struct tx_agg *agg = NULL;
 	unsigned long flags;
@@ -2758,20 +2758,20 @@ static struct tx_agg *e3100u_get_tx_agg(struct e3100u *tp)
 	return agg;
 }
 
-static void killer_drop_tx_skb(struct e3100u *tp, struct sk_buff *skb)
+static void killer_drop_tx_skb(struct e3100 *tp, struct sk_buff *skb)
 {
 	struct net_device_stats *stats;
 
-	stats = e3100u_get_stats(tp->netdev);
+	stats = rte3100_get_stats(tp->netdev);
 	stats->tx_dropped++;
 	dev_kfree_skb_any(skb);
 }
 
-/* e3100u_csum_workaround()
+/* e3100_csum_workaround()
  * The hw limits the value of the transport offset. When the offset is out of
  * range, calculate the checksum by sw.
  */
-static void e3100u_csum_workaround(struct e3100u *tp, struct sk_buff *skb,
+static void e3100_csum_workaround(struct e3100 *tp, struct sk_buff *skb,
 				  struct sk_buff_head *list)
 {
 	if (skb_shinfo(skb)->gso_size) {
@@ -2811,14 +2811,14 @@ drop:
 	}
 }
 
-static void e3100u_rx_len(struct e3100u *tp, void *desc, u32 *len)
+static void e3100_rx_len(struct e3100 *tp, void *desc, u32 *len)
 {
 	struct rx_desc *d = desc;
 
 	*len = le32_to_cpu(d->opts1) & RX_LEN_MASK;
 }
 
-static bool e3100u_tx_vlan_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
+static bool e3100_tx_vlan_tag(struct e3100 *tp, void *d, struct sk_buff *skb)
 {
 	struct tx_desc *desc = d;
 
@@ -2835,7 +2835,7 @@ static bool e3100u_tx_vlan_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 
 static bool
-e3100u_rx_vlan_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
+e3100_rx_vlan_tag(struct e3100 *tp, void *d, struct sk_buff *skb)
 {
 	struct rx_desc *desc = d;
 	u32 opts2 = le32_to_cpu(desc->opts2);
@@ -2850,7 +2850,7 @@ e3100u_rx_vlan_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
 }
 
 static void
-e3100u_vlan_put_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
+e3100_vlan_put_tag(struct e3100 *tp, void *d, struct sk_buff *skb)
 {
 	struct rx_desc *desc = d;
 	u32 opts2 = le32_to_cpu(desc->opts2);
@@ -2875,7 +2875,7 @@ killer_vlan_get_tag(struct sk_buff *skb)
 
 #else
 static bool
-e3100u_rx_vlan_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
+e3100_rx_vlan_tag(struct e3100 *tp, void *d, struct sk_buff *skb)
 {
 	struct rx_desc *desc = d;
 	u32 opts2 = le32_to_cpu(desc->opts2);
@@ -2894,7 +2894,7 @@ e3100u_rx_vlan_tag(struct e3100u *tp, void *d, struct sk_buff *skb)
 
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 
-static int e3100u_tx_csum(struct e3100u *tp, void *tx_desc, struct sk_buff *skb)
+static int e3100_tx_csum(struct e3100 *tp, void *tx_desc, struct sk_buff *skb)
 {
 	u32 mss = skb_shinfo(skb)->gso_size;
 	struct tx_desc *desc = tx_desc;
@@ -2980,14 +2980,14 @@ unavailable:
 	return ret;
 }
 
-static void e3100u_tx_len(struct e3100u *tp, void *tx_desc, u32 *len)
+static void e3100_tx_len(struct e3100 *tp, void *tx_desc, u32 *len)
 {
 	struct tx_desc *desc = tx_desc;
 
 	desc->opts1 |= cpu_to_le32(*len);
 }
 
-static void r8157_rx_len(struct e3100u *tp, void *desc, u32 *len)
+static void r8157-old_rx_len(struct e3100 *tp, void *desc, u32 *len)
 {
 	struct rx_desc_v2 *d = desc;
 
@@ -2996,7 +2996,7 @@ static void r8157_rx_len(struct e3100u *tp, void *desc, u32 *len)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 static bool
-r8157_rx_vlan_tag(struct e3100u *tp, void *desc, struct sk_buff *skb)
+r8157-old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u32 opts1 = le32_to_cpu(d->opts1);
@@ -3012,7 +3012,7 @@ r8157_rx_vlan_tag(struct e3100u *tp, void *desc, struct sk_buff *skb)
 }
 
 static void
-r8157_vlan_put_tag(struct e3100u *tp, void *desc, struct sk_buff *skb)
+r8157-old_vlan_put_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u32 opts1 = le32_to_cpu(d->opts1);
@@ -3026,7 +3026,7 @@ r8157_vlan_put_tag(struct e3100u *tp, void *desc, struct sk_buff *skb)
 
 #else
 static bool
-r8157_rx_vlan_tag(struct e3100u *tp, void *desc, struct sk_buff *skb)
+r8157-old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u32 opts1 = le32_to_cpu(d->opts1);
@@ -3046,7 +3046,7 @@ r8157_rx_vlan_tag(struct e3100u *tp, void *desc, struct sk_buff *skb)
 }
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 
-static int r8157_tx_csum(struct e3100u *tp, void *tx_desc, struct sk_buff *skb)
+static int r8157-old_tx_csum(struct e3100 *tp, void *tx_desc, struct sk_buff *skb)
 {
 	u32 mss = skb_shinfo(skb)->gso_size;
 	int ret = TX_CSUM_SUCCESS;
@@ -3062,12 +3062,12 @@ static int r8157_tx_csum(struct e3100u *tp, void *tx_desc, struct sk_buff *skb)
 		}
 	}
 
-	ret = e3100u_tx_csum(tp, tx_desc, skb);
+	ret = e3100_tx_csum(tp, tx_desc, skb);
 
 	return ret;
 }
 
-static void r8157_tx_len(struct e3100u *tp, void *tx_desc, u32 *len)
+static void r8157-old_tx_len(struct e3100 *tp, void *tx_desc, u32 *len)
 {
 	struct tx_desc_v2 *desc = tx_desc;
 
@@ -3075,7 +3075,7 @@ static void r8157_tx_len(struct e3100u *tp, void *tx_desc, u32 *len)
 	desc->opts4 = cpu_to_le32(TX_SIG);
 }
 
-static int killer_tx_csum(struct e3100u *tp, void *desc, struct sk_buff *skb,
+static int killer_tx_csum(struct e3100 *tp, void *desc, struct sk_buff *skb,
 		       u32 len)
 {
 	int ret = TX_CSUM_SUCCESS;
@@ -3089,7 +3089,7 @@ static int killer_tx_csum(struct e3100u *tp, void *desc, struct sk_buff *skb,
 	return ret;
 }
 
-static int e3100u_tx_agg_fill(struct e3100u *tp, struct tx_agg *agg)
+static int e3100_tx_agg_fill(struct e3100 *tp, struct tx_agg *agg)
 {
 	struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
 	struct net_device *netdev = tp->netdev;
@@ -3127,7 +3127,7 @@ static int e3100u_tx_agg_fill(struct e3100u *tp, struct tx_agg *agg)
 		tx_desc = (void *)tx_data;
 
 		if (killer_tx_csum(tp, tx_desc, skb, skb->len)) {
-			e3100u_csum_workaround(tp, skb, &skb_head);
+			e3100_csum_workaround(tp, skb, &skb_head);
 			continue;
 		}
 
@@ -3190,7 +3190,7 @@ out_tx_fill:
 	if (ret < 0) {
 		struct net_device_stats *stats;
 
-		stats = e3100u_get_stats(netdev);
+		stats = rte3100_get_stats(netdev);
 		stats->tx_dropped += agg->skb_num;
 		netdev_completed_queue(netdev, agg->skb_num, agg->skb_bytes);
 	}
@@ -3224,7 +3224,7 @@ static int killer_cal_sg_number(struct sk_buff *skb, unsigned int recursion_leve
 	return number;
 }
 
-static int killer_cal_sg_size(struct e3100u *tp, struct sk_buff *skb,
+static int killer_cal_sg_size(struct e3100 *tp, struct sk_buff *skb,
 			   int num, int *len, unsigned int recursion_level)
 {
 	struct sk_buff *frag_iter;
@@ -3260,7 +3260,7 @@ out:
 	return num;
 }
 
-static int killer_skb_check(struct e3100u *tp, struct sk_buff **pskb, int headroom)
+static int killer_skb_check(struct e3100 *tp, struct sk_buff **pskb, int headroom)
 {
 	int sg_num, size, eat, nhead, ret, avg_sg;
 	struct sk_buff *skb = *pskb;
@@ -3332,7 +3332,7 @@ out:
 	return ret;
 }
 
-static int e3100u_tx_agg_sg_fill(struct e3100u *tp, struct tx_agg *agg)
+static int e3100_tx_agg_sg_fill(struct e3100 *tp, struct tx_agg *agg)
 {
 	struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
 	struct net_device *netdev = tp->netdev;
@@ -3382,7 +3382,7 @@ static int e3100u_tx_agg_sg_fill(struct e3100u *tp, struct tx_agg *agg)
 		len = skb->len;
 
 		if (killer_tx_csum(tp, &tx_desc, skb, len)) {
-			e3100u_csum_workaround(tp, skb, &skb_head);
+			e3100_csum_workaround(tp, skb, &skb_head);
 			continue;
 		}
 
@@ -3482,7 +3482,7 @@ out_tx_fill:
 }
 
 static int
-e3100u_rx_csum(struct e3100u *tp, void *d, struct sk_buff *skb)
+e3100_rx_csum(struct e3100 *tp, void *d, struct sk_buff *skb)
 {
 	struct rx_desc *rx_desc = d;
 	u8 checksum = CHECKSUM_NONE;
@@ -3515,7 +3515,7 @@ return_result:
 }
 
 static int
-r8157_rx_csum(struct e3100u *tp, void *desc, struct sk_buff *skb)
+r8157-old_rx_csum(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u8 checksum = CHECKSUM_NONE;
@@ -3541,9 +3541,9 @@ return_result:
 	return  0;
 }
 
-static inline bool rx_count_exceed(struct e3100u *tp)
+static inline bool rx_count_exceed(struct e3100 *tp)
 {
-	return atomic_read(&tp->rx_count) > E3100U_MAX_RX;
+	return atomic_read(&tp->rx_count) > RTE3100_MAX_RX;
 }
 
 static int agg_offset(struct rx_agg *agg, void *addr)
@@ -3552,7 +3552,7 @@ static int agg_offset(struct rx_agg *agg, void *addr)
 	return (int)(addr - agg->buffer);
 }
 
-static struct rx_agg *killer_get_free_rx(struct e3100u *tp, gfp_t mflags)
+static struct rx_agg *killer_get_free_rx(struct e3100 *tp, gfp_t mflags)
 {
 	struct rx_agg *agg, *agg_next, *agg_free = NULL;
 	unsigned long flags;
@@ -3580,13 +3580,13 @@ static struct rx_agg *killer_get_free_rx(struct e3100u *tp, gfp_t mflags)
 
 	if (!agg_free && atomic_read(&tp->rx_count) < tp->rx_pending) {
 		agg_free = alloc_rx_agg(tp, mflags);
-		tp->rx_agg_free_ref += E3100U_MAX_RX;
+		tp->rx_agg_free_ref += RTE3100_MAX_RX;
 	}
 
 	return agg_free;
 }
 
-static int rx_bottom(struct e3100u *tp, int budget)
+static int rx_bottom(struct e3100 *tp, int budget)
 {
 	unsigned long flags;
 	struct list_head *cursor, *next, rx_queue;
@@ -3607,7 +3607,7 @@ static int rx_bottom(struct e3100u *tp, int budget)
 				break;
 
 			pkt_len = skb->len;
-			stats = e3100u_get_stats(netdev);
+			stats = rte3100_get_stats(netdev);
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 			vlan_tci = killer_vlan_get_tag(skb);
 
@@ -3685,7 +3685,7 @@ static int rx_bottom(struct e3100u *tp, int budget)
 			if (urb->actual_length < len_used)
 				break;
 
-			stats = e3100u_get_stats(netdev);
+			stats = rte3100_get_stats(netdev);
 
 			pkt_len -= ETH_FCS_LEN;
 			len = pkt_len;
@@ -3790,7 +3790,7 @@ find_next_rx:
 
 submit:
 		if (!ret) {
-			ret = e3100u_submit_rx(tp, agg, GFP_ATOMIC);
+			ret = e3100_submit_rx(tp, agg, GFP_ATOMIC);
 		} else {
 			urb->actual_length = 0;
 			list_add_tail(&agg->list, next);
@@ -3808,25 +3808,25 @@ out1:
 	return work_done;
 }
 
-static void tx_bottom(struct e3100u *tp)
+static void tx_bottom(struct e3100 *tp)
 {
 	int res, i;
 
-	for (i = 0; i < E3100U_MAX_TX; i++) {
+	for (i = 0; i < RTE3100_MAX_TX; i++) {
 		struct net_device *netdev = tp->netdev;
 		struct tx_agg *agg;
 
 		if (skb_queue_empty_lockless(&tp->tx_queue))
 			break;
 
-		agg = e3100u_get_tx_agg(tp);
+		agg = e3100_get_tx_agg(tp);
 		if (!agg)
 			break;
 
 		if (tp->sg_use)
-			res = e3100u_tx_agg_sg_fill(tp, agg);
+			res = e3100_tx_agg_sg_fill(tp, agg);
 		else
-			res = e3100u_tx_agg_fill(tp, agg);
+			res = e3100_tx_agg_fill(tp, agg);
 
 		if (res == -ENODEV) {
 			killer_set_unplug(tp);
@@ -3854,9 +3854,9 @@ static void bottom_half(unsigned long t)
 static void bottom_half(struct tasklet_struct *t)
 #endif
 {
-	struct e3100u *tp = from_tasklet(tp, t, tx_tl);
+	struct e3100 *tp = from_tasklet(tp, t, tx_tl);
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!test_bit(WORK_ENABLE, &tp->flags))
@@ -3872,7 +3872,7 @@ static void bottom_half(struct tasklet_struct *t)
 	tx_bottom(tp);
 }
 
-static inline int __e3100u_poll(struct e3100u *tp, int budget)
+static inline int __e3100_poll(struct e3100 *tp, int budget)
 {
 	struct napi_struct *napi = &tp->napi;
 	int work_done;
@@ -3901,13 +3901,13 @@ out:
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
 
-static int e3100u_poll(struct net_device *dev, int *budget)
+static int e3100_poll(struct net_device *dev, int *budget)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	int quota = min(dev->quota, *budget);
 	int work_done;
 
-	work_done = __e3100u_poll(tp, quota);
+	work_done = __e3100_poll(tp, quota);
 
 	*budget -= work_done;
 	dev->quota -= work_done;
@@ -3917,22 +3917,22 @@ static int e3100u_poll(struct net_device *dev, int *budget)
 
 #else
 
-static int e3100u_poll(struct napi_struct *napi, int budget)
+static int e3100_poll(struct napi_struct *napi, int budget)
 {
-	struct e3100u *tp = container_of(napi, struct e3100u, napi);
+	struct e3100 *tp = container_of(napi, struct e3100, napi);
 
-	return __e3100u_poll(tp, budget);
+	return __e3100_poll(tp, budget);
 }
 
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24) */
 
 static
-int e3100u_submit_rx(struct e3100u *tp, struct rx_agg *agg, gfp_t mem_flags)
+int e3100_submit_rx(struct e3100 *tp, struct rx_agg *agg, gfp_t mem_flags)
 {
 	int ret;
 
 	/* The rx would be stopped, so skip submitting */
-	if (test_bit(E3100U_UNPLUG, &tp->flags) ||
+	if (test_bit(RTE3100_UNPLUG, &tp->flags) ||
 	    !test_bit(WORK_ENABLE, &tp->flags) || !netif_carrier_ok(tp->netdev))
 		return 0;
 
@@ -3962,7 +3962,7 @@ int e3100u_submit_rx(struct e3100u *tp, struct rx_agg *agg, gfp_t mem_flags)
 	return ret;
 }
 
-static void killer_drop_queued_tx(struct e3100u *tp)
+static void killer_drop_queued_tx(struct e3100 *tp)
 {
 	struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
 
@@ -3979,12 +3979,12 @@ static void killer_drop_queued_tx(struct e3100u *tp)
 }
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
-static void e3100u_tx_timeout(struct net_device *netdev)
+static void rte3100_tx_timeout(struct net_device *netdev)
 #else
-static void e3100u_tx_timeout(struct net_device *netdev, unsigned int txqueue)
+static void rte3100_tx_timeout(struct net_device *netdev, unsigned int txqueue)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0) */
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
 	int i;
 #endif
@@ -3994,29 +3994,29 @@ static void e3100u_tx_timeout(struct net_device *netdev, unsigned int txqueue)
 		   tp->tx_back, tp->tx_submit, skb_queue_len(&tp->tx_queue));
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	for (i = 0; i < E3100U_MAX_TX; i++)
+	for (i = 0; i < RTE3100_MAX_TX; i++)
 		usb_unlink_urb(tp->tx_info[i].urb);
 #else
 	usb_queue_reset_device(tp->intf);
 #endif
 }
 
-static void e3100u_set_rx_mode(struct net_device *netdev)
+static void rte3100_set_rx_mode(struct net_device *netdev)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u32 mc_filter[2];	/* Multicast hash filter */
 	__le32 tmp[2];
 	u32 ocp_data;
 
 	if (in_atomic()) {
 		if (netif_carrier_ok(netdev)) {
-			set_bit(E3100U_SET_RX_MODE, &tp->flags);
+			set_bit(RTE3100_SET_RX_MODE, &tp->flags);
 			schedule_delayed_work(&tp->schedule, 0);
 		}
 		return;
 	}
 
-	clear_bit(E3100U_SET_RX_MODE, &tp->flags);
+	clear_bit(RTE3100_SET_RX_MODE, &tp->flags);
 
 	if (!netif_carrier_ok(netdev))
 		return;
@@ -4085,7 +4085,7 @@ out: /* to do */
 
 static bool killer_gso_check(struct net_device *dev, struct sk_buff *skb)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 
 	if (tp->sg_use)
 		return true;
@@ -4098,7 +4098,7 @@ static bool killer_gso_check(struct net_device *dev, struct sk_buff *skb)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4)
 
 static netdev_features_t
-e3100u_features_check(struct sk_buff *skb, struct net_device *dev,
+rte3100_features_check(struct sk_buff *skb, struct net_device *dev,
 		       netdev_features_t features)
 {
 	u32 mss = skb_shinfo(skb)->gso_size;
@@ -4114,10 +4114,10 @@ e3100u_features_check(struct sk_buff *skb, struct net_device *dev,
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4) */
 
-static netdev_tx_t e3100u_start_xmit(struct sk_buff *skb,
+static netdev_tx_t rte3100_start_xmit(struct sk_buff *skb,
 				      struct net_device *netdev)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,18,4)
 	if (unlikely(!killer_gso_check(netdev, skb))) {
@@ -4133,7 +4133,7 @@ static netdev_tx_t e3100u_start_xmit(struct sk_buff *skb,
 			nskb = segs;
 			segs = segs->next;
 			nskb->next = NULL;
-			e3100u_start_xmit(nskb, netdev);
+			rte3100_start_xmit(nskb, netdev);
 		} while (segs);
 
 free_skb:
@@ -4166,7 +4166,7 @@ free_skb:
 	return NETDEV_TX_OK;
 }
 
-static int e3100ub_reset_packet_filter(struct e3100u *tp)
+static int r8152b-old_reset_packet_filter(struct e3100 *tp)
 {
 	int ret;
 
@@ -4180,7 +4180,7 @@ out:
 	return ret;
 }
 
-static int e3100u_nic_reset(struct e3100u *tp)
+static int rte3100_nic_reset(struct e3100 *tp)
 {
 	int i, ret;
 
@@ -4253,7 +4253,7 @@ out:
 	return ret;
 }
 
-static void set_tx_qlen(struct e3100u *tp)
+static void set_tx_qlen(struct e3100 *tp)
 {
 	if (tp->sg_use)
 		tp->tx_qlen = KILLER_MAX_SG_NUM;
@@ -4262,7 +4262,7 @@ static void set_tx_qlen(struct e3100u *tp)
 					    tp->tx_desc.size);
 }
 
-static u16 e3100u_get_speed(struct e3100u *tp)
+static u16 rte3100_get_speed(struct e3100 *tp)
 {
 	u32 ocp_data;
 
@@ -4272,7 +4272,7 @@ static u16 e3100u_get_speed(struct e3100u *tp)
 		return (u16)ocp_data;
 }
 
-static int killer_eee_plus_en(struct e3100u *tp, bool enable)
+static int killer_eee_plus_en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EEEP_CR,
@@ -4282,18 +4282,18 @@ static int killer_eee_plus_en(struct e3100u *tp, bool enable)
 					 EEEP_CR_EEEP_TX);
 }
 
-static int killer_set_eee_plus(struct e3100u *tp)
+static int killer_set_eee_plus(struct e3100 *tp)
 {
 	if (tp->version == KILLER_VER_17)
 		return killer_eee_plus_en(tp, false);
 
-	if (e3100u_get_speed(tp) & _10bps)
+	if (rte3100_get_speed(tp) & _10bps)
 		return killer_eee_plus_en(tp, true);
 	else
 		return killer_eee_plus_en(tp, false);
 }
 
-static int rxdy_gated_en(struct e3100u *tp, bool enable)
+static int rxdy_gated_en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_MISC_1,
@@ -4303,7 +4303,7 @@ static int rxdy_gated_en(struct e3100u *tp, bool enable)
 					 RXDY_GATED_EN);
 }
 
-static int killer_start_rx(struct e3100u *tp)
+static int killer_start_rx(struct e3100 *tp)
 {
 	struct rx_agg *agg, *agg_next;
 	struct list_head tmp_list;
@@ -4324,8 +4324,8 @@ static int killer_start_rx(struct e3100u *tp)
 	list_for_each_entry_safe(agg, agg_next, &tmp_list, info_list) {
 		INIT_LIST_HEAD(&agg->list);
 
-		/* Only E3100U_MAX_RX rx_agg need to be submitted. */
-		if (++i > E3100U_MAX_RX) {
+		/* Only RTE3100_MAX_RX rx_agg need to be submitted. */
+		if (++i > RTE3100_MAX_RX) {
 			spin_lock_irqsave(&tp->rx_lock, flags);
 			list_add_tail(&agg->list, &tp->rx_used);
 			spin_unlock_irqrestore(&tp->rx_lock, flags);
@@ -4334,7 +4334,7 @@ static int killer_start_rx(struct e3100u *tp)
 			list_add_tail(&agg->list, &tp->rx_done);
 			spin_unlock_irqrestore(&tp->rx_lock, flags);
 		} else {
-			ret = e3100u_submit_rx(tp, agg, GFP_KERNEL);
+			ret = e3100_submit_rx(tp, agg, GFP_KERNEL);
 		}
 	}
 
@@ -4346,7 +4346,7 @@ static int killer_start_rx(struct e3100u *tp)
 	return ret;
 }
 
-static int killer_stop_rx(struct e3100u *tp)
+static int killer_stop_rx(struct e3100 *tp)
 {
 	struct rx_agg *agg, *agg_next;
 	struct list_head tmp_list;
@@ -4379,7 +4379,7 @@ static int killer_stop_rx(struct e3100u *tp)
 	return 0;
 }
 
-static int killer_set_ifg(struct e3100u *tp, u16 speed)
+static int killer_set_ifg(struct e3100 *tp, u16 speed)
 {
 	int ret;
 
@@ -4403,17 +4403,17 @@ out:
 	return ret;
 }
 
-static inline void r8153b_rx_agg_chg_indicate(struct e3100u *tp)
+static inline void r8153b-old_rx_agg_chg_indicate(struct e3100 *tp)
 {
 	ocp_write_byte(tp, MCU_TYPE_USB, USB_UPT_RXDMA_OWN,
 		       OWN_UPDATE | OWN_CLEAR);
 }
 
-static int killer_enable(struct e3100u *tp)
+static int killer_enable(struct e3100 *tp)
 {
 	int ret;
 
-	ret = e3100ub_reset_packet_filter(tp);
+	ret = r8152b-old_reset_packet_filter(tp);
 	if (ret < 0)
 		goto out;
 
@@ -4431,7 +4431,7 @@ static int killer_enable(struct e3100u *tp)
 	case KILLER_VER_07:
 		break;
 	default:
-		r8153b_rx_agg_chg_indicate(tp);
+		r8153b-old_rx_agg_chg_indicate(tp);
 		break;
 	}
 
@@ -4443,11 +4443,11 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100u_enable(struct e3100u *tp)
+static int rte3100_enable(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -4461,7 +4461,7 @@ out:
 	return ret;
 }
 
-static int r8153_set_rx_early_timeout(struct e3100u *tp)
+static int r8153-old_set_rx_early_timeout(struct e3100 *tp)
 {
 	u32 ocp_data = tp->coalesce / 8;
 	int ret;
@@ -4478,7 +4478,7 @@ static int r8153_set_rx_early_timeout(struct e3100u *tp)
 	case KILLER_VER_08:
 	case KILLER_VER_09:
 	case KILLER_VER_14:
-		/* The RTL8153B uses USB_RX_EXTRA_AGGR_TMR for rx timeout
+		/* The RTL8153B-OLD uses USB_RX_EXTRA_AGGR_TMR for rx timeout
 		 * primarily. For USB_RX_EARLY_TIMEOUT, we fix it to 1264ns.
 		 */
 		ret = ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EARLY_TIMEOUT,
@@ -4512,12 +4512,12 @@ static int r8153_set_rx_early_timeout(struct e3100u *tp)
 	return ret;
 }
 
-static u32 rx_reserved_size(struct e3100u *tp, u32 mtu)
+static u32 rx_reserved_size(struct e3100 *tp, u32 mtu)
 {
 	return mtu_to_size(mtu) + tp->rx_desc.size + tp->rx_desc.align;
 }
 
-static int r8153_set_rx_early_size(struct e3100u *tp)
+static int r8153-old_set_rx_early_size(struct e3100 *tp)
 {
 	u32 ocp_data = tp->rx_buf_sz - rx_reserved_size(tp, tp->netdev->mtu);
 	int ret;
@@ -4556,25 +4556,25 @@ static int r8153_set_rx_early_size(struct e3100u *tp)
 	return ret;
 }
 
-static int killer8153_enable(struct e3100u *tp)
+static int rtl8153-old_enable(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
 	ret = killer_set_eee_plus(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153_set_rx_early_timeout(tp);
+	ret = r8153-old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153_set_rx_early_size(tp);
+	ret = r8153-old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
-	ret = killer_set_ifg(tp, e3100u_get_speed(tp));
+	ret = killer_set_ifg(tp, rte3100_get_speed(tp));
 	if (ret < 0)
 		goto out;
 
@@ -4600,12 +4600,12 @@ out:
 	return ret;
 }
 
-static int killer_disable(struct e3100u *tp)
+static int killer_disable(struct e3100 *tp)
 {
 	int i, ret, err = 0;
 	u32 ocp_data;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -4617,7 +4617,7 @@ static int killer_disable(struct e3100u *tp)
 
 	killer_drop_queued_tx(tp);
 
-	for (i = 0; i < E3100U_MAX_TX; i++)
+	for (i = 0; i < RTE3100_MAX_TX; i++)
 		usb_kill_urb(tp->tx_info[i].urb);
 
 	ret = rxdy_gated_en(tp, true);
@@ -4640,7 +4640,7 @@ static int killer_disable(struct e3100u *tp)
 
 	killer_stop_rx(tp);
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 
 	if (err < 0)
 		return err;
@@ -4648,7 +4648,7 @@ static int killer_disable(struct e3100u *tp)
 		return ret;
 }
 
-static int e3100u_power_cut_en(struct e3100u *tp, bool enable)
+static int e3100_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -4668,7 +4668,7 @@ out:
 	return ret;
 }
 
-static int killer_rx_vlan_en(struct e3100u *tp, bool enable)
+static int killer_rx_vlan_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -4715,9 +4715,9 @@ static int killer_rx_vlan_en(struct e3100u *tp, bool enable)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 
 static void
-e3100u_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
+rte3100_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 
 	if (unlikely(tp->rtk_enable_diag))
 		return;
@@ -4738,9 +4738,9 @@ e3100u_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
 
-static void e3100u_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
+static void rte3100_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 
 	vlan_group_set_device(tp->vlgrp, vid, NULL);
 }
@@ -4749,11 +4749,11 @@ static void e3100u_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 
 #else
 
-static int e3100u_set_features(struct net_device *dev,
+static int rte3100_set_features(struct net_device *dev,
 				netdev_features_t features)
 {
 	netdev_features_t changed = features ^ dev->features;
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	int ret;
 
 	if (unlikely(tp->rtk_enable_diag))
@@ -4784,7 +4784,7 @@ out:
 
 #define WAKE_ANY (WAKE_PHY | WAKE_MAGIC | WAKE_UCAST | WAKE_BCAST | WAKE_MCAST)
 
-static u32 __killer_get_wol(struct e3100u *tp)
+static u32 __killer_get_wol(struct e3100 *tp)
 {
 	u32 ocp_data;
 	u32 wolopts = 0;
@@ -4819,7 +4819,7 @@ out:
 	return wolopts;
 }
 
-static int __killer_set_wol(struct e3100u *tp, u32 wolopts)
+static int __killer_set_wol(struct e3100 *tp, u32 wolopts)
 {
 	u16 ocp_data;
 	int ret;
@@ -4869,7 +4869,7 @@ out:
 	return ret;
 }
 
-static int r8153_mac_clk_speed_down(struct e3100u *tp, bool enable)
+static int r8153-old_mac_clk_speed_down(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -4884,7 +4884,7 @@ static int r8153_mac_clk_speed_down(struct e3100u *tp, bool enable)
 	return ret;
 }
 
-static int r8156_mac_clk_spd(struct e3100u *tp, bool enable)
+static int e3100u_mac_clk_spd(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -4909,7 +4909,7 @@ out:
 	return ret;
 }
 
-static int r8153_u1u2en(struct e3100u *tp, bool enable)
+static int r8153-old_u1u2en(struct e3100 *tp, bool enable)
 {
 	u8 u1u2[8];
 
@@ -4922,7 +4922,7 @@ static int r8153_u1u2en(struct e3100u *tp, bool enable)
 			     u1u2);
 }
 
-static int r8153b_u1u2en(struct e3100u *tp, bool enable)
+static int r8153b-old_u1u2en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return ocp_word_set_bits(tp, MCU_TYPE_USB, USB_LPM_CONFIG,
@@ -4932,7 +4932,7 @@ static int r8153b_u1u2en(struct e3100u *tp, bool enable)
 					 LPM_U1U2_EN);
 }
 
-static int r8153_u2p3en(struct e3100u *tp, bool enable)
+static int r8153-old_u2p3en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return ocp_word_set_bits(tp, MCU_TYPE_USB, USB_U2P3_CTRL,
@@ -4942,7 +4942,7 @@ static int r8153_u2p3en(struct e3100u *tp, bool enable)
 					 U2P3_ENABLE);
 }
 
-static int r8157_u2p3en(struct e3100u *tp, bool enable)
+static int r8157-old_u2p3en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return killer_ip_set_bits(tp, 0xc2c0, BIT(29));
@@ -4950,7 +4950,7 @@ static int r8157_u2p3en(struct e3100u *tp, bool enable)
 		return killer_ip_clr_bits(tp, 0xc2c0, BIT(29));
 }
 
-static bool r8156b_flash_used(struct e3100u *tp)
+static bool e3100ub_flash_used(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret;
@@ -4970,7 +4970,7 @@ static bool r8156b_flash_used(struct e3100u *tp)
 		return false;
 }
 
-static int r8153b_ups_flags(struct e3100u *tp)
+static int r8153b-old_ups_flags(struct e3100 *tp)
 {
 	u32 ups_flags = 0;
 
@@ -5045,7 +5045,7 @@ static int r8153b_ups_flags(struct e3100u *tp)
 	return ocp_write_dword(tp, MCU_TYPE_USB, USB_UPS_FLAGS, ups_flags);
 }
 
-static int r8156_ups_flags(struct e3100u *tp)
+static int e3100u_ups_flags(struct e3100 *tp)
 {
 	u32 ups_flags = 0;
 
@@ -5127,7 +5127,7 @@ static int r8156_ups_flags(struct e3100u *tp)
 	return ocp_write_dword(tp, MCU_TYPE_USB, USB_UPS_FLAGS, ups_flags);
 }
 
-static int killer_green_en(struct e3100u *tp, bool enable)
+static int killer_green_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5141,7 +5141,7 @@ static int killer_green_en(struct e3100u *tp, bool enable)
 	return ret;
 }
 
-static int r8153b_green_en(struct e3100u *tp, bool enable)
+static int r8153b-old_green_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5182,7 +5182,7 @@ out:
 	return ret;
 }
 
-static int r8153_phy_status(struct e3100u *tp, u16 desired)
+static int r8153-old_phy_status(struct e3100 *tp, u16 desired)
 {
 	int i, ret;
 	u16 data;
@@ -5202,19 +5202,19 @@ static int r8153_phy_status(struct e3100u *tp, u16 desired)
 		}
 
 		msleep(20);
-		if (test_bit(E3100U_UNPLUG, &tp->flags))
+		if (test_bit(RTE3100_UNPLUG, &tp->flags))
 			break;
 	}
 
 	return data;
 }
 
-static int r8153b_ups_en(struct e3100u *tp, bool enable)
+static int r8153b-old_ups_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153b_ups_flags(tp);
+		ret = r8153b-old_ups_flags(tp);
 
 		ret = ocp_byte_set_bits(tp, MCU_TYPE_USB, USB_POWER_CUT,
 					UPS_EN | USP_PREWAKE | PHASE2_EN);
@@ -5255,7 +5255,7 @@ static int r8153b_ups_en(struct e3100u *tp, bool enable)
 
 			tp->killer_ops.hw_phy_cfg(tp);
 
-			ret = e3100u_set_speed(tp, tp->autoneg, tp->speed,
+			ret = rte3100_set_speed(tp, tp->autoneg, tp->speed,
 						tp->duplex, tp->advertising);
 		}
 	}
@@ -5264,12 +5264,12 @@ out:
 	return ret;
 }
 
-static int r8153c_ups_en(struct e3100u *tp, bool enable)
+static int r8153-oldc_ups_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153b_ups_flags(tp);
+		ret = r8153b-old_ups_flags(tp);
 		if (ret < 0)
 			goto out;
 
@@ -5312,7 +5312,7 @@ static int r8153c_ups_en(struct e3100u *tp, bool enable)
 
 			tp->killer_ops.hw_phy_cfg(tp);
 
-			ret = e3100u_set_speed(tp, tp->autoneg, tp->speed,
+			ret = rte3100_set_speed(tp, tp->autoneg, tp->speed,
 						tp->duplex, tp->advertising);
 			if (ret < 0)
 				goto out;
@@ -5335,12 +5335,12 @@ out:
 	return ret;
 }
 
-static int r8156_ups_en(struct e3100u *tp, bool enable)
+static int e3100u_ups_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8156_ups_flags(tp);
+		ret = e3100u_ups_flags(tp);
 		if (ret < 0)
 			goto out;
 
@@ -5362,7 +5362,7 @@ static int r8156_ups_en(struct e3100u *tp, bool enable)
 			if (ret < 0)
 				goto out;
 
-			if (r8156b_flash_used(tp))
+			if (e3100ub_flash_used(tp))
 				ret = ocp_word_clr_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							GPHY_PATCH_DONE);
@@ -5390,13 +5390,13 @@ static int r8156_ups_en(struct e3100u *tp, bool enable)
 		if (ocp_data & PCUT_STATUS) {
 			tp->killer_ops.hw_phy_cfg(tp);
 
-			ret = e3100u_set_speed(tp, tp->autoneg, tp->speed,
+			ret = rte3100_set_speed(tp, tp->autoneg, tp->speed,
 						tp->duplex, tp->advertising);
 		} else {
 			switch (tp->version) {
 			case KILLER_VER_13:
 			case KILLER_VER_15:
-				if (r8156b_flash_used(tp))
+				if (e3100ub_flash_used(tp))
 					ret = ocp_word_set_bits(tp,
 							MCU_TYPE_USB,
 							USB_GPHY_CTRL,
@@ -5412,7 +5412,7 @@ out:
 	return ret;
 }
 
-static int r8153_power_cut_en(struct e3100u *tp, bool enable)
+static int r8153-old_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5431,7 +5431,7 @@ out:
 	return ret;
 }
 
-static int r8153b_power_cut_en(struct e3100u *tp, bool enable)
+static int r8153b-old_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5450,7 +5450,7 @@ out:
 	return ret;
 }
 
-static int r8157_power_cut_en(struct e3100u *tp, bool enable)
+static int r8157-old_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5481,7 +5481,7 @@ out:
 	return ret;
 }
 
-static int r8153_queue_wake(struct e3100u *tp, bool enable)
+static int r8153-old_queue_wake(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5506,14 +5506,14 @@ out:
 	return ret;
 }
 
-static bool killer_can_wakeup(struct e3100u *tp)
+static bool killer_can_wakeup(struct e3100 *tp)
 {
 	struct usb_device *udev = tp->udev;
 
 	return (udev->actconfig->desc.bmAttributes & USB_CONFIG_ATT_WAKEUP);
 }
 
-static int killer_runtime_suspend_enable(struct e3100u *tp, bool enable)
+static int killer_runtime_suspend_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5557,28 +5557,28 @@ out:
 	return ret;
 }
 
-static int killer8153_runtime_enable(struct e3100u *tp, bool enable)
+static int rtl8153-old_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
 		if (tp->version == KILLER_VER_06) {
-			ret = r8153_queue_wake(tp, true);
+			ret = r8153-old_queue_wake(tp, true);
 			if (ret < 0)
 				goto out;
 		}
-		ret = r8153_u1u2en(tp, false);
+		ret = r8153-old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_u2p3en(tp, false);
+		ret = r8153-old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
 		ret = killer_runtime_suspend_enable(tp, true);
 	} else {
 		if (tp->version == KILLER_VER_06) {
-			ret = r8153_queue_wake(tp, false);
+			ret = r8153-old_queue_wake(tp, false);
 			if (ret < 0)
 				goto out;
 		}
@@ -5593,32 +5593,32 @@ static int killer8153_runtime_enable(struct e3100u *tp, bool enable)
 		case KILLER_VER_05:
 		case KILLER_VER_06:
 		default:
-			ret = r8153_u2p3en(tp, true);
+			ret = r8153-old_u2p3en(tp, true);
 			if (ret < 0)
 				goto out;
 			break;
 		}
 
-		ret = r8153_u1u2en(tp, true);
+		ret = r8153-old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int killer8153b_runtime_enable(struct e3100u *tp, bool enable)
+static int rtl8153-oldb_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153_queue_wake(tp, true);
+		ret = r8153-old_queue_wake(tp, true);
 		if (ret < 0)
 			goto out;
-		ret = r8153b_u1u2en(tp, false);
+		ret = r8153b-old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_u2p3en(tp, false);
+		ret = r8153-old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5626,13 +5626,13 @@ static int killer8153b_runtime_enable(struct e3100u *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153b_ups_en(tp, true);
+		ret = r8153b-old_ups_en(tp, true);
 	} else {
-		ret = r8153b_ups_en(tp, false);
+		ret = r8153b-old_ups_en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_queue_wake(tp, false);
+		ret = r8153-old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5640,32 +5640,32 @@ static int killer8153b_runtime_enable(struct e3100u *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-//		ret = r8153_u2p3en(tp, true);
+//		ret = r8153-old_u2p3en(tp, true);
 //		if (ret < 0)
 //			goto out;
 
 		if (tp->udev->speed >= USB_SPEED_SUPER)
-			ret = r8153b_u1u2en(tp, true);
+			ret = r8153b-old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int killer8153c_runtime_enable(struct e3100u *tp, bool enable)
+static int rtl8153-oldc_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153_queue_wake(tp, true);
+		ret = r8153-old_queue_wake(tp, true);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153b_u1u2en(tp, false);
+		ret = r8153b-old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_u2p3en(tp, false);
+		ret = r8153-old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5673,13 +5673,13 @@ static int killer8153c_runtime_enable(struct e3100u *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153c_ups_en(tp, true);
+		ret = r8153-oldc_ups_en(tp, true);
 	} else {
-		ret = r8153c_ups_en(tp, false);
+		ret = r8153-oldc_ups_en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_queue_wake(tp, false);
+		ret = r8153-old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5687,44 +5687,44 @@ static int killer8153c_runtime_enable(struct e3100u *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-//		ret = r8153_u2p3en(tp, true);
+//		ret = r8153-old_u2p3en(tp, true);
 //		if (ret < 0)
 //			goto out;
 
-		ret = r8153b_u1u2en(tp, true);
+		ret = r8153b-old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int killer8156_runtime_enable(struct e3100u *tp, bool enable)
+static int rte3100u_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153_queue_wake(tp, true);
+		ret = r8153-old_queue_wake(tp, true);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153b_u1u2en(tp, false);
+		ret = r8153b-old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_u2p3en(tp, false);
+		ret = r8153-old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
 		ret = killer_runtime_suspend_enable(tp, true);
 //		if (tp->version != KILLER_VER_10 ||
 //		    tp->udev->speed == USB_SPEED_HIGH)
-//			ret = r8156_ups_en(tp, true);
+//			ret = e3100u_ups_en(tp, true);
 	} else {
-//		r8156_ups_en(tp, false);
+//		e3100u_ups_en(tp, false);
 //		if (ret < 0)
 //			goto out;
 
-		ret = r8153_queue_wake(tp, false);
+		ret = r8153-old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5732,31 +5732,31 @@ static int killer8156_runtime_enable(struct e3100u *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_u2p3en(tp, true);
+		ret = r8153-old_u2p3en(tp, true);
 		if (ret < 0)
 			goto out;
 
 		if (tp->udev->speed >= USB_SPEED_SUPER)
-			ret = r8153b_u1u2en(tp, true);
+			ret = r8153b-old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int killer8157_runtime_enable(struct e3100u *tp, bool enable)
+static int rtl8157-old_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
-	ret = r8153_queue_wake(tp, enable);
+	ret = r8153-old_queue_wake(tp, enable);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8157_u2p3en(tp, false);
+	ret = r8157-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -5766,17 +5766,17 @@ out:
 	return ret;
 }
 
-static int killer_nway_restart(struct e3100u *tp)
+static int killer_nway_restart(struct e3100 *tp)
 {
 	int r;
 
 	/* if autoneg is off, it's an error */
-	r = e3100u_mdio_read(tp, MII_BMCR);
+	r = e3100_mdio_read(tp, MII_BMCR);
 	if (r < 0)
 		goto out;
 
 	if (r & BMCR_ANENABLE)
-		r = e3100u_mdio_write(tp, MII_BMCR, r | BMCR_ANRESTART);
+		r = e3100_mdio_write(tp, MII_BMCR, r | BMCR_ANRESTART);
 
 out:
 	if (r < 0)
@@ -5785,7 +5785,7 @@ out:
 		return 0;
 }
 
-static int r8153_teredo_off(struct e3100u *tp)
+static int r8153-old_teredo_off(struct e3100 *tp)
 {
 	int ret;
 
@@ -5837,7 +5837,7 @@ out:
 	return ret;
 }
 
-static int killer_reset_bmu(struct e3100u *tp)
+static int killer_reset_bmu(struct e3100 *tp)
 {
 	int ret;
 
@@ -5893,7 +5893,7 @@ out:
 }
 
 /* Clear the bp to stop the firmware before loading a new one */
-static int killer_clear_bp(struct e3100u *tp, u16 type)
+static int killer_clear_bp(struct e3100 *tp, u16 type)
 {
 	u16 bp[16] = {0};
 	u16 bp_num;
@@ -5952,7 +5952,7 @@ out:
 	return ret;
 }
 
-static bool killer_check_fw_ver_ok(struct e3100u *tp, u16 index, u8 new_ver)
+static bool killer_check_fw_ver_ok(struct e3100 *tp, u16 index, u8 new_ver)
 {
 	u32 ocp_data;
 
@@ -5964,12 +5964,12 @@ static bool killer_check_fw_ver_ok(struct e3100u *tp, u16 index, u8 new_ver)
 		return false;
 }
 
-static inline void killer_reset_ocp_base(struct e3100u *tp)
+static inline void killer_reset_ocp_base(struct e3100 *tp)
 {
 	tp->ocp_base = -1;
 }
 
-static int killer_phy_patch_request(struct e3100u *tp, bool request, bool wait)
+static int killer_phy_patch_request(struct e3100 *tp, bool request, bool wait)
 {
 	int i, ret;
 	u16 check;
@@ -6004,7 +6004,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static void killer_patch_key_set(struct e3100u *tp, u16 key_addr, u16 patch_key)
+static void killer_patch_key_set(struct e3100 *tp, u16 key_addr, u16 patch_key)
 {
 	if (patch_key && key_addr) {
 		sram_write(tp, key_addr, patch_key);
@@ -6021,7 +6021,7 @@ static void killer_patch_key_set(struct e3100u *tp, u16 key_addr, u16 patch_key)
 }
 
 static int
-killer_pre_ram_code(struct e3100u *tp, u16 key_addr, u16 patch_key, bool wait)
+killer_pre_ram_code(struct e3100 *tp, u16 key_addr, u16 patch_key, bool wait)
 {
 	if (killer_phy_patch_request(tp, true, wait))
 		return -ETIME;
@@ -6031,7 +6031,7 @@ killer_pre_ram_code(struct e3100u *tp, u16 key_addr, u16 patch_key, bool wait)
 	return 0;
 }
 
-static int killer_post_ram_code(struct e3100u *tp, u16 key_addr, bool wait)
+static int killer_post_ram_code(struct e3100 *tp, u16 key_addr, bool wait)
 {
 	killer_patch_key_set(tp, key_addr, 0);
 
@@ -6040,14 +6040,14 @@ static int killer_post_ram_code(struct e3100u *tp, u16 key_addr, bool wait)
 	return 0;
 }
 
-static void patch4(struct e3100u *tp)
+static void patch4(struct e3100 *tp)
 {
 	ocp_word_set_bits(tp, MCU_TYPE_USB, USB_USB_TIMER, BIT(15));
 	ocp_write_word(tp, MCU_TYPE_USB, 0xc0ce, 0x0210);
 	ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_USB_TIMER, BIT(15));
 }
 
-static void e3100ub_firmware(struct e3100u *tp)
+static void r8152b-old_firmware(struct e3100 *tp)
 {
 	if (tp->version == KILLER_VER_01) {
 		int i;
@@ -6765,7 +6765,7 @@ static void e3100ub_firmware(struct e3100u *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static int e3100u_aldps_en(struct e3100u *tp, bool enable)
+static int e3100_aldps_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -6780,7 +6780,7 @@ static int e3100u_aldps_en(struct e3100u *tp, bool enable)
 	return ret;
 }
 
-static int e3100u_mmd_indirect(struct e3100u *tp, u16 dev, u16 reg)
+static int e3100_mmd_indirect(struct e3100 *tp, u16 dev, u16 reg)
 {
 	int ret;
 
@@ -6797,11 +6797,11 @@ out:
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-static int e3100u_mmd_read(struct e3100u *tp, u16 dev, u16 reg, u16 *data)
+static int e3100_mmd_read(struct e3100 *tp, u16 dev, u16 reg, u16 *data)
 {
 	int ret;
 
-	ret = e3100u_mmd_indirect(tp, dev, reg);
+	ret = e3100_mmd_indirect(tp, dev, reg);
 	if (ret < 0)
 		goto out;
 	ret = ocp_reg_read(tp, OCP_EEE_DATA, data);
@@ -6814,11 +6814,11 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 
-static int e3100u_mmd_write(struct e3100u *tp, u16 dev, u16 reg, u16 data)
+static int e3100_mmd_write(struct e3100 *tp, u16 dev, u16 reg, u16 data)
 {
 	int ret;
 
-	ret = e3100u_mmd_indirect(tp, dev, reg);
+	ret = e3100_mmd_indirect(tp, dev, reg);
 	if (ret < 0)
 		goto out;
 	ret = ocp_reg_write(tp, OCP_EEE_DATA, data);
@@ -6830,7 +6830,7 @@ out:
 	return ret;
 }
 
-static int e3100u_eee_en(struct e3100u *tp, bool enable)
+static int e3100_eee_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -6872,7 +6872,7 @@ out:
 	return ret;
 }
 
-static int r8153_eee_en(struct e3100u *tp, bool enable)
+static int r8153-old_eee_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -6905,12 +6905,12 @@ out:
 	return ret;
 }
 
-static int r8156_eee_en(struct e3100u *tp, bool enable)
+static int e3100u_eee_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153_eee_en(tp, true);
+		ret = r8153-old_eee_en(tp, true);
 		if (ret < 0)
 			goto out;
 		ret = ocp_reg_write(tp, OCP_EEE_ADV2, tp->eee_adv2);
@@ -6939,7 +6939,7 @@ out:
 	return ret;
 }
 
-static int r8157_eee_en(struct e3100u *tp, bool enable)
+static int r8157-old_eee_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -6976,7 +6976,7 @@ out:
 	return ret;
 }
 
-static int killer_eee_enable(struct e3100u *tp, bool enable)
+static int killer_eee_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -6985,16 +6985,16 @@ static int killer_eee_enable(struct e3100u *tp, bool enable)
 	case KILLER_VER_02:
 	case KILLER_VER_07:
 		if (enable) {
-			ret = e3100u_eee_en(tp, true);
+			ret = e3100_eee_en(tp, true);
 			if (ret < 0)
 				goto out;
-			ret = e3100u_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV,
+			ret = e3100_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV,
 					      tp->eee_adv);
 		} else {
-			ret = e3100u_eee_en(tp, false);
+			ret = e3100_eee_en(tp, false);
 			if (ret < 0)
 				goto out;
-			ret = e3100u_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV,
+			ret = e3100_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV,
 					      0);
 		}
 		break;
@@ -7005,18 +7005,18 @@ static int killer_eee_enable(struct e3100u *tp, bool enable)
 	case KILLER_VER_08:
 	case KILLER_VER_09:
 	case KILLER_VER_14:
-		ret = r8153_eee_en(tp, enable);
+		ret = r8153-old_eee_en(tp, enable);
 		break;
 	case KILLER_VER_10:
 	case KILLER_VER_11:
 	case KILLER_VER_12:
 	case KILLER_VER_13:
 	case KILLER_VER_15:
-		ret = r8156_eee_en(tp, enable);
+		ret = e3100u_eee_en(tp, enable);
 		break;
 	case KILLER_VER_16:
 	case KILLER_VER_17:
-		ret = r8157_eee_en(tp, enable);
+		ret = r8157-old_eee_en(tp, enable);
 		break;
 	default:
 		ret = 0;
@@ -7028,12 +7028,12 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int killer_disable_eee_bottom(struct e3100u *tp)
+static int killer_disable_eee_bottom(struct e3100 *tp)
 {
 	int i, ret = -EINVAL;
 
 	for (i = 0; i < 50; i++) {
-		if (!(e3100u_get_speed(tp) & LINK_STATUS)) {
+		if (!(rte3100_get_speed(tp) & LINK_STATUS)) {
 			ret = ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_EEE_CR,
 						EEE_RX_EN);
 			break;
@@ -7044,11 +7044,11 @@ static int killer_disable_eee_bottom(struct e3100u *tp)
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100ub_enable_fc(struct e3100u *tp)
+static int r8152b-old_enable_fc(struct e3100 *tp)
 {
 	int ret;
 
-	ret = e3100u_mdio_set_bit(tp, MII_ADVERTISE,
+	ret = e3100_mdio_set_bit(tp, MII_ADVERTISE,
 				 ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM);
 
 	tp->ups_info.flow_control = true;
@@ -7056,17 +7056,17 @@ static int e3100ub_enable_fc(struct e3100u *tp)
 	return ret;
 }
 
-static int e3100u_disable(struct e3100u *tp)
+static int rte3100_disable(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	ret = e3100u_aldps_en(tp, false);
+	ret = e3100_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 	ret = killer_disable(tp);
 	if (ret < 0)
 		err = ret;
-	ret = e3100u_aldps_en(tp, true);
+	ret = e3100_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -7074,18 +7074,18 @@ static int e3100u_disable(struct e3100u *tp)
 		return ret;
 }
 
-static void e3100ub_hw_phy_cfg(struct e3100u *tp)
+static void r8152b-old_hw_phy_cfg(struct e3100 *tp)
 {
-	e3100ub_firmware(tp);
+	r8152b-old_firmware(tp);
 
 	killer_eee_enable(tp, tp->eee_en);
-	e3100u_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
+	e3100_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static void wait_oob_link_list_ready(struct e3100u *tp)
+static void wait_oob_link_list_ready(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -7098,11 +7098,11 @@ static void wait_oob_link_list_ready(struct e3100u *tp)
 	}
 }
 
-static int r8156b_wait_loading_flash(struct e3100u *tp)
+static int e3100ub_wait_loading_flash(struct e3100 *tp)
 {
 	int ret = 0;
 
-	if (r8156b_flash_used(tp)) {
+	if (e3100ub_flash_used(tp)) {
 		int i;
 
 		for (i = 0; i < 100; i++) {
@@ -7119,7 +7119,7 @@ static int r8156b_wait_loading_flash(struct e3100u *tp)
 	return ret;
 }
 
-static int e3100ub_exit_oob(struct e3100u *tp)
+static int r8152b-old_exit_oob(struct e3100 *tp)
 {
 	int ret;
 
@@ -7130,7 +7130,7 @@ static int e3100ub_exit_oob(struct e3100u *tp)
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153_teredo_off(tp);
+	ret = r8153-old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 	ret = ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_NORAML);
@@ -7156,7 +7156,7 @@ static int e3100ub_exit_oob(struct e3100u *tp)
 
 	wait_oob_link_list_ready(tp);
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -7208,7 +7208,7 @@ static int e3100ub_exit_oob(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, E3100U_RMS);
+	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, RTE3100_RMS);
 	if (ret < 0)
 		goto out;
 
@@ -7220,7 +7220,7 @@ out:
 	return ret;
 }
 
-static int e3100ub_enter_oob(struct e3100u *tp)
+static int r8152b-old_enter_oob(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -7253,7 +7253,7 @@ static int e3100ub_enter_oob(struct e3100u *tp)
 
 	wait_oob_link_list_ready(tp);
 
-	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, E3100U_RMS);
+	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, RTE3100_RMS);
 	if (ret < 0)
 		err = ret;
 
@@ -7283,7 +7283,7 @@ static int e3100ub_enter_oob(struct e3100u *tp)
 		return ret;
 }
 
-static int r8156_lock_main(struct e3100u *tp, bool lock)
+static int e3100u_lock_main(struct e3100 *tp, bool lock)
 {
 	int i, ret;
 	u16 data;
@@ -7326,7 +7326,7 @@ out:
 	return ret;
 }
 
-static void r8153_wdt1_end(struct e3100u *tp)
+static void r8153-old_wdt1_end(struct e3100 *tp)
 {
 	int i, ret;
 
@@ -7347,7 +7347,7 @@ static void r8153_wdt1_end(struct e3100u *tp)
 #define DGB_DRV_STATE_LOAD		(2 << 14)
 #define DGB_DRV_STATE_UNLOAD		(1 << 14)
 
-static void killer_set_dbg_info_init(struct e3100u *tp, u16 drv_version)
+static void killer_set_dbg_info_init(struct e3100 *tp, u16 drv_version)
 {
 	u32 counter;
 
@@ -7360,7 +7360,7 @@ static void killer_set_dbg_info_init(struct e3100u *tp, u16 drv_version)
 	ocp_write_word(tp, MCU_TYPE_USB, 0xcfd0, counter);
 }
 
-static void killer_set_dbg_info_state(struct e3100u *tp, u16 state)
+static void killer_set_dbg_info_state(struct e3100 *tp, u16 state)
 {
 	u32 ocp_data;
 
@@ -7370,7 +7370,7 @@ static void killer_set_dbg_info_state(struct e3100u *tp, u16 state)
 	ocp_write_word(tp, MCU_TYPE_USB, 0xcfd0, state | ocp_data);
 }
 
-static void killer_fw_ver_erase(struct e3100u *tp)
+static void killer_fw_ver_erase(struct e3100 *tp)
 {
 	u16 outer_ver;
 	u32 ocp_data;
@@ -7406,7 +7406,7 @@ static void killer_fw_ver_erase(struct e3100u *tp)
 	}
 }
 
-static int killer_fc_pause_pkt_en(struct e3100u *tp)
+static int killer_fc_pause_pkt_en(struct e3100 *tp)
 {
 	int ret, ratio, temp;
 	u16 speed, num_pause_pkts;
@@ -7470,7 +7470,7 @@ static int killer_fc_pause_pkt_en(struct e3100u *tp)
 		if (ret < 0)
 			break;
 
-		speed = e3100u_get_speed(tp);
+		speed = rte3100_get_speed(tp);
 		num_pause_pkts = 0xa;
 		ratio = 10000;
 
@@ -7522,7 +7522,7 @@ no_link:
 	return ret < 0 ? ret : 0;
 }
 
-static void r8153_firmware(struct e3100u *tp)
+static void r8153-old_firmware(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret;
@@ -7982,7 +7982,7 @@ static void r8153_firmware(struct e3100u *tp)
 		sram_write(tp, 0xb820, 0x0210);
 		killer_post_ram_code(tp, 0x8146, true);
 
-		r8153_wdt1_end(tp);
+		r8153-old_wdt1_end(tp);
 
 		killer_clear_bp(tp, MCU_TYPE_USB);
 
@@ -8325,7 +8325,7 @@ static void r8153_firmware(struct e3100u *tp)
 		sram_write(tp, 0xb820, 0x0210);
 		killer_post_ram_code(tp, 0x8146, true);
 
-		r8153_wdt1_end(tp);
+		r8153-old_wdt1_end(tp);
 
 		ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_FW_FIX_EN0,
 				  FW_FIX_SUSPEND);
@@ -8651,7 +8651,7 @@ static void r8153_firmware(struct e3100u *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static void r8153b_firmware(struct e3100u *tp)
+static void r8153b-old_firmware(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret;
@@ -9389,7 +9389,7 @@ static void r8153b_firmware(struct e3100u *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static void r8156_firmware(struct e3100u *tp)
+static void e3100u_firmware(struct e3100 *tp)
 {
 	if (tp->version == KILLER_TEST_01) {
 		static u8 usb3_patch_t[] = {
@@ -10682,7 +10682,7 @@ static void r8156_firmware(struct e3100u *tp)
 
 		killer_phy_patch_request(tp, false, true);
 
-		r8156_lock_main(tp, true);
+		e3100u_lock_main(tp, true);
 
 		sram_write(tp, 0x80c9, 0x3478);
 		sram_write(tp, 0x80d0, 0xfe8f);
@@ -10782,7 +10782,7 @@ static void r8156_firmware(struct e3100u *tp)
 		sram_write(tp, 0x816a, 0xdb06);
 		sram_write(tp, 0x8171, 0xdb06);
 
-		r8156_lock_main(tp, false);
+		e3100u_lock_main(tp, false);
 
 		killer_clear_bp(tp, MCU_TYPE_USB);
 
@@ -10812,7 +10812,7 @@ static void r8156_firmware(struct e3100u *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static int r8153_aldps_en(struct e3100u *tp, bool enable)
+static int r8153-old_aldps_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -10841,7 +10841,7 @@ out:
 	return ret;
 }
 
-static int r8153b_mcu_spdown_en(struct e3100u *tp, bool enable)
+static int r8153b-old_mcu_spdown_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -10855,15 +10855,15 @@ static int r8153b_mcu_spdown_en(struct e3100u *tp, bool enable)
 	return ret;
 }
 
-static void r8153_hw_phy_cfg(struct e3100u *tp)
+static void r8153-old_hw_phy_cfg(struct e3100 *tp)
 {
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
 
-	r8153_firmware(tp);
+	r8153-old_firmware(tp);
 
 	if (tp->version == KILLER_VER_03)
 		ocp_reg_clr_bits(tp, OCP_EEE_CFG, CTAP_SHORT_EN);
@@ -10886,8 +10886,8 @@ static void r8153_hw_phy_cfg(struct e3100u *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
 
 	switch (tp->version) {
 	case KILLER_VER_03:
@@ -10896,14 +10896,14 @@ static void r8153_hw_phy_cfg(struct e3100u *tp)
 	case KILLER_VER_05:
 	case KILLER_VER_06:
 	default:
-		r8153_u2p3en(tp, true);
+		r8153-old_u2p3en(tp, true);
 		break;
 	}
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static u32 e3100u_efuse_read(struct e3100u *tp, u8 addr)
+static u32 e3100_efuse_read(struct e3100 *tp, u8 addr)
 {
 	u32 ocp_data, d2;
 	int ret;
@@ -10924,7 +10924,7 @@ static u32 e3100u_efuse_read(struct e3100u *tp, u8 addr)
 	return ocp_data;
 }
 
-static void r8153b_hw_phy_cfg(struct e3100u *tp)
+static void r8153b-old_hw_phy_cfg(struct e3100 *tp)
 {
 	u32 ocp_data;
 	u16 data;
@@ -10933,7 +10933,7 @@ static void r8153b_hw_phy_cfg(struct e3100u *tp)
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
@@ -10941,23 +10941,23 @@ static void r8153b_hw_phy_cfg(struct e3100u *tp)
 	/* U1/U2/L1 idle timer. 500 us */
 	ocp_write_word(tp, MCU_TYPE_USB, USB_U1U2_TIMER, 500);
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
 	switch (ret) {
 	case PHY_STAT_PWRDN:
 	case PHY_STAT_EXT_INIT:
-		r8153b_firmware(tp);
-		e3100u_mdio_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+		r8153b-old_firmware(tp);
+		e3100_mdio_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 		break;
 	case PHY_STAT_LAN_ON:
 	default:
-		r8153b_firmware(tp);
+		r8153b-old_firmware(tp);
 		break;
 	}
 
-	r8153b_green_en(tp, test_bit(GREEN_ETHERNET, &tp->flags));
+	r8153b-old_green_en(tp, test_bit(GREEN_ETHERNET, &tp->flags));
 
 	sram_set_bits(tp, SRAM_GREEN_CFG, R_TUNE_EN);
 	ocp_reg_set_bits(tp, OCP_NCTL_CFG, PGA_RETURN_EN);
@@ -10967,7 +10967,7 @@ static void r8153b_hw_phy_cfg(struct e3100u *tp)
 	 * bit (bit3) to rebuild the real 16-bit data. Write the data to the
 	 * ADC ioffset.
 	 */
-	ocp_data = e3100u_efuse_read(tp, 0x7d);
+	ocp_data = e3100_efuse_read(tp, 0x7d);
 	data = (u16)(((ocp_data & 0x1fff0) >> 1) | (ocp_data & 0x7));
 	if (data != 0xffff)
 		ocp_reg_write(tp, OCP_ADC_IOFFSET, data);
@@ -11019,22 +11019,22 @@ static void r8153b_hw_phy_cfg(struct e3100u *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
-//	r8153_u2p3en(tp, true);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
+//	r8153-old_u2p3en(tp, true);
 
 	set_bit(PHY_RESET, &tp->flags);
 	killer_set_dbg_info_state(tp, DGB_DRV_STATE_LOAD);
 }
 
-static void r8153c_hw_phy_cfg(struct e3100u *tp)
+static void r8153-oldc_hw_phy_cfg(struct e3100 *tp)
 {
-	r8153b_hw_phy_cfg(tp);
+	r8153b-old_hw_phy_cfg(tp);
 
 	tp->ups_info.r_tune = true;
 }
 
-static int killer8153_change_mtu(struct e3100u *tp)
+static int rtl8153-old_change_mtu(struct e3100 *tp)
 {
 	int ret;
 
@@ -11049,7 +11049,7 @@ out:
 	return ret;
 }
 
-static int r8153_lanwake_clr_en(struct e3100u *tp, bool enable)
+static int r8153-old_lanwake_clr_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -11073,14 +11073,14 @@ out:
 	return ret;
 }
 
-static int r8153_first_init(struct e3100u *tp)
+static int r8153-old_first_init(struct e3100 *tp)
 {
 	int ret;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153_teredo_off(tp);
+	ret = r8153-old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11088,7 +11088,7 @@ static int r8153_first_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 	ret = killer_reset_bmu(tp);
@@ -11115,7 +11115,7 @@ static int r8153_first_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = killer8153_change_mtu(tp);
+	ret = rtl8153-old_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11123,7 +11123,7 @@ static int r8153_first_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11142,13 +11142,13 @@ static int r8153_first_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_lanwake_clr_en(tp, true);
+	ret = r8153-old_lanwake_clr_en(tp, true);
 
 out:
 	return ret;
 }
 
-static int r8153_enter_oob(struct e3100u *tp)
+static int r8153-old_enter_oob(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -11243,7 +11243,7 @@ static int r8153_enter_oob(struct e3100u *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = r8153_lanwake_clr_en(tp, false);
+	ret = r8153-old_lanwake_clr_en(tp, false);
 
 	if (err < 0)
 		return err;
@@ -11251,11 +11251,11 @@ static int r8153_enter_oob(struct e3100u *tp)
 		return ret;
 }
 
-static int killer8153_disable(struct e3100u *tp)
+static int rtl8153-old_disable(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 	ret = killer_disable(tp);
@@ -11264,7 +11264,7 @@ static int killer8153_disable(struct e3100u *tp)
 	ret = killer_reset_bmu(tp);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -11272,17 +11272,17 @@ static int killer8153_disable(struct e3100u *tp)
 		return ret;
 }
 
-static u32 fc_pause_on_auto(struct e3100u *tp)
+static u32 fc_pause_on_auto(struct e3100 *tp)
 {
 	return (ALIGN(mtu_to_size(tp->netdev->mtu), 1024) + 6 * 1024);
 }
 
-static u32 fc_pause_off_auto(struct e3100u *tp)
+static u32 fc_pause_off_auto(struct e3100 *tp)
 {
 	return (ALIGN(mtu_to_size(tp->netdev->mtu), 1024) + 14 * 1024);
 }
 
-static int r8156_fc_parameter(struct e3100u *tp)
+static int e3100u_fc_parameter(struct e3100 *tp)
 {
 	int ret;
 
@@ -11299,25 +11299,25 @@ out:
 	return ret;
 }
 
-static int killer8156_enable(struct e3100u *tp)
+static int rte3100u_enable(struct e3100 *tp)
 {
 	u16 speed;
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8156_fc_parameter(tp);
+	ret = e3100u_fc_parameter(tp);
 	if (ret < 0)
 		goto out;
 	set_tx_qlen(tp);
 	ret = killer_set_eee_plus(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153_set_rx_early_timeout(tp);
+	ret = r8153-old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153_set_rx_early_size(tp);
+	ret = r8153-old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11334,7 +11334,7 @@ static int killer8156_enable(struct e3100u *tp)
 		break;
 	}
 
-	speed = e3100u_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 	ret = killer_set_ifg(tp, speed);
 	if (ret < 0)
 		goto out;
@@ -11381,7 +11381,7 @@ out:
 	return ret;
 }
 
-static int killer8156_disable(struct e3100u *tp)
+static int rte3100u_disable(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -11392,7 +11392,7 @@ static int killer8156_disable(struct e3100u *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = killer8153_disable(tp);
+	ret = rtl8153-old_disable(tp);
 
 	if (err < 0)
 		return err;
@@ -11400,12 +11400,12 @@ static int killer8156_disable(struct e3100u *tp)
 		return ret;
 }
 
-static int killer8156b_enable(struct e3100u *tp)
+static int rtl8152b-old_enable(struct e3100 *tp)
 {
 	u16 speed;
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -11418,14 +11418,14 @@ static int killer8156b_enable(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_set_rx_early_timeout(tp);
+	ret = r8153-old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153_set_rx_early_size(tp);
+	ret = r8153-old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
-	speed = e3100u_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 	ret = killer_set_ifg(tp, speed);
 	if (ret < 0)
 		goto out;
@@ -11464,12 +11464,12 @@ out:
 	return ret;
 }
 
-static int killer8157_enable(struct e3100u *tp)
+static int rtl8157-old_enable(struct e3100 *tp)
 {
 	u16 speed;
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -11482,14 +11482,14 @@ static int killer8157_enable(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_set_rx_early_timeout(tp);
+	ret = r8153-old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153_set_rx_early_size(tp);
+	ret = r8153-old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
-	speed = e3100u_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 	ret = killer_set_ifg(tp, speed);
 	if (ret < 0)
 		goto out;
@@ -11500,7 +11500,7 @@ out:
 	return ret;
 }
 
-static int e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
+static int rte3100_set_speed(struct e3100 *tp, u8 autoneg, u32 speed, u8 duplex,
 			     u32 advertising)
 {
 	u16 bmcr;
@@ -11569,7 +11569,7 @@ static int e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
 		if (!(advertising & support))
 			return -EINVAL;
 
-		ret = e3100u_mdio_read(tp, MII_ADVERTISE);
+		ret = e3100_mdio_read(tp, MII_ADVERTISE);
 		if (ret < 0)
 			goto out;
 
@@ -11595,14 +11595,14 @@ static int e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
 		}
 
 		if (orig != new1) {
-			ret = e3100u_mdio_write(tp, MII_ADVERTISE, new1);
+			ret = e3100_mdio_write(tp, MII_ADVERTISE, new1);
 			if (ret < 0)
 				goto out;
 			tp->mii.advertising = new1;
 		}
 
 		if (tp->mii.supports_gmii) {
-			ret = e3100u_mdio_read(tp, MII_CTRL1000);
+			ret = e3100_mdio_read(tp, MII_CTRL1000);
 			if (ret < 0)
 				goto out;
 
@@ -11616,7 +11616,7 @@ static int e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
 			}
 
 			if (orig != new1) {
-				ret = e3100u_mdio_write(tp, MII_CTRL1000, new1);
+				ret = e3100_mdio_write(tp, MII_CTRL1000, new1);
 				if (ret < 0)
 					goto out;
 			}
@@ -11663,7 +11663,7 @@ static int e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
 	if (test_and_clear_bit(PHY_RESET, &tp->flags))
 		bmcr |= BMCR_RESET;
 
-	ret = e3100u_mdio_write(tp, MII_BMCR, bmcr);
+	ret = e3100_mdio_write(tp, MII_BMCR, bmcr);
 	if (ret < 0)
 		goto out;
 
@@ -11672,7 +11672,7 @@ static int e3100u_set_speed(struct e3100u *tp, u8 autoneg, u32 speed, u8 duplex,
 
 		for (i = 0; i < 50; i++) {
 			msleep(20);
-			ret = e3100u_mdio_read(tp, MII_BMCR);
+			ret = e3100_mdio_read(tp, MII_BMCR);
 			if (ret < 0)
 				goto out;
 			if ((ret & BMCR_RESET) == 0)
@@ -11690,12 +11690,12 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static bool killer_speed_down(struct e3100u *tp)
+static bool killer_speed_down(struct e3100 *tp)
 {
 	bool ret = false;
 	int r;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return ret;
 
 	if (!(tp->saved_wolopts & WAKE_ANY)) {
@@ -11704,7 +11704,7 @@ static bool killer_speed_down(struct e3100u *tp)
 		case KILLER_VER_02:
 			set_bit(RECOVER_SPEED, &tp->flags);
 			ret = true;
-			r = e3100u_mdio_set_bit(tp, MII_BMCR, BMCR_PDOWN);
+			r = e3100_mdio_set_bit(tp, MII_BMCR, BMCR_PDOWN);
 			if (r < 0)
 				netif_err(tp, drv, tp->netdev,
 					  "failed to set BMCR\n");
@@ -11717,12 +11717,12 @@ static bool killer_speed_down(struct e3100u *tp)
 	if (!(tp->saved_wolopts & WAKE_PHY)) {
 		u16 bmcr;
 
-		r = e3100u_mdio_read(tp, MII_BMCR);
+		r = e3100_mdio_read(tp, MII_BMCR);
 		if (r < 0)
 			goto out1;
 
 		bmcr = r;
-		r = e3100u_mdio_read(tp, MII_EXPANSION);
+		r = e3100_mdio_read(tp, MII_EXPANSION);
 		if (r < 0)
 			goto out1;
 
@@ -11730,7 +11730,7 @@ static bool killer_speed_down(struct e3100u *tp)
 		    (r & EXPANSION_NWAY)) {
 			u16 anar, gbcr = 0, lpa, gbcr2 = 0, lpa2, lpa3;
 
-			r = e3100u_mdio_read(tp, MII_ADVERTISE);
+			r = e3100_mdio_read(tp, MII_ADVERTISE);
 			if (r < 0)
 				goto out1;
 
@@ -11739,7 +11739,7 @@ static bool killer_speed_down(struct e3100u *tp)
 				  ADVERTISE_100HALF | ADVERTISE_100FULL);
 
 			if (tp->mii.supports_gmii) {
-				r = e3100u_mdio_read(tp, MII_CTRL1000);
+				r = e3100_mdio_read(tp, MII_CTRL1000);
 				if (r < 0)
 					goto out1;
 
@@ -11758,15 +11758,15 @@ static bool killer_speed_down(struct e3100u *tp)
 					   MDIO_AN_10GBT_CTRL_ADV10G);
 			}
 
-			r = e3100u_mdio_read(tp, MII_LPA);
+			r = e3100_mdio_read(tp, MII_LPA);
 			if (r < 0)
 				goto out1;
 			lpa = r;
-			r = e3100u_mdio_read(tp, MII_STAT1000);
+			r = e3100_mdio_read(tp, MII_STAT1000);
 			if (r < 0)
 				goto out1;
 			lpa2 = r;
-			r = e3100u_mdio_read(tp, OCP_10GBT_STAT);
+			r = e3100_mdio_read(tp, OCP_10GBT_STAT);
 			if (r < 0)
 				goto out1;
 			lpa3 = r;
@@ -11790,7 +11790,7 @@ static bool killer_speed_down(struct e3100u *tp)
 			ret = true;
 
 			if (tp->mii.supports_gmii) {
-				r = e3100u_mdio_write(tp, MII_CTRL1000, gbcr);
+				r = e3100_mdio_write(tp, MII_CTRL1000, gbcr);
 				if (r < 0)
 					goto out1;
 			}
@@ -11802,10 +11802,10 @@ static bool killer_speed_down(struct e3100u *tp)
 					goto out1;
 			}
 
-			r = e3100u_mdio_write(tp, MII_ADVERTISE, anar);
+			r = e3100_mdio_write(tp, MII_ADVERTISE, anar);
 			if (r < 0)
 				goto out1;
-			r = e3100u_mdio_write(tp, MII_BMCR, bmcr | BMCR_ANRESTART);
+			r = e3100_mdio_write(tp, MII_BMCR, bmcr | BMCR_ANRESTART);
 			if (r < 0)
 				goto out1;
 		}
@@ -11815,45 +11815,45 @@ out1:
 	return ret;
 }
 
-static int e3100u_up(struct e3100u *tp)
+static int rte3100_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = e3100u_aldps_en(tp, false);
+	ret = e3100_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = e3100ub_exit_oob(tp);
+	ret = r8152b-old_exit_oob(tp);
 	if (ret < 0)
 		goto out;
-	ret = e3100u_aldps_en(tp, true);
+	ret = e3100_aldps_en(tp, true);
 
 out:
 	return ret;
 }
 
-static int e3100u_down(struct e3100u *tp)
+static int rte3100_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
 	}
 
-	ret = e3100u_power_cut_en(tp, false);
+	ret = e3100_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = e3100u_aldps_en(tp, false);
+	ret = e3100_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = e3100ub_enter_oob(tp);
+	ret = r8152b-old_enter_oob(tp);
 	if (ret < 0)
 		err = ret;
-	ret = e3100u_aldps_en(tp, true);
+	ret = e3100_aldps_en(tp, true);
 
 
 	if (err < 0)
@@ -11862,23 +11862,23 @@ static int e3100u_down(struct e3100u *tp)
 		return ret;
 }
 
-static int killer8153_up(struct e3100u *tp)
+static int rtl8153-old_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153_u1u2en(tp, false);
+	ret = r8153-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_first_init(tp);
+	ret = r8153-old_first_init(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11887,7 +11887,7 @@ static int killer8153_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -11898,44 +11898,44 @@ static int killer8153_up(struct e3100u *tp)
 	case KILLER_VER_05:
 	case KILLER_VER_06:
 	default:
-		ret = r8153_u2p3en(tp, true);
+		ret = r8153-old_u2p3en(tp, true);
 		if (ret < 0)
 			goto out;
 		break;
 	}
 
-	ret = r8153_u1u2en(tp, true);
+	ret = r8153-old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int killer8153_down(struct e3100u *tp)
+static int rtl8153-old_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
 	}
 
-	ret = r8153_u1u2en(tp, false);
+	ret = r8153-old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_power_cut_en(tp, false);
+	ret = r8153-old_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_enter_oob(tp);
+	ret = r8153-old_enter_oob(tp);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -11943,75 +11943,75 @@ static int killer8153_down(struct e3100u *tp)
 		return ret;
 }
 
-static int killer8153b_up(struct e3100u *tp)
+static int rtl8153-oldb_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_first_init(tp);
+	ret = r8153-old_first_init(tp);
 	if (ret < 0)
 		goto out;
 	ret = ocp_write_dword(tp, MCU_TYPE_USB, USB_RX_BUF_TH, RX_THR_B);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_mcu_spdown_en(tp, false);
+	ret = r8153b-old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
-//	ret = r8153_u2p3en(tp, true);
+//	ret = r8153-old_u2p3en(tp, true);
 //	if (ret < 0)
 //		goto out;
 	if (tp->udev->speed >= USB_SPEED_SUPER)
-		ret = r8153b_u1u2en(tp, true);
+		ret = r8153b-old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int killer8153b_down(struct e3100u *tp)
+static int rtl8153-oldb_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
 	}
 
-	ret = r8153b_mcu_spdown_en(tp, true);
+	ret = r8153b-old_mcu_spdown_en(tp, true);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b_power_cut_en(tp, false);
+	ret = r8153b-old_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_enter_oob(tp);
+	ret = r8153-old_enter_oob(tp);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -12019,7 +12019,7 @@ static int killer8153b_down(struct e3100u *tp)
 		return ret;
 }
 
-static int killer8153c_change_mtu(struct e3100u *tp)
+static int rtl8153-oldc_change_mtu(struct e3100 *tp)
 {
 	int ret;
 
@@ -12055,27 +12055,27 @@ out:
 	return ret;
 }
 
-static int killer8153c_up(struct e3100u *tp)
+static int rtl8153-oldc_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153_teredo_off(tp);
+	ret = r8153-old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12083,7 +12083,7 @@ static int killer8153c_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 	ret = killer_reset_bmu(tp);
@@ -12110,11 +12110,11 @@ static int killer8153c_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = killer8153c_change_mtu(tp);
+	ret = rtl8153-oldc_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12148,23 +12148,23 @@ static int killer8153c_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_mcu_spdown_en(tp, false);
+	ret = r8153b-old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
-//	ret = r8153_u2p3en(tp, true);
+//	ret = r8153-old_u2p3en(tp, true);
 //	if (ret < 0)
 //		goto out;
-	ret = r8153b_u1u2en(tp, true);
+	ret = r8153b-old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int killer8156_change_mtu(struct e3100u *tp)
+static int rte3100u_change_mtu(struct e3100 *tp)
 {
 	u32 max_pkt_size = mtu_to_size(tp->netdev->mtu);
 	int ret;
@@ -12175,7 +12175,7 @@ static int killer8156_change_mtu(struct e3100u *tp)
 	ret = ocp_write_byte(tp, MCU_TYPE_PLA, PLA_MTPS, MTPS_JUMBO);
 	if (ret < 0)
 		goto out;
-	ret = r8156_fc_parameter(tp);
+	ret = e3100u_fc_parameter(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12190,27 +12190,27 @@ out:
 	return ret;
 }
 
-static int killer8156_up(struct e3100u *tp)
+static int rte3100u_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153_teredo_off(tp);
+	ret = r8153-old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12218,7 +12218,7 @@ static int killer8156_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 	ret = killer_reset_bmu(tp);
@@ -12238,7 +12238,7 @@ static int killer8156_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = killer8156_change_mtu(tp);
+	ret = rte3100u_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12261,7 +12261,7 @@ static int killer8156_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_mcu_spdown_en(tp, false);
+	ret = r8153b-old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -12281,10 +12281,10 @@ static int killer8156_up(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153_u2p3en(tp, true);
+	ret = r8153-old_u2p3en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -12294,35 +12294,35 @@ static int killer8156_up(struct e3100u *tp)
 		goto out;
 
 	if (tp->udev->speed >= USB_SPEED_SUPER)
-		ret = r8153b_u1u2en(tp, true);
+		ret = r8153b-old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int killer8156_down(struct e3100u *tp)
+static int rte3100u_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
 	}
 
-	ret = r8153b_mcu_spdown_en(tp, true);
+	ret = r8153b-old_mcu_spdown_en(tp, true);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b_power_cut_en(tp, false);
+	ret = r8153b-old_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 
@@ -12388,7 +12388,7 @@ static int killer8156_down(struct e3100u *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -12396,7 +12396,7 @@ static int killer8156_down(struct e3100u *tp)
 		return ret;
 }
 
-static int killer8157_change_mtu(struct e3100u *tp)
+static int rtl8157-old_change_mtu(struct e3100 *tp)
 {
 	u32 max_pkt_size = mtu_to_size(tp->netdev->mtu);
 	u32 ocp_data;
@@ -12416,7 +12416,7 @@ static int killer8157_change_mtu(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_fc_parameter(tp);
+	ret = e3100u_fc_parameter(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12431,24 +12431,24 @@ out:
 	return ret;
 }
 
-static int killer8157_up(struct e3100u *tp)
+static int rtl8157-old_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153_teredo_off(tp);
+	ret = r8153-old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12456,7 +12456,7 @@ static int killer8157_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12477,7 +12477,7 @@ static int killer8157_up(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = killer8157_change_mtu(tp);
+	ret = rtl8157-old_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12502,7 +12502,7 @@ static int killer8157_up(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -12515,26 +12515,26 @@ static int killer8157_up(struct e3100u *tp)
 		goto out;
 
 //	if (tp->udev->speed >= USB_SPEED_SUPER)
-//		ret = r8153b_u1u2en(tp, true);
+//		ret = r8153b-old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int killer8157_down(struct e3100u *tp)
+static int rtl8157-old_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
 	}
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153_aldps_en(tp, false);
+	ret = r8153-old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 
@@ -12601,7 +12601,7 @@ static int killer8157_down(struct e3100u *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = r8153_aldps_en(tp, true);
+	ret = r8153-old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -12609,7 +12609,7 @@ static int killer8157_down(struct e3100u *tp)
 		return ret;
 }
 
-static bool e3100u_in_nway(struct e3100u *tp)
+static bool rte3100_in_nway(struct e3100 *tp)
 {
 	u32 nway_state;
 
@@ -12632,7 +12632,7 @@ static bool e3100u_in_nway(struct e3100u *tp)
 		return true;
 }
 
-static bool killer8153_in_nway(struct e3100u *tp)
+static bool rtl8153-old_in_nway(struct e3100 *tp)
 {
 	u16 phy_state;
 
@@ -12647,7 +12647,7 @@ static bool killer8153_in_nway(struct e3100u *tp)
 		return true;
 }
 
-static int r8156_mdio_force_mode(struct e3100u *tp)
+static int e3100u_mdio_force_mode(struct e3100 *tp)
 {
 	/* Select force mode through 0xa5b4 bit 15
 	 * 0: MDIO force mode
@@ -12656,13 +12656,13 @@ static int r8156_mdio_force_mode(struct e3100u *tp)
 	return ocp_reg_clr_bits(tp, 0xa5b4, BIT(15));
 }
 
-static void set_carrier(struct e3100u *tp)
+static void set_carrier(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 	struct napi_struct *napi = &tp->napi;
 	u16 speed;
 
-	speed = e3100u_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 
 	if (speed & LINK_STATUS) {
 		if (!netif_carrier_ok(netdev)) {
@@ -12671,7 +12671,7 @@ static void set_carrier(struct e3100u *tp)
 			napi_disable(napi);
 			netif_carrier_on(netdev);
 			killer_start_rx(tp);
-			e3100u_set_rx_mode(netdev);
+			rte3100_set_rx_mode(netdev);
 			napi_enable(napi);
 			netif_wake_queue(netdev);
 			netif_info(tp, link, netdev, "carrier on\n");
@@ -12692,12 +12692,12 @@ static void set_carrier(struct e3100u *tp)
 	}
 }
 
-static inline void __killer_work_func(struct e3100u *tp)
+static inline void __killer_work_func(struct e3100 *tp)
 {
 	/* If the device is unplugged or !netif_running(), the workqueue
 	 * doesn't need to wake the device, and could return directly.
 	 */
-	if (test_bit(E3100U_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
 		return;
 
 	if (usb_autopm_get_interface(tp->intf) < 0)
@@ -12714,11 +12714,11 @@ static inline void __killer_work_func(struct e3100u *tp)
 		goto out1;
 	}
 
-	if (test_and_clear_bit(E3100U_LINK_CHG, &tp->flags))
+	if (test_and_clear_bit(RTE3100_LINK_CHG, &tp->flags))
 		set_carrier(tp);
 
-	if (test_bit(E3100U_SET_RX_MODE, &tp->flags))
-		e3100u_set_rx_mode(tp->netdev);
+	if (test_bit(RTE3100_SET_RX_MODE, &tp->flags))
+		rte3100_set_rx_mode(tp->netdev);
 
 	/* don't schedule tasket before linking */
 	if (test_and_clear_bit(SCHEDULE_TASKLET, &tp->flags) &&
@@ -12735,7 +12735,7 @@ out1:
 	usb_autopm_put_interface(tp->intf);
 
 link_chg_only:
-	if (test_and_clear_bit(E3100U_LINK_CHG, &tp->flags)) {
+	if (test_and_clear_bit(RTE3100_LINK_CHG, &tp->flags)) {
 		int lock;
 
 		rtnl_lock();
@@ -12748,9 +12748,9 @@ link_chg_only:
 	}
 }
 
-static inline void __killer_hw_phy_work_func(struct e3100u *tp)
+static inline void __killer_hw_phy_work_func(struct e3100 *tp)
 {
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (usb_autopm_get_interface(tp->intf) < 0)
@@ -12760,7 +12760,7 @@ static inline void __killer_hw_phy_work_func(struct e3100u *tp)
 
 	tp->killer_ops.hw_phy_cfg(tp);
 
-	e3100u_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
+	rte3100_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
 			  tp->advertising);
 
 	mutex_unlock(&tp->control);
@@ -12772,14 +12772,14 @@ static inline void __killer_hw_phy_work_func(struct e3100u *tp)
 
 static void killer_work_func_t(void *data)
 {
-	struct e3100u *tp = (struct e3100u *)data;
+	struct e3100 *tp = (struct e3100 *)data;
 
 	__killer_work_func(tp);
 }
 
 static void killer_hw_phy_work_func_t(void *data)
 {
-	struct e3100u *tp = (struct e3100u *)data;
+	struct e3100 *tp = (struct e3100 *)data;
 
 	__killer_hw_phy_work_func(tp);
 }
@@ -12788,14 +12788,14 @@ static void killer_hw_phy_work_func_t(void *data)
 
 static void killer_work_func_t(struct work_struct *work)
 {
-	struct e3100u *tp = container_of(work, struct e3100u, schedule.work);
+	struct e3100 *tp = container_of(work, struct e3100, schedule.work);
 
 	__killer_work_func(tp);
 }
 
 static void killer_hw_phy_work_func_t(struct work_struct *work)
 {
-	struct e3100u *tp = container_of(work, struct e3100u, hw_phy_work.work);
+	struct e3100 *tp = container_of(work, struct e3100, hw_phy_work.work);
 
 	__killer_hw_phy_work_func(tp);
 }
@@ -12806,7 +12806,7 @@ static void killer_hw_phy_work_func_t(struct work_struct *work)
 static int killer_notifier(struct notifier_block *nb, unsigned long action,
 			void *data)
 {
-	struct e3100u *tp = container_of(nb, struct e3100u, pm_notifier);
+	struct e3100 *tp = container_of(nb, struct e3100, pm_notifier);
 
 	switch (action) {
 	case PM_HIBERNATION_PREPARE:
@@ -12830,8 +12830,8 @@ static int killer_notifier(struct notifier_block *nb, unsigned long action,
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP) */
 
-#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
-static int killer_s5_wol(struct e3100u *tp)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
+static int killer_s5_wol(struct e3100 *tp)
 {
 	struct usb_device *udev = tp->udev;
 	u32 ocp_data;
@@ -12886,7 +12886,7 @@ static
 int killer_reboot_notifier(struct notifier_block *nb, unsigned long action,
 			void *data)
 {
-	struct e3100u *tp = container_of(nb, struct e3100u, reboot_notifier);
+	struct e3100 *tp = container_of(nb, struct e3100, reboot_notifier);
 
 	switch (action) {
 	case SYS_POWER_OFF:
@@ -12917,15 +12917,15 @@ int killer_reboot_notifier(struct notifier_block *nb, unsigned long action,
 
 	return NOTIFY_DONE;
 }
-#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 
-static int rtk_disable_diag(struct e3100u *tp)
+static int rtk_disable_diag(struct e3100 *tp)
 {
 	tp->rtk_enable_diag--;
 	killer_reset_ocp_base(tp);
 
 	if (tp->support_2500full || tp->support_5000full || tp->support_10gfull)
-		if (r8156_mdio_force_mode(tp) < 0)
+		if (e3100u_mdio_force_mode(tp) < 0)
 			netif_err(tp, drv, tp->netdev, "failed to set force mode\n");
 
 	netif_info(tp, drv, tp->netdev, "disable rtk diag %d\n",
@@ -12938,9 +12938,9 @@ static int rtk_disable_diag(struct e3100u *tp)
 	return 0;
 }
 
-static int e3100u_open(struct net_device *netdev)
+static int rte3100_open(struct net_device *netdev)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int res = 0;
 
 	if (unlikely(tp->rtk_enable_diag))
@@ -12972,7 +12972,7 @@ static int e3100u_open(struct net_device *netdev)
 	smp_mb__after_atomic();
 
 	if (test_and_clear_bit(RECOVER_SPEED, &tp->flags))
-		e3100u_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
+		rte3100_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
 				  tp->advertising);
 
 	res = usb_submit_urb(tp->intr_urb, GFP_KERNEL);
@@ -12993,10 +12993,10 @@ static int e3100u_open(struct net_device *netdev)
 	tp->pm_notifier.notifier_call = killer_notifier;
 	register_pm_notifier(&tp->pm_notifier);
 #endif
-#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 	tp->reboot_notifier.notifier_call = killer_reboot_notifier;
 	register_reboot_notifier(&tp->reboot_notifier);
-#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 	return 0;
 
 out_unwork:
@@ -13010,14 +13010,14 @@ out:
 	return res;
 }
 
-static int e3100u_close(struct net_device *netdev)
+static int rte3100_close(struct net_device *netdev)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int res = 0;
 
-#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 	unregister_reboot_notifier(&tp->reboot_notifier);
-#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 	unregister_pm_notifier(&tp->pm_notifier);
 #endif
@@ -13036,7 +13036,7 @@ static int e3100u_close(struct net_device *netdev)
 	}
 
 	res = usb_autopm_get_interface(tp->intf);
-	if (res < 0 || test_bit(E3100U_UNPLUG, &tp->flags)) {
+	if (res < 0 || test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 	} else {
@@ -13044,16 +13044,16 @@ static int e3100u_close(struct net_device *netdev)
 
 		tp->killer_ops.down(tp);
 
-#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 		if (killer_s5_wol(tp) < 0)
 			netif_info(tp, drv, tp->netdev,
 				   "S5 WOL is not enabled\n");
 		else
 			netif_info(tp, drv, tp->netdev, "Enable S5 WOL\n");
-#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 
 		if (tp->version == KILLER_VER_01)
-			e3100u_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
+			rte3100_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
 		else
 			killer_speed_down(tp);
 
@@ -13068,12 +13068,12 @@ static int e3100u_close(struct net_device *netdev)
 	return res;
 }
 
-static int killer_tally_reset(struct e3100u *tp)
+static int killer_tally_reset(struct e3100 *tp)
 {
 	return ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_RSTTALLY, TALLY_RESET);
 }
 
-static int test_io_en(struct e3100u *tp, bool enable)
+static int test_io_en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 	    return ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_PHY_PWR,
@@ -13083,7 +13083,7 @@ static int test_io_en(struct e3100u *tp, bool enable)
 				     TEST_IO_OFF);
 }
 
-static int killer_disable_spi(struct e3100u *tp)
+static int killer_disable_spi(struct e3100 *tp)
 {
 	int ret;
 
@@ -13099,11 +13099,11 @@ out:
 	return ret;
 }
 
-static int e3100ub_init(struct e3100u *tp)
+static int r8152b-old_init(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 #if 0
@@ -13133,15 +13133,15 @@ static int e3100ub_init(struct e3100u *tp)
 	}
 #endif
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_aldps_en(tp, false);
+	ret = e3100_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13152,7 +13152,7 @@ static int e3100ub_init(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = e3100u_power_cut_en(tp, false);
+	ret = e3100_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13202,15 +13202,15 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8153_init(struct e3100u *tp)
+static int r8153-old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153_u1u2en(tp, false);
+	ret = r8153-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13224,7 +13224,7 @@ static int r8153_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -13236,15 +13236,15 @@ static int r8153_init(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13291,11 +13291,11 @@ static int r8153_init(struct e3100u *tp)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153_queue_wake(tp, false);
+		ret = r8153-old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
-		if (e3100u_get_speed(tp) & LINK_STATUS)
+		if (rte3100_get_speed(tp) & LINK_STATUS)
 			ret = ocp_word_set_bits(tp, MCU_TYPE_PLA,
 						PLA_EXTRA_STATUS,
 						CUR_LINK_OK | POLL_LINK_CHG);
@@ -13341,7 +13341,7 @@ static int r8153_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_power_cut_en(tp, false);
+	ret = r8153-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13349,17 +13349,17 @@ static int r8153_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_mac_clk_speed_down(tp, false);
+	ret = r8153-old_mac_clk_speed_down(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_u1u2en(tp, true);
+	ret = r8153-old_u1u2en(tp, true);
 	if (ret < 0)
 		goto out;
 
 	usb_enable_lpm(tp->udev);
 
-	ret = r8153_lanwake_clr_en(tp, true);
+	ret = r8153-old_lanwake_clr_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -13392,17 +13392,17 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8153b_init(struct e3100u *tp)
+static int r8153b-old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0xb);
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13421,19 +13421,19 @@ static int r8153b_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13442,15 +13442,15 @@ static int r8153b_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_power_cut_en(tp, false);
+	ret = r8153b-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_ups_en(tp, false);
+	ret = r8153b-old_ups_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_queue_wake(tp, false);
+	ret = r8153-old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13458,7 +13458,7 @@ static int r8153b_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100u_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -13467,7 +13467,7 @@ static int r8153b_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_lanwake_clr_en(tp, true);
+	ret = r8153-old_lanwake_clr_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -13476,7 +13476,7 @@ static int r8153b_init(struct e3100u *tp)
 		ocp_write_word(tp, MCU_TYPE_USB, USB_SSPHYLINK2, 0x0c8c);
 
 //	if (tp->udev->speed >= USB_SPEED_SUPER) {
-//		ret = r8153b_u1u2en(tp, true);
+//		ret = r8153b-old_u1u2en(tp, true);
 //		if (ret < 0)
 //			goto out;
 //	}
@@ -13484,11 +13484,11 @@ static int r8153b_init(struct e3100u *tp)
 	usb_enable_lpm(tp->udev);
 
 	/* MAC clock speed down */
-	ret = r8153_mac_clk_speed_down(tp, false);
+	ret = r8153-old_mac_clk_speed_down(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_mcu_spdown_en(tp, false);
+	ret = r8153b-old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13522,17 +13522,17 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8153c_init(struct e3100u *tp)
+static int r8153-oldc_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0xc);
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13550,19 +13550,19 @@ static int r8153c_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13571,15 +13571,15 @@ static int r8153c_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_power_cut_en(tp, false);
+	ret = r8153b-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153c_ups_en(tp, false);
+	ret = r8153-oldc_ups_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_queue_wake(tp, false);
+	ret = r8153-old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13587,7 +13587,7 @@ static int r8153c_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100u_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -13597,16 +13597,16 @@ static int r8153c_init(struct e3100u *tp)
 		goto out;
 
 	if (tp->udev->speed < USB_SPEED_SUPER)
-		ret = r8153b_u1u2en(tp, false);
+		ret = r8153b-old_u1u2en(tp, false);
 	else
-		ret = r8153b_u1u2en(tp, true);
+		ret = r8153b-old_u1u2en(tp, true);
 	if (ret < 0)
 		goto out;
 
 	usb_enable_lpm(tp->udev);
 
 	/* MAC clock speed down */
-	ret = r8153_mac_clk_speed_down(tp, true);
+	ret = r8153-old_mac_clk_speed_down(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -13636,7 +13636,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static void r8156_patch_code(struct e3100u *tp)
+static void e3100u_patch_code(struct e3100 *tp)
 {
 	if (tp->version == KILLER_TEST_01) {
 		static u8 usb3_patch_t[] = {
@@ -14936,7 +14936,7 @@ static void r8156_patch_code(struct e3100u *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static void r8157_patch_code(struct e3100u *tp)
+static void r8157-old_patch_code(struct e3100 *tp)
 {
 	if (tp->version == KILLER_VER_16) {
 		static u8 usb_patch_16[] = {
@@ -15192,11 +15192,11 @@ static void r8157_patch_code(struct e3100u *tp)
 	}
 }
 
-static void r8159_patch_code(struct e3100u *tp)
+static void r8159-old_patch_code(struct e3100 *tp)
 {
 }
 
-static int killer_ram_code_speed_up(struct e3100u *tp, bool wait)
+static int killer_ram_code_speed_up(struct e3100 *tp, bool wait)
 {
 	u16 fw_version, code_ver;
 	u32 len = 0, ocp_data;
@@ -16261,7 +16261,7 @@ static int killer_ram_code_speed_up(struct e3100u *tp, bool wait)
 			data = ram13;
 			len = sizeof(ram13);
 
-			if (r8156b_flash_used(tp)) {
+			if (e3100ub_flash_used(tp)) {
 				ret = ocp_word_set_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							BYPASS_FLASH);
@@ -18753,7 +18753,7 @@ static int killer_ram_code_speed_up(struct e3100u *tp, bool wait)
 			data = ram16;
 			len = sizeof(ram16);
 
-			if (r8156b_flash_used(tp)) {
+			if (e3100ub_flash_used(tp)) {
 				ret = ocp_word_set_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							BYPASS_FLASH);
@@ -23107,7 +23107,7 @@ static int killer_ram_code_speed_up(struct e3100u *tp, bool wait)
 			data = ram17;
 			len = sizeof(ram17);
 
-			if (r8156b_flash_used(tp)) {
+			if (e3100ub_flash_used(tp)) {
 				ret = ocp_word_set_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							BYPASS_FLASH);
@@ -23190,7 +23190,7 @@ out:
 	return ret;
 }
 
-static void r8156_ram_code(struct e3100u *tp, bool power_cut)
+static void e3100u_ram_code(struct e3100 *tp, bool power_cut)
 {
 	killer_reset_ocp_base(tp);
 
@@ -26974,7 +26974,7 @@ static void r8156_ram_code(struct e3100u *tp, bool power_cut)
 	killer_reset_ocp_base(tp);
 }
 
-static int r8157_firmware(struct e3100u *tp, bool power_cut)
+static int r8157-old_firmware(struct e3100 *tp, bool power_cut)
 {
 	int ret;
 
@@ -26983,39 +26983,39 @@ static int r8157_firmware(struct e3100u *tp, bool power_cut)
 	return ret;
 }
 
-static void r8156_hw_phy_cfg(struct e3100u *tp)
+static void e3100u_hw_phy_cfg(struct e3100 *tp)
 {
 	u32 ocp_data;
 	u16 data;
 	int ret;
 
-	r8156_patch_code(tp);
+	e3100u_patch_code(tp);
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
 	switch (ret) {
 	case PHY_STAT_EXT_INIT:
-		r8156_ram_code(tp, true);
+		e3100u_ram_code(tp, true);
 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
 		break;
 	case PHY_STAT_LAN_ON:
 	case PHY_STAT_PWRDN:
 	default:
-		r8156_ram_code(tp, false);
+		e3100u_ram_code(tp, false);
 		break;
 	}
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -27222,18 +27222,18 @@ static void r8156_hw_phy_cfg(struct e3100u *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
-	r8153_u2p3en(tp, true);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
+	r8153-old_u2p3en(tp, true);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static void r8156b_hw_phy_cfg(struct e3100u *tp)
+static void e3100ub_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
-	r8156_patch_code(tp);
+	e3100u_patch_code(tp);
 
 	switch (tp->version) {
 	case KILLER_VER_12:
@@ -27247,7 +27247,7 @@ static void r8156b_hw_phy_cfg(struct e3100u *tp)
 		break;
 	case KILLER_VER_13:
 	case KILLER_VER_15:
-		r8156b_wait_loading_flash(tp);
+		e3100ub_wait_loading_flash(tp);
 		break;
 	default:
 		break;
@@ -27255,29 +27255,29 @@ static void r8156b_hw_phy_cfg(struct e3100u *tp)
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
 	switch (ret) {
 	case PHY_STAT_EXT_INIT:
-		r8156_ram_code(tp, true);
+		e3100u_ram_code(tp, true);
 		ocp_reg_clr_bits(tp, 0xa466, BIT(0));
 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
 		break;
 	case PHY_STAT_LAN_ON:
 	case PHY_STAT_PWRDN:
 	default:
-		r8156_ram_code(tp, false);
+		e3100u_ram_code(tp, false);
 		break;
 	}
 
-	e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -27485,29 +27485,29 @@ static void r8156b_hw_phy_cfg(struct e3100u *tp)
 
 	killer_eee_enable(tp, tp->eee_en);
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
-	r8153_u2p3en(tp, true);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
+	r8153-old_u2p3en(tp, true);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static void r8156_hw_phy_cfg_test(struct e3100u *tp)
+static void e3100u_hw_phy_cfg_test(struct e3100 *tp)
 {
 	u16 data;
 	int ret;
 
-	data = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	data = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
-	if (r8153_eee_en(tp, false) < 0)
+	if (r8153-old_eee_en(tp, false) < 0)
 		return;
 	ocp_reg_write(tp, OCP_EEE_ADV, 0);
 
-	r8156_firmware(tp);
+	e3100u_firmware(tp);
 
 	ocp_reg_set_bits(tp, 0xa5d4, BIT(7) | BIT(0));
 	ocp_reg_write(tp, 0xa5e6, 0x6290);
@@ -27556,11 +27556,11 @@ static void r8156_hw_phy_cfg_test(struct e3100u *tp)
 	ocp_reg_set_bits(tp, 0xa442, BIT(11));
 	ocp_dword_set_bits(tp, MCU_TYPE_PLA, 0xe84c, BIT(7));
 
-	r8156_lock_main(tp, true);
+	e3100u_lock_main(tp, true);
 	ocp_reg_clr_bits(tp, 0xcc46, 0x700);
 	ocp_reg_clr_bits(tp, 0xcc46, 0x70);
 	ocp_reg_w0w1(tp, 0xcc46, 0x70, BIT(6) | BIT(4));
-	r8156_lock_main(tp, false);
+	e3100u_lock_main(tp, false);
 
 	ocp_reg_clr_bits(tp, 0xbd38, BIT(13));
 	ocp_reg_set_bits(tp, 0xbd38, BIT(12));
@@ -27568,51 +27568,51 @@ static void r8156_hw_phy_cfg_test(struct e3100u *tp)
 	ocp_reg_set_bits(tp, 0xbd38, BIT(13));
 
 //	if (tp->eee_en) {
-//		r8153_eee_en(tp, true);
+//		r8153-old_eee_en(tp, true);
 //		ocp_reg_write(tp, OCP_EEE_ADV, tp->eee_adv);
 //	}
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
-	r8153_u2p3en(tp, true);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
+	r8153-old_u2p3en(tp, true);
 }
 
-static void r8157_hw_phy_cfg(struct e3100u *tp)
+static void r8157-old_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
-	r8156b_wait_loading_flash(tp);
+	e3100ub_wait_loading_flash(tp);
 
-	r8157_patch_code(tp);
+	r8157-old_patch_code(tp);
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
 	switch (ret) {
 	case PHY_STAT_EXT_INIT:
-		r8157_firmware(tp, true);
+		r8157-old_firmware(tp, true);
 		ocp_reg_clr_bits(tp, 0xa466, BIT(0));
 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
 		break;
 	case PHY_STAT_LAN_ON:
 	case PHY_STAT_PWRDN:
 	default:
-		r8157_firmware(tp, false);
+		r8157-old_firmware(tp, false);
 		break;
 	}
 
-	e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -27778,23 +27778,23 @@ static void r8157_hw_phy_cfg(struct e3100u *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static void r8159_hw_phy_cfg(struct e3100u *tp)
+static void r8159-old_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
-	r8156b_wait_loading_flash(tp);
+	e3100ub_wait_loading_flash(tp);
 
-	r8159_patch_code(tp);
+	r8159-old_patch_code(tp);
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
@@ -27811,12 +27811,12 @@ static void r8159_hw_phy_cfg(struct e3100u *tp)
 		break;
 	}
 
-	e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153_aldps_en(tp, false);
+	r8153-old_aldps_en(tp, false);
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -28040,18 +28040,18 @@ static void r8159_hw_phy_cfg(struct e3100u *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153_aldps_en(tp, true);
-	e3100ub_enable_fc(tp);
+	r8153-old_aldps_en(tp, true);
+	r8152b-old_enable_fc(tp);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static int r8156_init(struct e3100u *tp)
+static int e3100u_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = ocp_byte_clr_bits(tp, MCU_TYPE_USB, USB_ECM_OP, EN_ALL_SPEED);
@@ -28067,7 +28067,7 @@ static int r8156_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28081,7 +28081,7 @@ static int r8156_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -28091,16 +28091,16 @@ static int r8156_init(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
 
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28114,15 +28114,15 @@ static int r8156_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_power_cut_en(tp, false);
+	ret = r8153b-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_ups_en(tp, false);
+	ret = e3100u_ups_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_queue_wake(tp, false);
+	ret = r8153-old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28131,7 +28131,7 @@ static int r8156_init(struct e3100u *tp)
 		goto out;
 
 	if (tp->udev->speed >= USB_SPEED_SUPER) {
-		ret = r8153b_u1u2en(tp, true);
+		ret = r8153b-old_u1u2en(tp, true);
 		if (ret < 0)
 			goto out;
 	}
@@ -28145,13 +28145,13 @@ static int r8156_init(struct e3100u *tp)
 //	switch (ocp_data) {
 //	case 0x4000:
 //		tp->dash_mode = 1;
-//		ret = r8156_mac_clk_spd(tp, false);
+//		ret = e3100u_mac_clk_spd(tp, false);
 //		if (ret < 0)
 //			goto out;
 //		break;
 //	case 0x8000:
 //		tp->dash_mode = 0;
-		ret = r8156_mac_clk_spd(tp, false);
+		ret = e3100u_mac_clk_spd(tp, false);
 		if (ret < 0)
 			goto out;
 //		break;
@@ -28161,7 +28161,7 @@ static int r8156_init(struct e3100u *tp)
 //	}
 
 
-	ret = r8153b_mcu_spdown_en(tp, false);
+	ret = r8153b-old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28180,7 +28180,7 @@ static int r8156_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100u_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28205,7 +28205,7 @@ static int r8156_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_mdio_force_mode(tp);
+	ret = e3100u_mdio_force_mode(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28219,7 +28219,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8156b_u2phy_backup(struct e3100u *tp)
+static int e3100ub_u2phy_backup(struct e3100 *tp)
 {
 	static u8 u2phy_backup[] = {
 		0x00, 0x00, 0x1b, 0x18,
@@ -28232,12 +28232,12 @@ static int r8156b_u2phy_backup(struct e3100u *tp)
 				 u2phy_backup, MCU_TYPE_USB);
 }
 
-static int r8156b_init(struct e3100u *tp)
+static int e3100ub_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = ocp_byte_clr_bits(tp, MCU_TYPE_USB, USB_ECM_OP, EN_ALL_SPEED);
@@ -28257,14 +28257,14 @@ static int r8156b_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	switch (tp->version) {
 	case KILLER_VER_13:
 	case KILLER_VER_15:
-		ret = r8156b_wait_loading_flash(tp);
+		ret = e3100ub_wait_loading_flash(tp);
 		if (ret < 0)
 			goto out;
 		break;
@@ -28282,7 +28282,7 @@ static int r8156b_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 	if (ret == PHY_STAT_EXT_INIT) {
@@ -28295,15 +28295,15 @@ static int r8156b_init(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_u2p3en(tp, false);
+	ret = r8153-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28317,19 +28317,19 @@ static int r8156b_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156b_u2phy_backup(tp);
+	ret = e3100ub_u2phy_backup(tp);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_power_cut_en(tp, false);
+	ret = r8153b-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_ups_en(tp, false);
+	ret = e3100u_ups_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_queue_wake(tp, false);
+	ret = r8153-old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28338,7 +28338,7 @@ static int r8156b_init(struct e3100u *tp)
 		goto out;
 
 	if (tp->udev->speed >= USB_SPEED_SUPER) {
-		ret = r8153b_u1u2en(tp, true);
+		ret = r8153b-old_u1u2en(tp, true);
 		if (ret < 0)
 			goto out;
 	}
@@ -28349,15 +28349,15 @@ static int r8156b_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_mac_clk_spd(tp, false);
+	ret = e3100u_mac_clk_spd(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_mcu_spdown_en(tp, false);
+	ret = r8153b-old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	if (e3100u_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28380,7 +28380,7 @@ static int r8156b_init(struct e3100u *tp)
 		goto out;
 	*/
 
-	ret = r8156_mdio_force_mode(tp);
+	ret = e3100u_mdio_force_mode(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28394,12 +28394,12 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8157_init(struct e3100u *tp)
+static int r8157-old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0x1);
@@ -28421,7 +28421,7 @@ static int r8157_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28435,11 +28435,11 @@ static int r8157_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8156b_wait_loading_flash(tp);
+	ret = e3100ub_wait_loading_flash(tp);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 	if (ret == PHY_STAT_EXT_INIT) {
@@ -28452,15 +28452,15 @@ static int r8157_init(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8157_u2p3en(tp, false);
+	ret = r8157-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28492,15 +28492,15 @@ static int r8157_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8157_power_cut_en(tp, false);
+	ret = r8157-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-//	ret = r8156_ups_en(tp, false);
+//	ret = e3100u_ups_en(tp, false);
 //	if (ret < 0)
 //		goto out;
 
-	ret = r8153_queue_wake(tp, false);
+	ret = r8153-old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28509,7 +28509,7 @@ static int r8157_init(struct e3100u *tp)
 		goto out;
 
 //	if (tp->udev->speed >= USB_SPEED_SUPER) {
-//		ret = r8153b_u1u2en(tp, true);
+//		ret = r8153b-old_u1u2en(tp, true);
 //		if (ret < 0)
 //			goto out;
 //	}
@@ -28526,11 +28526,11 @@ static int r8157_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_mac_clk_spd(tp, false);
+	ret = e3100u_mac_clk_spd(tp, false);
 	if (ret < 0)
 		goto out;
 
-	if (e3100u_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28563,7 +28563,7 @@ static int r8157_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_mdio_force_mode(tp);
+	ret = e3100u_mdio_force_mode(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28580,7 +28580,7 @@ out:
 		return 0;
 }
 
-static int r8159_wait_backup_restore(struct e3100u *tp)
+static int r8159-old_wait_backup_restore(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret, i;
@@ -28608,12 +28608,12 @@ out:
 	return ret;
 }
 
-static int r8159_init(struct e3100u *tp)
+static int r8159-old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0x9);
@@ -28635,7 +28635,7 @@ static int r8159_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b_u1u2en(tp, false);
+	ret = r8153b-old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28649,7 +28649,7 @@ static int r8159_init(struct e3100u *tp)
 		msleep(20);
 	}
 
-	ret = r8159_wait_backup_restore(tp);
+	ret = r8159-old_wait_backup_restore(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28667,11 +28667,11 @@ static int r8159_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156b_wait_loading_flash(tp);
+	ret = e3100ub_wait_loading_flash(tp);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, 0);
+	ret = r8153-old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 	if (ret == PHY_STAT_EXT_INIT) {
@@ -28684,15 +28684,15 @@ static int r8159_init(struct e3100u *tp)
 			goto out;
 	}
 
-	ret = e3100u_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
+	ret = e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8157_u2p3en(tp, false);
+	ret = r8157-old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28714,15 +28714,15 @@ static int r8159_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8157_power_cut_en(tp, false);
+	ret = r8157-old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-//	ret = r8156_ups_en(tp, false);
+//	ret = e3100u_ups_en(tp, false);
 //	if (ret < 0)
 //		goto out;
 
-	ret = r8153_queue_wake(tp, false);
+	ret = r8153-old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28737,11 +28737,11 @@ static int r8159_init(struct e3100u *tp)
 	usb_disable_lpm(tp->udev);
 	usb_disable_ltm(tp->udev);
 
-	ret = r8156_mac_clk_spd(tp, false);
+	ret = e3100u_mac_clk_spd(tp, false);
 	if (ret < 0)
 		goto out;
 
-	if (e3100u_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28768,7 +28768,7 @@ static int r8159_init(struct e3100u *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156_mdio_force_mode(tp);
+	ret = e3100u_mdio_force_mode(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28918,9 +28918,9 @@ static bool killer_vendor_mode(struct usb_interface *intf)
 }
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0) */
 
-static int e3100u_pre_reset(struct usb_interface *intf)
+static int rte3100_pre_reset(struct usb_interface *intf)
 {
-	struct e3100u *tp = usb_get_intfdata(intf);
+	struct e3100 *tp = usb_get_intfdata(intf);
 	struct net_device *netdev;
 
 	if (!tp)
@@ -28947,9 +28947,9 @@ static int e3100u_pre_reset(struct usb_interface *intf)
 	return 0;
 }
 
-static int e3100u_post_reset(struct usb_interface *intf)
+static int rte3100_post_reset(struct usb_interface *intf)
 {
-	struct e3100u *tp = usb_get_intfdata(intf);
+	struct e3100 *tp = usb_get_intfdata(intf);
 	struct net_device *netdev;
 	struct sockaddr_storage ss;
 
@@ -28980,7 +28980,7 @@ static int e3100u_post_reset(struct usb_interface *intf)
 		mutex_lock(&tp->control);
 		tp->killer_ops.enable(tp);
 		killer_start_rx(tp);
-		e3100u_set_rx_mode(netdev);
+		rte3100_set_rx_mode(netdev);
 		mutex_unlock(&tp->control);
 	}
 
@@ -28995,10 +28995,10 @@ static int e3100u_post_reset(struct usb_interface *intf)
 	return 0;
 }
 
-static bool delay_autosuspend(struct e3100u *tp)
+static bool delay_autosuspend(struct e3100 *tp)
 {
 	bool sw_linking = !!netif_carrier_ok(tp->netdev);
-	bool hw_linking = !!(e3100u_get_speed(tp) & LINK_STATUS);
+	bool hw_linking = !!(rte3100_get_speed(tp) & LINK_STATUS);
 
 	/* This means a linking change occurs and the driver doesn't detect it,
 	 * yet. If the driver has disabled tx/rx and hw is linking on, the
@@ -29018,7 +29018,7 @@ static bool delay_autosuspend(struct e3100u *tp)
 		return false;
 }
 
-static int e3100u_runtime_resume(struct e3100u *tp)
+static int rte3100_runtime_resume(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 
@@ -29032,7 +29032,7 @@ static int e3100u_runtime_resume(struct e3100u *tp)
 		smp_mb__after_atomic();
 
 		if (netif_carrier_ok(netdev)) {
-			if (e3100u_get_speed(tp) & LINK_STATUS) {
+			if (rte3100_get_speed(tp) & LINK_STATUS) {
 				killer_start_rx(tp);
 			} else {
 				netif_carrier_off(netdev);
@@ -29063,7 +29063,7 @@ static int e3100u_runtime_resume(struct e3100u *tp)
 	return 0;
 }
 
-static int e3100u_system_resume(struct e3100u *tp)
+static int rte3100_system_resume(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 
@@ -29076,7 +29076,7 @@ static int e3100u_system_resume(struct e3100u *tp)
 		set_bit(WORK_ENABLE, &tp->flags);
 		smp_mb__after_atomic();
 		if (test_and_clear_bit(RECOVER_SPEED, &tp->flags))
-			e3100u_set_speed(tp, tp->autoneg, tp->speed,
+			rte3100_set_speed(tp, tp->autoneg, tp->speed,
 					  tp->duplex, tp->advertising);
 		usb_submit_urb(tp->intr_urb, GFP_NOIO);
 	}
@@ -29084,7 +29084,7 @@ static int e3100u_system_resume(struct e3100u *tp)
 	return 0;
 }
 
-static int e3100u_runtime_suspend(struct e3100u *tp)
+static int rte3100_runtime_suspend(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 	int ret = 0;
@@ -29145,7 +29145,7 @@ out2:
 		}
 
 		if (delay_autosuspend(tp)) {
-			e3100u_runtime_resume(tp);
+			rte3100_runtime_resume(tp);
 			ret = -EBUSY;
 		}
 	}
@@ -29154,7 +29154,7 @@ out1:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100u_system_suspend(struct e3100u *tp)
+static int rte3100_system_suspend(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 
@@ -29173,7 +29173,7 @@ static int e3100u_system_suspend(struct e3100u *tp)
 		tp->killer_ops.down(tp);
 
 		if (tp->version == KILLER_VER_01)
-			e3100u_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
+			rte3100_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
 		else
 			killer_speed_down(tp);
 
@@ -29184,26 +29184,26 @@ static int e3100u_system_suspend(struct e3100u *tp)
 	return 0;
 }
 
-static int e3100u_suspend(struct usb_interface *intf, pm_message_t message)
+static int rte3100_suspend(struct usb_interface *intf, pm_message_t message)
 {
-	struct e3100u *tp = usb_get_intfdata(intf);
+	struct e3100 *tp = usb_get_intfdata(intf);
 	int ret;
 
 	mutex_lock(&tp->control);
 
 	if (PMSG_IS_AUTO(message))
-		ret = e3100u_runtime_suspend(tp);
+		ret = rte3100_runtime_suspend(tp);
 	else
-		ret = e3100u_system_suspend(tp);
+		ret = rte3100_system_suspend(tp);
 
 	mutex_unlock(&tp->control);
 
 	return ret;
 }
 
-static int e3100u_resume(struct usb_interface *intf)
+static int rte3100_resume(struct usb_interface *intf)
 {
-	struct e3100u *tp = usb_get_intfdata(intf);
+	struct e3100 *tp = usb_get_intfdata(intf);
 	int ret;
 
 	mutex_lock(&tp->control);
@@ -29211,30 +29211,30 @@ static int e3100u_resume(struct usb_interface *intf)
 	killer_reset_ocp_base(tp);
 
 	if (test_bit(SELECTIVE_SUSPEND, &tp->flags))
-		ret = e3100u_runtime_resume(tp);
+		ret = rte3100_runtime_resume(tp);
 	else
-		ret = e3100u_system_resume(tp);
+		ret = rte3100_system_resume(tp);
 
 	mutex_unlock(&tp->control);
 
 	return ret;
 }
 
-static int e3100u_reset_resume(struct usb_interface *intf)
+static int rte3100_reset_resume(struct usb_interface *intf)
 {
-	struct e3100u *tp = usb_get_intfdata(intf);
+	struct e3100 *tp = usb_get_intfdata(intf);
 
 	clear_bit(SELECTIVE_SUSPEND, &tp->flags);
 	killer_reset_ocp_base(tp);
 	tp->killer_ops.init(tp);
 	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
 	set_ethernet_addr(tp, true);
-	return e3100u_resume(intf);
+	return rte3100_resume(intf);
 }
 
-static void e3100u_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+static void rte3100_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 
 	if (usb_autopm_get_interface(tp->intf) < 0)
 		return;
@@ -29252,9 +29252,9 @@ static void e3100u_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
 	usb_autopm_put_interface(tp->intf);
 }
 
-static int e3100u_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+static int rte3100_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	int ret;
 
 	if (!killer_can_wakeup(tp))
@@ -29280,24 +29280,24 @@ out_set_wol:
 	return ret;
 }
 
-static u32 e3100u_get_msglevel(struct net_device *dev)
+static u32 rte3100_get_msglevel(struct net_device *dev)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 
 	return tp->msg_enable;
 }
 
-static void e3100u_set_msglevel(struct net_device *dev, u32 value)
+static void rte3100_set_msglevel(struct net_device *dev, u32 value)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 
 	tp->msg_enable = value;
 }
 
-static void e3100u_get_drvinfo(struct net_device *netdev,
+static void rte3100_get_drvinfo(struct net_device *netdev,
 				struct ethtool_drvinfo *info)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	strscpy(info->driver, MODULENAME, sizeof(info->driver));
 	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
@@ -29306,9 +29306,9 @@ static void e3100u_get_drvinfo(struct net_device *netdev,
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0)
 static
-int e3100u_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
+int rte3100_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u16 bmcr, bmsr;
 	int ret, advert;
 
@@ -29334,16 +29334,16 @@ int e3100u_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 
 	mutex_lock(&tp->control);
 
-	ret = e3100u_mdio_read(tp, MII_BMCR);
+	ret = e3100_mdio_read(tp, MII_BMCR);
 	if (ret < 0)
 		goto out1;
 	bmcr = ret;
-	ret = e3100u_mdio_read(tp, MII_BMSR);
+	ret = e3100_mdio_read(tp, MII_BMSR);
 	if (ret < 0)
 		goto out1;
 	bmsr = ret;
 
-	ret = e3100u_mdio_read(tp, MII_ADVERTISE);
+	ret = e3100_mdio_read(tp, MII_ADVERTISE);
 	if (ret < 0)
 		goto out1;
 	advert = ret;
@@ -29362,7 +29362,7 @@ int e3100u_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 	if (tp->mii.supports_gmii) {
 		u16 ctrl1000;
 
-		ret = e3100u_mdio_read(tp, MII_CTRL1000);
+		ret = e3100_mdio_read(tp, MII_CTRL1000);
 		if (ret < 0)
 			goto out1;
 
@@ -29392,7 +29392,7 @@ int e3100u_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
 	if (bmsr & BMSR_ANEGCOMPLETE) {
-		ret = e3100u_mdio_read(tp, MII_LPA);
+		ret = e3100_mdio_read(tp, MII_LPA);
 		if (ret < 0)
 			goto out1;
 		advert = ret;
@@ -29414,7 +29414,7 @@ int e3100u_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 		if (tp->mii.supports_gmii) {
 			u16 stat1000;
 
-			ret = e3100u_mdio_read(tp, MII_STAT1000);
+			ret = e3100_mdio_read(tp, MII_STAT1000);
 			if (ret < 0)
 				goto out1;
 
@@ -29440,7 +29440,7 @@ int e3100u_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 
 
 	if (netif_running(netdev) && netif_carrier_ok(netdev)) {
-		u16 speed = e3100u_get_speed(tp);
+		u16 speed = rte3100_get_speed(tp);
 
 		if (speed & _100bps)
 			cmd->speed = SPEED_100;
@@ -29468,9 +29468,9 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100u_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
+static int rte3100_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	u32 advertising = 0;
 	int ret;
 
@@ -29497,7 +29497,7 @@ static int e3100u_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 
 	mutex_lock(&tp->control);
 
-	ret = e3100u_set_speed(tp, cmd->autoneg, cmd->speed, cmd->duplex,
+	ret = rte3100_set_speed(tp, cmd->autoneg, cmd->speed, cmd->duplex,
 				advertising);
 	if (!ret) {
 		tp->autoneg = cmd->autoneg;
@@ -29516,10 +29516,10 @@ out:
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0) */
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
-static int e3100u_get_link_ksettings(struct net_device *netdev,
+static int rte3100_get_link_ksettings(struct net_device *netdev,
 				      struct ethtool_link_ksettings *cmd)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u16 bmcr, bmsr, advert;
 	int ret;
 
@@ -29559,12 +29559,12 @@ static int e3100u_get_link_ksettings(struct net_device *netdev,
 	if (ret < 0)
 		goto out2;
 
-	ret = e3100u_mdio_read(tp, MII_BMCR);
+	ret = e3100_mdio_read(tp, MII_BMCR);
 	if (ret < 0)
 		goto out3;
 	bmcr = ret;
 
-	ret = e3100u_mdio_read(tp, MII_BMSR);
+	ret = e3100_mdio_read(tp, MII_BMSR);
 	if (ret < 0)
 		goto out3;
 	bmsr = ret;
@@ -29577,7 +29577,7 @@ static int e3100u_get_link_ksettings(struct net_device *netdev,
 	else
 		cmd->base.autoneg = AUTONEG_DISABLE;
 
-	ret = e3100u_mdio_read(tp, MII_ADVERTISE);
+	ret = e3100_mdio_read(tp, MII_ADVERTISE);
 	if (ret < 0)
 		goto out3;
 
@@ -29604,7 +29604,7 @@ static int e3100u_get_link_ksettings(struct net_device *netdev,
 	if (tp->mii.supports_gmii) {
 		u16 ctrl1000;
 
-		ret = e3100u_mdio_read(tp, MII_CTRL1000);
+		ret = e3100_mdio_read(tp, MII_CTRL1000);
 		if (ret < 0)
 			goto out3;
 
@@ -29636,7 +29636,7 @@ static int e3100u_get_link_ksettings(struct net_device *netdev,
 	}
 
 	if (bmsr & BMSR_ANEGCOMPLETE) {
-		ret = e3100u_mdio_read(tp, MII_LPA);
+		ret = e3100_mdio_read(tp, MII_LPA);
 		if (ret < 0)
 			goto out3;
 
@@ -29661,7 +29661,7 @@ static int e3100u_get_link_ksettings(struct net_device *netdev,
 		if (tp->mii.supports_gmii) {
 			u16 stat1000;
 
-			ret = e3100u_mdio_read(tp, MII_STAT1000);
+			ret = e3100_mdio_read(tp, MII_STAT1000);
 			if (ret < 0)
 				goto out3;
 
@@ -29695,7 +29695,7 @@ static int e3100u_get_link_ksettings(struct net_device *netdev,
 	}
 
 	if (netif_running(netdev) && netif_carrier_ok(netdev)) {
-		u16 speed = e3100u_get_speed(tp);
+		u16 speed = rte3100_get_speed(tp);
 
 		if (speed & _100bps)
 			cmd->base.speed = SPEED_100;
@@ -29726,10 +29726,10 @@ out1:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100u_set_link_ksettings(struct net_device *dev,
+static int rte3100_set_link_ksettings(struct net_device *dev,
 				      const struct ethtool_link_ksettings *cmd)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	u32 advertising = 0;
 	int ret;
 
@@ -29775,7 +29775,7 @@ static int e3100u_set_link_ksettings(struct net_device *dev,
 
 	mutex_lock(&tp->control);
 
-	ret = e3100u_set_speed(tp, cmd->base.autoneg, cmd->base.speed,
+	ret = rte3100_set_speed(tp, cmd->base.autoneg, cmd->base.speed,
 				cmd->base.duplex, advertising);
 	if (!ret) {
 		tp->autoneg = cmd->base.autoneg;
@@ -29793,7 +29793,7 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0) */
 
-static const char e3100u_gstrings[][ETH_GSTRING_LEN] = {
+static const char rte3100_gstrings[][ETH_GSTRING_LEN] = {
 	"tx_packets",
 	"rx_packets",
 	"tx_errors",
@@ -29812,26 +29812,26 @@ static const char e3100u_gstrings[][ETH_GSTRING_LEN] = {
 };
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)
-static int e3100u_get_sset_count(struct net_device *dev)
+static int rte3100_get_sset_count(struct net_device *dev)
 {
-	return ARRAY_SIZE(e3100u_gstrings);
+	return ARRAY_SIZE(rte3100_gstrings);
 }
 #else
-static int e3100u_get_sset_count(struct net_device *dev, int sset)
+static int rte3100_get_sset_count(struct net_device *dev, int sset)
 {
 	switch (sset) {
 	case ETH_SS_STATS:
-		return ARRAY_SIZE(e3100u_gstrings);
+		return ARRAY_SIZE(rte3100_gstrings);
 	default:
 		return -EOPNOTSUPP;
 	}
 }
 #endif
 
-static void e3100u_get_ethtool_stats(struct net_device *dev,
+static void rte3100_get_ethtool_stats(struct net_device *dev,
 				      struct ethtool_stats *stats, u64 *data)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	struct tally_counter tally;
 	int ret;
 
@@ -29870,34 +29870,34 @@ static void e3100u_get_ethtool_stats(struct net_device *dev,
 	data[14] = tp->tx_back;
 }
 
-static void e3100u_get_strings(struct net_device *dev, u32 stringset, u8 *data)
+static void rte3100_get_strings(struct net_device *dev, u32 stringset, u8 *data)
 {
 	switch (stringset) {
 	case ETH_SS_STATS:
-		memcpy(data, e3100u_gstrings, sizeof(e3100u_gstrings));
+		memcpy(data, rte3100_gstrings, sizeof(rte3100_gstrings));
 		break;
 	}
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0)
-static int e3100u_get_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int e3100_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
 	int ret;
 	u16 val;
 
-	ret = e3100u_mmd_read(tp, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE, &val);
+	ret = e3100_mmd_read(tp, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE, &val);
 	if (ret < 0)
 		goto out;
 	mii_eee_cap1_mod_linkmode_t(eee->supported, val);
 
-	ret = e3100u_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV, &val);
+	ret = e3100_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV, &val);
 	if (ret < 0)
 		goto out;
 	mii_eee_cap1_mod_linkmode_t(eee->advertised, val);
 
-	ret = e3100u_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_LPABLE, &val);
+	ret = e3100_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_LPABLE, &val);
 	if (ret < 0)
 		goto out;
 	mii_eee_cap1_mod_linkmode_t(eee->lp_advertised, val);
@@ -29911,7 +29911,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100u_set_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int e3100_set_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
 	u16 val = linkmode_to_mii_eee_cap1_t(eee->advertised);
 
@@ -29921,7 +29921,7 @@ static int e3100u_set_eee(struct e3100u *tp, struct ethtool_keee *eee)
 	return killer_eee_enable(tp, tp->eee_en);
 }
 
-static int r8153_get_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int r8153-old_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
 	u16 val;
@@ -29951,13 +29951,13 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8156_get_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int e3100u_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
 	u16 val;
 	int ret;
 
-	ret = r8153_get_eee(tp, eee);
+	ret = r8153-old_get_eee(tp, eee);
 	if (ret < 0)
 		goto out;
 
@@ -29983,31 +29983,31 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8156_set_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int e3100u_set_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
 	/* 2.5G EEE, 5G EEE */
 	tp->eee_adv2 = linkmode_to_mii_eee_cap2_t(eee->advertised);
 
-	return e3100u_set_eee(tp, eee);
+	return e3100_set_eee(tp, eee);
 }
 #else
-static int e3100u_get_eee(struct e3100u *tp, struct ethtool_eee *eee)
+static int e3100_get_eee(struct e3100 *tp, struct ethtool_eee *eee)
 {
 	u32 lp, adv, supported = 0;
 	int ret;
 	u16 val;
 
-	ret = e3100u_mmd_read(tp, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE, &val);
+	ret = e3100_mmd_read(tp, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE, &val);
 	if (ret < 0)
 		goto out;
 	supported = mmd_eee_cap_to_ethtool_sup_t(val);
 
-	ret = e3100u_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV, &val);
+	ret = e3100_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV, &val);
 	if (ret < 0)
 		goto out;
 	adv = mmd_eee_adv_to_ethtool_adv_t(val);
 
-	ret = e3100u_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_LPABLE, &val);
+	ret = e3100_mmd_read(tp, MDIO_MMD_AN, MDIO_AN_EEE_LPABLE, &val);
 	if (ret < 0)
 		goto out;
 	lp = mmd_eee_adv_to_ethtool_adv_t(val);
@@ -30022,7 +30022,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100u_set_eee(struct e3100u *tp, struct ethtool_eee *eee)
+static int e3100_set_eee(struct e3100 *tp, struct ethtool_eee *eee)
 {
 	u16 val = ethtool_adv_to_mmd_eee_adv_t(eee->advertised);
 
@@ -30032,7 +30032,7 @@ static int e3100u_set_eee(struct e3100u *tp, struct ethtool_eee *eee)
 	return killer_eee_enable(tp, tp->eee_en);
 }
 
-static int r8153_get_eee(struct e3100u *tp, struct ethtool_eee *eee)
+static int r8153-old_get_eee(struct e3100 *tp, struct ethtool_eee *eee)
 {
 	u32 lp, adv, supported = 0;
 	u16 val;
@@ -30063,21 +30063,21 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8156_get_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int e3100u_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
-	return r8153_get_eee(tp, eee);
+	return r8153-old_get_eee(tp, eee);
 }
 
-static int r8156_set_eee(struct e3100u *tp, struct ethtool_keee *eee)
+static int e3100u_set_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
-	return e3100u_set_eee(tp, eee);
+	return e3100_set_eee(tp, eee);
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0) */
 
 static int
 killer_ethtool_get_eee(struct net_device *net, struct ethtool_keee *edata)
 {
-	struct e3100u *tp = netdev_priv(net);
+	struct e3100 *tp = netdev_priv(net);
 	int ret;
 
 	if (!tp->killer_ops.eee_get) {
@@ -30104,7 +30104,7 @@ out:
 static int
 killer_ethtool_set_eee(struct net_device *net, struct ethtool_keee *edata)
 {
-	struct e3100u *tp = netdev_priv(net);
+	struct e3100 *tp = netdev_priv(net);
 	int ret;
 
 	if (!tp->killer_ops.eee_set) {
@@ -30134,9 +30134,9 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 
-static int e3100u_nway_reset(struct net_device *dev)
+static int rte3100_nway_reset(struct net_device *dev)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	int ret;
 
 	ret = usb_autopm_get_interface(tp->intf);
@@ -30155,7 +30155,7 @@ out:
 	return ret;
 }
 
-static int e3100u_get_coalesce(struct net_device *netdev,
+static int rte3100_get_coalesce(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 				struct ethtool_coalesce *coalesce)
 #else
@@ -30164,7 +30164,7 @@ static int e3100u_get_coalesce(struct net_device *netdev,
 				struct netlink_ext_ack *extack)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	switch (tp->version) {
 	case KILLER_VER_01:
@@ -30180,7 +30180,7 @@ static int e3100u_get_coalesce(struct net_device *netdev,
 	return 0;
 }
 
-static int e3100u_set_coalesce(struct net_device *netdev,
+static int rte3100_set_coalesce(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 				struct ethtool_coalesce *coalesce)
 #else
@@ -30189,7 +30189,7 @@ static int e3100u_set_coalesce(struct net_device *netdev,
 				struct netlink_ext_ack *extack)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u32 rx_coalesce_nsecs;
 	int ret;
 
@@ -30224,7 +30224,7 @@ static int e3100u_set_coalesce(struct net_device *netdev,
 			tp->killer_ops.enable(tp);
 			killer_start_rx(tp);
 			napi_enable(&tp->napi);
-			e3100u_set_rx_mode(netdev);
+			rte3100_set_rx_mode(netdev);
 			netif_wake_queue(netdev);
 		}
 	}
@@ -30236,9 +30236,9 @@ static int e3100u_set_coalesce(struct net_device *netdev,
 	return ret;
 }
 
-static int e3100u_ethtool_begin(struct net_device *netdev)
+static int rte3100_ethtool_begin(struct net_device *netdev)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	if (unlikely(tp->rtk_enable_diag))
 		return -EBUSY;
@@ -30247,10 +30247,10 @@ static int e3100u_ethtool_begin(struct net_device *netdev)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
-static int e3100u_get_tunable(struct net_device *netdev,
+static int rte3100_get_tunable(struct net_device *netdev,
 			       const struct ethtool_tunable *tunable, void *d)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	switch (tunable->id) {
 	case ETHTOOL_RX_COPYBREAK:
@@ -30266,11 +30266,11 @@ static int e3100u_get_tunable(struct net_device *netdev,
 	return 0;
 }
 
-static int e3100u_set_tunable(struct net_device *netdev,
+static int rte3100_set_tunable(struct net_device *netdev,
 			       const struct ethtool_tunable *tunable,
 			       const void *d)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int ret = 0;
 	u32 val;
 
@@ -30324,7 +30324,7 @@ static int e3100u_set_tunable(struct net_device *netdev,
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
 
-static void e3100u_get_ringparam(struct net_device *netdev,
+static void rte3100_get_ringparam(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,17,0)
 				  struct ethtool_ringparam *ring)
 #else
@@ -30333,13 +30333,13 @@ static void e3100u_get_ringparam(struct net_device *netdev,
 				  struct netlink_ext_ack *extack)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
-	ring->rx_max_pending = E3100U_RX_MAX_PENDING;
+	ring->rx_max_pending = RTE3100_RX_MAX_PENDING;
 	ring->rx_pending = tp->rx_pending;
 }
 
-static int e3100u_set_ringparam(struct net_device *netdev,
+static int rte3100_set_ringparam(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,17,0)
 				 struct ethtool_ringparam *ring)
 #else
@@ -30348,9 +30348,9 @@ static int e3100u_set_ringparam(struct net_device *netdev,
 				 struct netlink_ext_ack *extack)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
-	if (ring->rx_pending < E3100U_MAX_RX)
+	if (ring->rx_pending < RTE3100_MAX_RX)
 		return -EINVAL;
 
 	if (tp->rx_pending != ring->rx_pending) {
@@ -30368,9 +30368,9 @@ static int e3100u_set_ringparam(struct net_device *netdev,
 	return 0;
 }
 
-static void e3100u_get_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
+static void rte3100_get_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int bmcr, lcladv, rmtadv;
 	u8 cap;
 
@@ -30379,9 +30379,9 @@ static void e3100u_get_pauseparam(struct net_device *netdev, struct ethtool_paus
 
 	mutex_lock(&tp->control);
 
-	bmcr = e3100u_mdio_read(tp, MII_BMCR);
-	lcladv = e3100u_mdio_read(tp, MII_ADVERTISE);
-	rmtadv = e3100u_mdio_read(tp, MII_LPA);
+	bmcr = e3100_mdio_read(tp, MII_BMCR);
+	lcladv = e3100_mdio_read(tp, MII_ADVERTISE);
+	rmtadv = e3100_mdio_read(tp, MII_LPA);
 
 	mutex_unlock(&tp->control);
 
@@ -30408,9 +30408,9 @@ static void e3100u_get_pauseparam(struct net_device *netdev, struct ethtool_paus
 		pause->tx_pause = 1;
 }
 
-static int e3100u_set_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
+static int rte3100_set_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u16 old, new1;
 	u8 cap = 0;
 	int ret;
@@ -30421,7 +30421,7 @@ static int e3100u_set_pauseparam(struct net_device *netdev, struct ethtool_pause
 
 	mutex_lock(&tp->control);
 
-	ret = e3100u_mdio_read(tp, MII_BMCR);
+	ret = e3100_mdio_read(tp, MII_BMCR);
 	if (ret < 0)
 		goto out;
 
@@ -30436,14 +30436,14 @@ static int e3100u_set_pauseparam(struct net_device *netdev, struct ethtool_pause
 	if (pause->tx_pause)
 		cap |= FLOW_CTRL_TX;
 
-	ret = e3100u_mdio_read(tp, MII_ADVERTISE);
+	ret = e3100_mdio_read(tp, MII_ADVERTISE);
 	if (ret < 0)
 		goto out;
 
 	old = ret;
 	new1 = (old & ~(ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM)) | mii_advertise_flowctrl(cap);
 	if (old != new1)
-		ret = e3100u_mdio_write(tp, MII_ADVERTISE, new1);
+		ret = e3100_mdio_write(tp, MII_ADVERTISE, new1);
 
 	if (new1 & (ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM))
 		tp->ups_info.flow_control = true;
@@ -30461,20 +30461,20 @@ static const struct ethtool_ops ops = {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0)
 	.supported_coalesce_params = ETHTOOL_COALESCE_USECS,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0) */
-	.get_drvinfo = e3100u_get_drvinfo,
+	.get_drvinfo = rte3100_get_drvinfo,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0)
-	.get_settings = e3100u_get_settings,
-	.set_settings = e3100u_set_settings,
+	.get_settings = rte3100_get_settings,
+	.set_settings = rte3100_set_settings,
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0) */
 	.get_link = ethtool_op_get_link,
-	.nway_reset = e3100u_nway_reset,
-	.get_msglevel = e3100u_get_msglevel,
-	.set_msglevel = e3100u_set_msglevel,
-	.get_wol = e3100u_get_wol,
-	.set_wol = e3100u_set_wol,
-	.get_strings = e3100u_get_strings,
-	.get_sset_count = e3100u_get_sset_count,
-	.get_ethtool_stats = e3100u_get_ethtool_stats,
+	.nway_reset = rte3100_nway_reset,
+	.get_msglevel = rte3100_get_msglevel,
+	.set_msglevel = rte3100_set_msglevel,
+	.get_wol = rte3100_get_wol,
+	.set_wol = rte3100_set_wol,
+	.get_strings = rte3100_get_strings,
+	.get_sset_count = rte3100_get_sset_count,
+	.get_ethtool_stats = rte3100_get_ethtool_stats,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)
 	.get_tx_csum = ethtool_op_get_tx_csum,
 	.set_tx_csum = ethtool_op_set_tx_csum,
@@ -30485,45 +30485,45 @@ static const struct ethtool_ops ops = {
 	.set_tso = ethtool_op_set_tso,
 #endif
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0) */
-	.get_coalesce = e3100u_get_coalesce,
-	.set_coalesce = e3100u_set_coalesce,
+	.get_coalesce = rte3100_get_coalesce,
+	.set_coalesce = rte3100_set_coalesce,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 	.get_eee = killer_ethtool_get_eee,
 	.set_eee = killer_ethtool_set_eee,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
-	.get_link_ksettings = e3100u_get_link_ksettings,
-	.set_link_ksettings = e3100u_set_link_ksettings,
+	.get_link_ksettings = rte3100_get_link_ksettings,
+	.set_link_ksettings = rte3100_set_link_ksettings,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0) */
-	.begin = e3100u_ethtool_begin,
+	.begin = rte3100_ethtool_begin,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
-	.get_tunable = e3100u_get_tunable,
-	.set_tunable = e3100u_set_tunable,
+	.get_tunable = rte3100_get_tunable,
+	.set_tunable = rte3100_set_tunable,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
-	.get_ringparam = e3100u_get_ringparam,
-	.set_ringparam = e3100u_set_ringparam,
-	.get_pauseparam = e3100u_get_pauseparam,
-	.set_pauseparam = e3100u_set_pauseparam,
+	.get_ringparam = rte3100_get_ringparam,
+	.set_ringparam = rte3100_set_ringparam,
+	.get_pauseparam = rte3100_get_pauseparam,
+	.set_pauseparam = rte3100_set_pauseparam,
 };
 
-static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
+static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 {
 	struct net_device *netdev = tp->netdev;
-	struct killertool_cmd my_cmd, *myptr;
+	struct rtltool_cmd my_cmd, *myptr;
 	struct usb_device_info *uinfo;
 	struct usb_device *udev;
 	__le32	ocp_data;
 	void	*buffer;
 	int	ret;
 
-	myptr = (struct killertool_cmd *)ifr->ifr_data;
+	myptr = (struct rtltool_cmd *)ifr->ifr_data;
 	if (copy_from_user(&my_cmd, myptr, sizeof(my_cmd)))
 		return -EFAULT;
 
 	ret = 0;
 
 	switch (my_cmd.cmd) {
-	case KILLERTOOL_PLA_OCP_READ_DWORD:
+	case RTLTOOL_PLA_OCP_READ_DWORD:
 		ret = pla_ocp_read(tp, (u16)my_cmd.offset, sizeof(ocp_data),
 				   &ocp_data);
 		if (ret < 0)
@@ -30534,7 +30534,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 			ret = -EFAULT;
 		break;
 
-	case KILLERTOOL_PLA_OCP_WRITE_DWORD:
+	case RTLTOOL_PLA_OCP_WRITE_DWORD:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30544,7 +30544,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 				    sizeof(ocp_data), &ocp_data);
 		break;
 
-	case KILLERTOOL_USB_OCP_READ_DWORD:
+	case RTLTOOL_USB_OCP_READ_DWORD:
 		ret = usb_ocp_read(tp, (u16)my_cmd.offset, sizeof(ocp_data),
 				   &ocp_data);
 		if (ret < 0)
@@ -30555,7 +30555,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 			ret = -EFAULT;
 		break;
 
-	case KILLERTOOL_USB_OCP_WRITE_DWORD:
+	case RTLTOOL_USB_OCP_WRITE_DWORD:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30565,7 +30565,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 				    sizeof(ocp_data), &ocp_data);
 		break;
 
-	case KILLERTOOL_PLA_OCP_READ:
+	case RTLTOOL_PLA_OCP_READ:
 		buffer = kmalloc(my_cmd.data, GFP_KERNEL);
 		if (!buffer) {
 			ret = -ENOMEM;
@@ -30584,7 +30584,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case KILLERTOOL_PLA_OCP_WRITE:
+	case RTLTOOL_PLA_OCP_WRITE:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30606,7 +30606,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case KILLERTOOL_USB_OCP_READ:
+	case RTLTOOL_USB_OCP_READ:
 		buffer = kmalloc(my_cmd.data, GFP_KERNEL);
 		if (!buffer) {
 			ret = -ENOMEM;
@@ -30625,7 +30625,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case KILLERTOOL_USB_OCP_WRITE:
+	case RTLTOOL_USB_OCP_WRITE:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30647,7 +30647,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case KILLERTOOL_PHY_OCP_READ:
+	case RTLTOOL_PHY_OCP_READ:
 		if (!tp->rtk_enable_diag) {
 			netif_err(tp, drv, netdev, "rtk diag isn't enable\n");
 			ret = -EPERM;
@@ -30664,7 +30664,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 			ret = -EFAULT;
 		break;
 
-	case KILLERTOOL_PHY_OCP_WRITE:
+	case RTLTOOL_PHY_OCP_WRITE:
 		if (!tp->rtk_enable_diag) {
 			netif_err(tp, drv, netdev, "rtk diag isn't enable\n");
 			ret = -EPERM;
@@ -30675,7 +30675,7 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 		ret = ocp_reg_write(tp, (u16)my_cmd.offset, (u16)ocp_data);
 		break;
 
-	case KILLERTOOL_USB_INFO:
+	case RTLTOOL_USB_INFO:
 		uinfo = (struct usb_device_info *)&my_cmd.nic_info;
 		udev = tp->udev;
 		uinfo->idVendor = __le16_to_cpu(udev->descriptor.idVendor);
@@ -30722,13 +30722,13 @@ static int killertool_ioctl(struct e3100u *tp, struct ifreq *ifr)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0)
-static int e3100u_siocdevprivate(struct net_device *netdev, struct ifreq *rq,
+static int rte3100_siocdevprivate(struct net_device *netdev, struct ifreq *rq,
 				  void __user *data, int cmd)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = usb_autopm_get_interface(tp->intf);
@@ -30741,7 +30741,7 @@ static int e3100u_siocdevprivate(struct net_device *netdev, struct ifreq *rq,
 			ret = -EPERM;
 			break;
 		}
-		ret = killertool_ioctl(tp, rq);
+		ret = rtltool_ioctl(tp, rq);
 		break;
 
 	default:
@@ -30755,13 +30755,13 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0) */
 
-static int e3100u_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+static int rte3100_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 {
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	struct mii_ioctl_data *data = if_mii(rq);
 	int ret;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = usb_autopm_get_interface(tp->intf);
@@ -30770,7 +30770,7 @@ static int e3100u_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 
 	switch (cmd) {
 	case SIOCGMIIPHY:
-		data->phy_id = e3100u_PHY_ID; /* Internal PHY */
+		data->phy_id = E3100_PHY_ID; /* Internal PHY */
 		break;
 
 	case SIOCGMIIREG:
@@ -30780,7 +30780,7 @@ static int e3100u_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 		}
 
 		mutex_lock(&tp->control);
-		data->val_out = e3100u_mdio_read(tp, data->reg_num);
+		data->val_out = e3100_mdio_read(tp, data->reg_num);
 		mutex_unlock(&tp->control);
 		break;
 
@@ -30796,7 +30796,7 @@ static int e3100u_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 		}
 
 		mutex_lock(&tp->control);
-		ret = e3100u_mdio_write(tp, data->reg_num, data->val_in);
+		ret = e3100_mdio_write(tp, data->reg_num, data->val_in);
 		if (ret > 0)
 			ret = 0;
 		mutex_unlock(&tp->control);
@@ -30808,7 +30808,7 @@ static int e3100u_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 			ret = -EPERM;
 			break;
 		}
-		ret = killertool_ioctl(tp, rq);
+		ret = rtltool_ioctl(tp, rq);
 		break;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
 
@@ -30822,9 +30822,9 @@ out:
 	return ret;
 }
 
-static int e3100u_change_mtu(struct net_device *dev, int new_mtu)
+static int rte3100_change_mtu(struct net_device *dev, int new_mtu)
 {
-	struct e3100u *tp = netdev_priv(dev);
+	struct e3100 *tp = netdev_priv(dev);
 	int ret;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0)
 	u32 max_mtu;
@@ -30899,7 +30899,7 @@ static int e3100u_change_mtu(struct net_device *dev, int new_mtu)
 			killer_start_rx(tp);
 			tasklet_enable(&tp->tx_tl);
 			napi_enable(&tp->napi);
-			e3100u_set_rx_mode(dev);
+			rte3100_set_rx_mode(dev);
 			netif_wake_queue(dev);
 		}
 	}
@@ -30912,63 +30912,63 @@ static int e3100u_change_mtu(struct net_device *dev, int new_mtu)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
-static const struct net_device_ops e3100u_netdev_ops = {
-	.ndo_open		= e3100u_open,
-	.ndo_stop		= e3100u_close,
+static const struct net_device_ops rte3100_netdev_ops = {
+	.ndo_open		= rte3100_open,
+	.ndo_stop		= rte3100_close,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
-	.ndo_do_ioctl		= e3100u_ioctl,
+	.ndo_do_ioctl		= rte3100_ioctl,
 #else
-	.ndo_siocdevprivate	= e3100u_siocdevprivate,
-	.ndo_eth_ioctl		= e3100u_ioctl,
+	.ndo_siocdevprivate	= rte3100_siocdevprivate,
+	.ndo_eth_ioctl		= rte3100_ioctl,
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
-	.ndo_start_xmit		= e3100u_start_xmit,
-	.ndo_tx_timeout		= e3100u_tx_timeout,
+	.ndo_start_xmit		= rte3100_start_xmit,
+	.ndo_tx_timeout		= rte3100_tx_timeout,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	.ndo_vlan_rx_register	= e3100u_vlan_rx_register,
+	.ndo_vlan_rx_register	= rte3100_vlan_rx_register,
 #else
-	.ndo_set_features	= e3100u_set_features,
+	.ndo_set_features	= rte3100_set_features,
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
-	.ndo_set_rx_mode	= e3100u_set_rx_mode,
-	.ndo_set_mac_address	= e3100u_set_mac_address,
-	.ndo_change_mtu		= e3100u_change_mtu,
+	.ndo_set_rx_mode	= rte3100_set_rx_mode,
+	.ndo_set_mac_address	= rte3100_set_mac_address,
+	.ndo_change_mtu		= rte3100_change_mtu,
 	.ndo_validate_addr	= eth_validate_addr,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4)
-	.ndo_features_check	= e3100u_features_check,
+	.ndo_features_check	= rte3100_features_check,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4) */
 };
 #endif
 
-static void e3100u_unload(struct e3100u *tp)
+static void rte3100_unload(struct e3100 *tp)
 {
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	e3100u_power_cut_en(tp, false);
+	e3100_power_cut_en(tp, false);
 }
 
-static void killer8153_unload(struct e3100u *tp)
+static void rtl8153-old_unload(struct e3100 *tp)
 {
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	r8153_power_cut_en(tp, false);
+	r8153-old_power_cut_en(tp, false);
 }
 
-static void killer8153b_unload(struct e3100u *tp)
+static void rtl8153-oldb_unload(struct e3100 *tp)
 {
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	if (!r8153b_power_cut_en(tp, false))
+	if (!r8153b-old_power_cut_en(tp, false))
 		killer_set_dbg_info_state(tp, DGB_DRV_STATE_UNLOAD);
 }
 
-static void killer8157_unload(struct e3100u *tp)
+static void rtl8157-old_unload(struct e3100 *tp)
 {
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	r8153_power_cut_en(tp, false);
+	r8153-old_power_cut_en(tp, false);
 
 	/* Disable Interrupt Mitigation */
 	if (ocp_byte_clr_bits(tp, MCU_TYPE_USB, 0xcf04,
@@ -30976,56 +30976,56 @@ static void killer8157_unload(struct e3100u *tp)
 		return;
 }
 
-static int e3100u_desc_init(struct e3100u *tp)
+static int e3100_desc_init(struct e3100 *tp)
 {
 	tp->rx_desc.size = sizeof(struct rx_desc);
 	tp->rx_desc.align = 8;
-	tp->rx_desc.vlan_tag = e3100u_rx_vlan_tag;
-	tp->rx_desc.csum = e3100u_rx_csum;
-	tp->rx_desc.len = e3100u_rx_len;
+	tp->rx_desc.vlan_tag = e3100_rx_vlan_tag;
+	tp->rx_desc.csum = e3100_rx_csum;
+	tp->rx_desc.len = e3100_rx_len;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	tp->vlan_put_tag = e3100u_vlan_put_tag;
+	tp->vlan_put_tag = e3100_vlan_put_tag;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0) */
 
 	tp->tx_desc.size = sizeof(struct tx_desc);
 	tp->tx_desc.align = 4;
-	tp->tx_desc.vlan_tag = e3100u_tx_vlan_tag;
-	tp->tx_desc.csum = e3100u_tx_csum;
-	tp->tx_desc.len = e3100u_tx_len;
+	tp->tx_desc.vlan_tag = e3100_tx_vlan_tag;
+	tp->tx_desc.csum = e3100_tx_csum;
+	tp->tx_desc.len = e3100_tx_len;
 
 	return 0;
 }
 
-static int r8157_desc_init(struct e3100u *tp)
+static int r8157-old_desc_init(struct e3100 *tp)
 {
 	tp->rx_desc.size = sizeof(struct rx_desc_v2);
 	tp->rx_desc.align = 16;
-	tp->rx_desc.vlan_tag = r8157_rx_vlan_tag;
-	tp->rx_desc.csum = r8157_rx_csum;
-	tp->rx_desc.len = r8157_rx_len;
+	tp->rx_desc.vlan_tag = r8157-old_rx_vlan_tag;
+	tp->rx_desc.csum = r8157-old_rx_csum;
+	tp->rx_desc.len = r8157-old_rx_len;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	tp->vlan_put_tag = r8157_vlan_put_tag;
+	tp->vlan_put_tag = r8157-old_vlan_put_tag;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0) */
 
 	tp->tx_desc.size = sizeof(struct tx_desc_v2);
 	tp->tx_desc.align = 16;
-	tp->tx_desc.vlan_tag = e3100u_tx_vlan_tag;
-	tp->tx_desc.csum = r8157_tx_csum;
-	tp->tx_desc.len = r8157_tx_len;
+	tp->tx_desc.vlan_tag = e3100_tx_vlan_tag;
+	tp->tx_desc.csum = r8157-old_tx_csum;
+	tp->tx_desc.len = r8157-old_tx_len;
 
 	return 0;
 }
 
-static void killer8153c_unload(struct e3100u *tp)
+static void rtl8153-oldc_unload(struct e3100 *tp)
 {
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	r8153_power_cut_en(tp, false);
+	r8153-old_power_cut_en(tp, false);
 	killer_set_dbg_info_state(tp, DGB_DRV_STATE_UNLOAD);
 }
 
-static int killer_ops_init(struct e3100u *tp)
+static int killer_ops_init(struct e3100 *tp)
 {
 	struct killer_ops *ops = &tp->killer_ops;
 	int ret = 0;
@@ -31034,99 +31034,99 @@ static int killer_ops_init(struct e3100u *tp)
 	case KILLER_VER_01:
 	case KILLER_VER_02:
 	case KILLER_VER_07:
-		ops->init		= e3100ub_init;
-		ops->enable		= e3100u_enable;
-		ops->disable		= e3100u_disable;
-		ops->up			= e3100u_up;
-		ops->down		= e3100u_down;
-		ops->unload		= e3100u_unload;
+		ops->init		= r8152b-old_init;
+		ops->enable		= rte3100_enable;
+		ops->disable		= rte3100_disable;
+		ops->up			= rte3100_up;
+		ops->down		= rte3100_down;
+		ops->unload		= rte3100_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= e3100u_get_eee;
-		ops->eee_set		= e3100u_set_eee;
+		ops->eee_get		= e3100_get_eee;
+		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= e3100u_in_nway;
-		ops->hw_phy_cfg		= e3100ub_hw_phy_cfg;
+		ops->in_nway		= rte3100_in_nway;
+		ops->hw_phy_cfg		= r8152b-old_hw_phy_cfg;
 		ops->autosuspend_en	= killer_runtime_suspend_enable;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 16 * 1024;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_100TX;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_VER_03:
 	case KILLER_VER_04:
 	case KILLER_VER_05:
 	case KILLER_VER_06:
-		ops->init		= r8153_init;
-		ops->enable		= killer8153_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8153_up;
-		ops->down		= killer8153_down;
-		ops->unload		= killer8153_unload;
+		ops->init		= r8153-old_init;
+		ops->enable		= rtl8153-old_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rtl8153-old_up;
+		ops->down		= rtl8153-old_down;
+		ops->unload		= rtl8153-old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8153_get_eee;
-		ops->eee_set		= e3100u_set_eee;
+		ops->eee_get		= r8153-old_get_eee;
+		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8153_hw_phy_cfg;
-		ops->autosuspend_en	= killer8153_runtime_enable;
-		ops->change_mtu		= killer8153_change_mtu;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= r8153-old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8153-old_runtime_enable;
+		ops->change_mtu		= rtl8153-old_change_mtu;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		if (tp->udev->speed < USB_SPEED_SUPER)
 			tp->rx_buf_sz	= 16 * 1024;
 		else
 			tp->rx_buf_sz	= 32 * 1024;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_VER_08:
 	case KILLER_VER_09:
-		ops->init		= r8153b_init;
-		ops->enable		= killer8153_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8153b_up;
-		ops->down		= killer8153b_down;
-		ops->unload		= killer8153b_unload;
+		ops->init		= r8153b-old_init;
+		ops->enable		= rtl8153-old_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rtl8153-oldb_up;
+		ops->down		= rtl8153-oldb_down;
+		ops->unload		= rtl8153-oldb_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8153_get_eee;
-		ops->eee_set		= e3100u_set_eee;
+		ops->eee_get		= r8153-old_get_eee;
+		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8153b_hw_phy_cfg;
-		ops->autosuspend_en	= killer8153b_runtime_enable;
-		ops->change_mtu		= killer8153_change_mtu;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= r8153b-old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8153-oldb_runtime_enable;
+		ops->change_mtu		= rtl8153-old_change_mtu;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_TEST_01:
-		ops->init		= r8156_init;
-		ops->enable		= killer8156_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8156_up;
-		ops->down		= killer8156_down;
-		ops->unload		= killer8153_unload;
+		ops->init		= e3100u_init;
+		ops->enable		= rte3100u_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rte3100u_up;
+		ops->down		= rte3100u_down;
+		ops->unload		= rtl8153-old_unload;
 //#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-//		ops->eee_get		= r8156_get_eee;
-//		ops->eee_set		= r8156_set_eee;
+//		ops->eee_get		= e3100u_get_eee;
+//		ops->eee_set		= e3100u_set_eee;
 //#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8156_hw_phy_cfg_test;
-		ops->autosuspend_en	= killer8156_runtime_enable;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= e3100u_hw_phy_cfg_test;
+		ops->autosuspend_en	= rte3100u_runtime_enable;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
 		tp->support_2500full	= 1;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_VER_11:
@@ -31135,25 +31135,25 @@ static int killer_ops_init(struct e3100u *tp)
 		tp->eee_adv2		= MDIO_EEE_2_5GT;
 		fallthrough;
 	case KILLER_VER_10:
-		ops->init		= r8156_init;
-		ops->enable		= killer8156_enable;
-		ops->disable		= killer8156_disable;
-		ops->up			= killer8156_up;
-		ops->down		= killer8156_down;
-		ops->unload		= killer8153_unload;
+		ops->init		= e3100u_init;
+		ops->enable		= rte3100u_enable;
+		ops->disable		= rte3100u_disable;
+		ops->up			= rte3100u_up;
+		ops->down		= rte3100u_down;
+		ops->unload		= rtl8153-old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8156_get_eee;
-		ops->eee_set		= r8156_set_eee;
+		ops->eee_get		= e3100u_get_eee;
+		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8156_hw_phy_cfg;
-		ops->autosuspend_en	= killer8156_runtime_enable;
-		ops->change_mtu		= killer8156_change_mtu;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= e3100u_hw_phy_cfg;
+		ops->autosuspend_en	= rte3100u_runtime_enable;
+		ops->change_mtu		= rte3100u_change_mtu;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
 		tp->support_2500full	= 1;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_VER_12:
@@ -31161,95 +31161,95 @@ static int killer_ops_init(struct e3100u *tp)
 		tp->support_2500full	= 1;
 		fallthrough;
 	case KILLER_VER_15:
-		ops->init		= r8156b_init;
-		ops->enable		= killer8156b_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8156_up;
-		ops->down		= killer8156_down;
-		ops->unload		= killer8153_unload;
+		ops->init		= e3100ub_init;
+		ops->enable		= rtl8152b-old_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rte3100u_up;
+		ops->down		= rte3100u_down;
+		ops->unload		= rtl8153-old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8156_get_eee;
-		ops->eee_set		= r8156_set_eee;
+		ops->eee_get		= e3100u_get_eee;
+		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8156b_hw_phy_cfg;
-		ops->autosuspend_en	= killer8156_runtime_enable;
-		ops->change_mtu		= killer8156_change_mtu;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= e3100ub_hw_phy_cfg;
+		ops->autosuspend_en	= rte3100u_runtime_enable;
+		ops->change_mtu		= rte3100u_change_mtu;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
 		tp->eee_adv2		= MDIO_EEE_2_5GT;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_VER_14:
-		ops->init		= r8153c_init;
-		ops->enable		= killer8153_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8153c_up;
-		ops->down		= killer8153b_down;
-		ops->unload		= killer8153c_unload;
+		ops->init		= r8153-oldc_init;
+		ops->enable		= rtl8153-old_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rtl8153-oldc_up;
+		ops->down		= rtl8153-oldb_down;
+		ops->unload		= rtl8153-oldc_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8153_get_eee;
-		ops->eee_set		= e3100u_set_eee;
+		ops->eee_get		= r8153-old_get_eee;
+		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8153c_hw_phy_cfg;
-		ops->autosuspend_en	= killer8153c_runtime_enable;
-		ops->change_mtu		= killer8153c_change_mtu;
-		ops->phy_read		= e3100u_phy_read;
-		ops->phy_write		= e3100u_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= r8153-oldc_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8153-oldc_runtime_enable;
+		ops->change_mtu		= rtl8153-oldc_change_mtu;
+		ops->phy_read		= e3100_phy_read;
+		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
-		e3100u_desc_init(tp);
+		e3100_desc_init(tp);
 		break;
 
 	case KILLER_VER_16:
-		ops->init		= r8157_init;
-		ops->enable		= killer8157_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8157_up;
-		ops->down		= killer8157_down;
-		ops->unload		= killer8157_unload;
+		ops->init		= r8157-old_init;
+		ops->enable		= rtl8157-old_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rtl8157-old_up;
+		ops->down		= rtl8157-old_down;
+		ops->unload		= rtl8157-old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8156_get_eee;
-		ops->eee_set		= r8156_set_eee;
+		ops->eee_get		= e3100u_get_eee;
+		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8157_hw_phy_cfg;
-		ops->autosuspend_en	= killer8157_runtime_enable;
-		ops->change_mtu		= killer8157_change_mtu;
-		ops->phy_read		= r8157_phy_read;
-		ops->phy_write		= r8157_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= r8157-old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8157-old_runtime_enable;
+		ops->change_mtu		= rtl8157-old_change_mtu;
+		ops->phy_read		= r8157-old_phy_read;
+		ops->phy_write		= r8157-old_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
 		tp->support_2500full	= 1;
 		tp->support_5000full	= 1;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
 		tp->eee_adv2		= MDIO_EEE_2_5GT | MDIO_EEE_5GT;
-		r8157_desc_init(tp);
+		r8157-old_desc_init(tp);
 		break;
 
 	case KILLER_VER_17:
-		ops->init		= r8159_init;
-		ops->enable		= killer8157_enable;
-		ops->disable		= killer8153_disable;
-		ops->up			= killer8157_up;
-		ops->down		= killer8157_down;
-		ops->unload		= killer8157_unload;
+		ops->init		= r8159-old_init;
+		ops->enable		= rtl8157-old_enable;
+		ops->disable		= rtl8153-old_disable;
+		ops->up			= rtl8157-old_up;
+		ops->down		= rtl8157-old_down;
+		ops->unload		= rtl8157-old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8156_get_eee;
-		ops->eee_set		= r8156_set_eee;
+		ops->eee_get		= e3100u_get_eee;
+		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= killer8153_in_nway;
-		ops->hw_phy_cfg		= r8159_hw_phy_cfg;
-		ops->autosuspend_en	= killer8157_runtime_enable;
-		ops->change_mtu		= killer8157_change_mtu;
-		ops->phy_read		= r8157_phy_read;
-		ops->phy_write		= r8157_phy_write;
+		ops->in_nway		= rtl8153-old_in_nway;
+		ops->hw_phy_cfg		= r8159-old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8157-old_runtime_enable;
+		ops->change_mtu		= rtl8157-old_change_mtu;
+		ops->phy_read		= r8157-old_phy_read;
+		ops->phy_write		= r8157-old_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
 		tp->support_2500full	= 1;
 		tp->support_5000full	= 1;
@@ -31257,7 +31257,7 @@ static int killer_ops_init(struct e3100u *tp)
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_100TX | MDIO_EEE_1000T | MDIO_EEE_10GT;
 		tp->eee_adv2		= MDIO_EEE_2_5GT | MDIO_EEE_5GT;
-		r8157_desc_init(tp);
+		r8157-old_desc_init(tp);
 		break;
 
 	default:
@@ -31282,7 +31282,7 @@ static u8 __killer_get_hw_ver(struct usb_device *udev)
 
 	for (i = 0, ret = 0; i < 3 && ret != 4; i++)
 		ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-				      E3100U_REQ_GET_REGS, E3100U_REQT_READ,
+				      RTE3100_REQ_GET_REGS, RTE3100_REQT_READ,
 				      PLA_TCR0, MCU_TYPE_PLA, tmp, sizeof(*tmp),
 				      USB_CTRL_GET_TIMEOUT);
 
@@ -31358,8 +31358,8 @@ static u8 __killer_get_hw_ver(struct usb_device *udev)
 	return version;
 }
 
-u8 e3100u_get_version(struct usb_interface *intf);
-u8 e3100u_get_version(struct usb_interface *intf)
+u8 rte3100_get_version(struct usb_interface *intf);
+u8 rte3100_get_version(struct usb_interface *intf)
 {
 	u8 version;
 
@@ -31369,15 +31369,15 @@ u8 e3100u_get_version(struct usb_interface *intf)
 
 	return version;
 }
-EXPORT_SYMBOL_GPL(e3100u_get_version);
+EXPORT_SYMBOL_GPL(rte3100_get_version);
 
-#ifdef E3100U_DEBUG
+#ifdef RTE3100_DEBUG
 
 static ssize_t
 ocp_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	struct usb_interface *intf = tp->intf;
 	char tmp[256];
 	struct tally_counter tally;
@@ -31590,7 +31590,7 @@ static ssize_t ocp_store(struct device *dev, struct device_attribute *attr,
 			 const char *buf, size_t count)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	struct usb_interface *intf = tp->intf;
 	u32 v1, v2, v3, v4;
 	int num, ret;
@@ -31745,7 +31745,7 @@ static ssize_t pla_read(struct file *fp, struct kobject *kobj,
 {
 	struct device *dev = kobj_to_dev(kobj);
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int ret;
 
 	if (size <= ATTR_PLA_SIZE)
@@ -31797,13 +31797,13 @@ static struct attribute_group rtk_dbg_grp = {
 	.bin_attrs = rtk_bin_attrs,
 };
 
-#endif /* E3100U_DEBUG */
+#endif /* RTE3100_DEBUG */
 
 static ssize_t temperature_show(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	int ret, temp;
 	u16 data;
 
@@ -31855,7 +31855,7 @@ static ssize_t rx_copybreak_show(struct device *dev,
 				 struct device_attribute *attr, char *buf)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	sprintf(buf, "%u\n", tp->rx_copybreak);
 
@@ -31867,7 +31867,7 @@ static ssize_t rx_copybreak_store(struct device *dev,
 				  const char *buf, size_t count)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u32 rx_copybreak;
 
 	if (sscanf(buf, "%u\n", &rx_copybreak) != 1)
@@ -31876,7 +31876,7 @@ static ssize_t rx_copybreak_store(struct device *dev,
 	if (rx_copybreak < ETH_ZLEN)
 		return -EINVAL;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (tp->rx_copybreak != rx_copybreak) {
@@ -31906,7 +31906,7 @@ static ssize_t tx_copybreak_show(struct device *dev,
 				 struct device_attribute *attr, char *buf)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	sprintf(buf, "%u\n", tp->tx_copybreak);
 
@@ -31918,7 +31918,7 @@ static ssize_t tx_copybreak_store(struct device *dev,
 				  const char *buf, size_t count)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	u32 tx_copybreak;
 
 	if (sscanf(buf, "%u\n", &tx_copybreak) != 1)
@@ -31927,7 +31927,7 @@ static ssize_t tx_copybreak_store(struct device *dev,
 	if (tx_copybreak < ETH_ZLEN)
 		return -EINVAL;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (tp->tx_copybreak != tx_copybreak) {
@@ -31950,7 +31950,7 @@ static DEVICE_ATTR_RW(tx_copybreak);
 static ssize_t fc_pause_on_show(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
-	struct e3100u *tp = netdev_priv(to_net_dev(dev));
+	struct e3100 *tp = netdev_priv(to_net_dev(dev));
 
 	if (!tp->fc_pause_on)
 		sprintf(buf, "(Auto)%u\n", fc_pause_on_auto(tp));
@@ -31965,12 +31965,12 @@ static ssize_t fc_pause_on_store(struct device *dev,
 				 const char *buf, size_t count)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	struct usb_interface *intf = tp->intf;
 	u32 pause_on, pause_off, tmp;
 	int ret = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (sscanf(buf, "%u\n", &pause_on) != 1)
@@ -32004,7 +32004,7 @@ static ssize_t fc_pause_on_store(struct device *dev,
 		tp->fc_pause_on = pause_on;
 
 		if (netdev->flags & IFF_UP) {
-			r8156_fc_parameter(tp);
+			e3100u_fc_parameter(tp);
 
 			if (netif_carrier_ok(netdev)) {
 				netif_stop_queue(netdev);
@@ -32015,7 +32015,7 @@ static ssize_t fc_pause_on_store(struct device *dev,
 				killer_start_rx(tp);
 				tasklet_enable(&tp->tx_tl);
 				napi_enable(&tp->napi);
-				e3100u_set_rx_mode(netdev);
+				rte3100_set_rx_mode(netdev);
 				netif_wake_queue(netdev);
 			}
 		}
@@ -32037,7 +32037,7 @@ static DEVICE_ATTR_RW(fc_pause_on);
 static ssize_t fc_pause_off_show(struct device *dev,
 				 struct device_attribute *attr, char *buf)
 {
-	struct e3100u *tp = netdev_priv(to_net_dev(dev));
+	struct e3100 *tp = netdev_priv(to_net_dev(dev));
 
 	if (!tp->fc_pause_off)
 		sprintf(buf, "(Auto)%u\n", fc_pause_off_auto(tp));
@@ -32052,12 +32052,12 @@ static ssize_t fc_pause_off_store(struct device *dev,
 				  const char *buf, size_t count)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 	struct usb_interface *intf = tp->intf;
 	u32 pause_on, pause_off, tmp;
 	int ret = 0;
 
-	if (test_bit(E3100U_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (sscanf(buf, "%u\n", &pause_off) != 1)
@@ -32091,7 +32091,7 @@ static ssize_t fc_pause_off_store(struct device *dev,
 		tp->fc_pause_off = pause_off;
 
 		if (netdev->flags & IFF_UP) {
-			r8156_fc_parameter(tp);
+			e3100u_fc_parameter(tp);
 
 			if (netif_carrier_ok(netdev)) {
 				netif_stop_queue(netdev);
@@ -32102,7 +32102,7 @@ static ssize_t fc_pause_off_store(struct device *dev,
 				killer_start_rx(tp);
 				tasklet_enable(&tp->tx_tl);
 				napi_enable(&tp->napi);
-				e3100u_set_rx_mode(netdev);
+				rte3100_set_rx_mode(netdev);
 				netif_wake_queue(netdev);
 			}
 		}
@@ -32125,7 +32125,7 @@ static ssize_t
 sg_en_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	if (tp->sg_use)
 		strcat(buf, "enable\n");
@@ -32139,7 +32139,7 @@ static ssize_t sg_en_store(struct device *dev, struct device_attribute *attr,
 			   const char *buf, size_t count)
 {
 	struct net_device *netdev = to_net_dev(dev);
-	struct e3100u *tp = netdev_priv(netdev);
+	struct e3100 *tp = netdev_priv(netdev);
 
 	if (!strncmp(buf, "enable", 6) &&
 	    usb_device_no_sg_constraint(tp->udev))
@@ -32179,7 +32179,7 @@ static struct attribute_group rtk_adv_grp = {
 	.attrs = rtk_adv_attrs,
 };
 
-static bool e3100u_supports_lenovo_macpassthru(struct usb_device *udev)
+static bool rte3100_supports_lenovo_macpassthru(struct usb_device *udev)
 {
 	int parent_vendor_id = le16_to_cpu(udev->parent->descriptor.idVendor);
 	int product_id = le16_to_cpu(udev->descriptor.idProduct);
@@ -32204,12 +32204,12 @@ static bool e3100u_supports_lenovo_macpassthru(struct usb_device *udev)
 	return 0;
 }
 
-static void killer_get_mapt_ver(struct e3100u *tp)
+static void killer_get_mapt_ver(struct e3100 *tp)
 {
 	struct usb_device *udev = tp->udev;
 	u32 ocp_data;
 
-	/* test for -AD variant of RTL8153 */
+	/* test for -AD variant of RTL8153-OLD */
 	if (ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0, &ocp_data) < 0)
 		return;
 
@@ -32223,7 +32223,7 @@ static void killer_get_mapt_ver(struct e3100u *tp)
 		}
 	}
 
-	/* test for RTL8153-BND and RTL8153-BD */
+	/* test for RTL8153-OLD-BND and RTL8153-OLD-BD */
 	if (ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1, &ocp_data) < 0)
 		return;
 
@@ -32232,20 +32232,20 @@ static void killer_get_mapt_ver(struct e3100u *tp)
 		return;
 	}
 
-	tp->lenovo_macpassthru = e3100u_supports_lenovo_macpassthru(udev);
+	tp->lenovo_macpassthru = rte3100_supports_lenovo_macpassthru(udev);
 }
 
-static int e3100u_probe(struct usb_interface *intf,
+static int rte3100_probe(struct usb_interface *intf,
 			 const struct usb_device_id *id)
 {
 	struct usb_device *udev = interface_to_usbdev(intf);
-	struct e3100u *tp;
+	struct e3100 *tp;
 	struct net_device *netdev;
 	u8 version;
 	int ret;
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0)
-	version = e3100u_get_version(intf);
+	version = rte3100_get_version(intf);
 	if (version == KILLER_VER_UNKNOWN)
 		return -ENODEV;
 
@@ -32258,13 +32258,13 @@ static int e3100u_probe(struct usb_interface *intf,
 	if (!killer_check_vendor_ok(intf))
 		return -ENODEV;
 
-	version = e3100u_get_version(intf);
+	version = rte3100_get_version(intf);
 	if (version == KILLER_VER_UNKNOWN)
 		return -ENODEV;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0) */
 
 	usb_reset_device(udev);
-	netdev = alloc_etherdev(sizeof(struct e3100u));
+	netdev = alloc_etherdev(sizeof(struct e3100));
 	if (!netdev) {
 		dev_err(&intf->dev, "Out of memory\n");
 		return -ENOMEM;
@@ -32312,24 +32312,24 @@ static int e3100u_probe(struct usb_interface *intf,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,3) */
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	netdev->open = e3100u_open;
-	netdev->stop = e3100u_close;
-	netdev->get_stats = e3100u_get_stats;
-	netdev->hard_start_xmit = e3100u_start_xmit;
-	netdev->tx_timeout = e3100u_tx_timeout;
-	netdev->change_mtu = e3100u_change_mtu;
-	netdev->set_mac_address = e3100u_set_mac_address;
-	netdev->do_ioctl = e3100u_ioctl;
-	netdev->set_multicast_list = e3100u_set_rx_mode;
-	netdev->vlan_rx_register = e3100u_vlan_rx_register;
+	netdev->open = rte3100_open;
+	netdev->stop = rte3100_close;
+	netdev->get_stats = rte3100_get_stats;
+	netdev->hard_start_xmit = rte3100_start_xmit;
+	netdev->tx_timeout = rte3100_tx_timeout;
+	netdev->change_mtu = rte3100_change_mtu;
+	netdev->set_mac_address = rte3100_set_mac_address;
+	netdev->do_ioctl = rte3100_ioctl;
+	netdev->set_multicast_list = rte3100_set_rx_mode;
+	netdev->vlan_rx_register = rte3100_vlan_rx_register;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	netdev->vlan_rx_kill_vid = e3100u_vlan_rx_kill_vid;
+	netdev->vlan_rx_kill_vid = rte3100_vlan_rx_kill_vid;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22) */
 #else
-	netdev->netdev_ops = &e3100u_netdev_ops;
+	netdev->netdev_ops = &rte3100_netdev_ops;
 #endif /* HAVE_NET_DEVICE_OPS */
 
-	netdev->watchdog_timeo = E3100U_TX_TIMEOUT;
+	netdev->watchdog_timeo = RTE3100_TX_TIMEOUT;
 
 	netdev->features |= NETIF_F_RXCSUM | NETIF_F_IP_CSUM | NETIF_F_SG |
 			    NETIF_F_TSO | NETIF_F_FRAGLIST | NETIF_F_IPV6_CSUM |
@@ -32406,7 +32406,7 @@ static int e3100u_probe(struct usb_interface *intf,
 	tp->mii.mdio_write = write_mii_word;
 	tp->mii.phy_id_mask = 0x3f;
 	tp->mii.reg_num_mask = 0x1f;
-	tp->mii.phy_id = e3100u_PHY_ID;
+	tp->mii.phy_id = E3100_PHY_ID;
 	tp->mii.force_media = 0;
 	tp->mii.advertising = ADVERTISE_10HALF | ADVERTISE_10FULL |
 			      ADVERTISE_100HALF | ADVERTISE_100FULL;
@@ -32439,9 +32439,9 @@ static int e3100u_probe(struct usb_interface *intf,
 
 	tp->duplex = DUPLEX_FULL;
 
-	tp->rx_copybreak = E3100U_RXFG_HEADSZ;
-	tp->tx_copybreak = E3100U_TXFG_HEADSZ;
-	tp->rx_pending = 10 * E3100U_MAX_RX;
+	tp->rx_copybreak = RTE3100_RXFG_HEADSZ;
+	tp->tx_copybreak = RTE3100_TXFG_HEADSZ;
+	tp->rx_pending = 10 * RTE3100_MAX_RX;
 
 	intf->needs_remote_wakeup = 1;
 
@@ -32460,9 +32460,9 @@ static int e3100u_probe(struct usb_interface *intf,
 	usb_set_intfdata(intf, tp);
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(6,1,0)
-	netif_napi_add_weight(netdev, &tp->napi, e3100u_poll, NAPI_POLL_WEIGHT);
+	netif_napi_add_weight(netdev, &tp->napi, e3100_poll, NAPI_POLL_WEIGHT);
 #else
-	netif_napi_add(netdev, &tp->napi, e3100u_poll);
+	netif_napi_add(netdev, &tp->napi, e3100_poll);
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,1,0) */
 
 	ret = register_netdev(netdev);
@@ -32487,7 +32487,7 @@ static int e3100u_probe(struct usb_interface *intf,
 		goto out3;
 	}
 
-#ifdef E3100U_DEBUG
+#ifdef RTE3100_DEBUG
 	ret = sysfs_create_group(&netdev->dev.kobj, &rtk_dbg_grp);
 	if (ret < 0) {
 		netif_err(tp, probe, netdev, "create rtk_dbg_grp fail\n");
@@ -32497,7 +32497,7 @@ static int e3100u_probe(struct usb_interface *intf,
 
 	return 0;
 
-#ifdef E3100U_DEBUG
+#ifdef RTE3100_DEBUG
 out4:
 	sysfs_remove_group(&netdev->dev.kobj, &rtk_adv_grp);
 #endif
@@ -32514,15 +32514,15 @@ out:
 	return ret;
 }
 
-static void e3100u_disconnect(struct usb_interface *intf)
+static void rte3100_disconnect(struct usb_interface *intf)
 {
-	struct e3100u *tp = usb_get_intfdata(intf);
+	struct e3100 *tp = usb_get_intfdata(intf);
 
 	usb_set_intfdata(intf, NULL);
 	if (tp) {
 		struct net_device *netdev = tp->netdev;
 
-#ifdef E3100U_DEBUG
+#ifdef RTE3100_DEBUG
 		sysfs_remove_group(&netdev->dev.kobj, &rtk_dbg_grp);
 #endif
 		sysfs_remove_group(&netdev->dev.kobj, &rtk_adv_grp);
@@ -32551,25 +32551,25 @@ static void e3100u_disconnect(struct usb_interface *intf)
 }
 
 /* table of devices that work with this driver */
-static const struct usb_device_id e3100u_table[] = {
-	/* Intel/Rivet */
+static const struct usb_device_id rte3100_table[] = {
+	/* Rivet */
 	KILLER_USB_DEVICE(VENDOR_ID_KILLER, 0x3100),
 
 	{}
 };
 
-MODULE_DEVICE_TABLE(usb, e3100u_table);
+MODULE_DEVICE_TABLE(usb, rte3100_table);
 
-static struct usb_driver e3100u_driver = {
+static struct usb_driver rte3100_driver = {
 	.name =		MODULENAME,
-	.id_table =	e3100u_table,
-	.probe =	e3100u_probe,
-	.disconnect =	e3100u_disconnect,
-	.suspend =	e3100u_suspend,
-	.resume =	e3100u_resume,
-	.reset_resume =	e3100u_reset_resume,
-	.pre_reset =	e3100u_pre_reset,
-	.post_reset =	e3100u_post_reset,
+	.id_table =	rte3100_table,
+	.probe =	rte3100_probe,
+	.disconnect =	rte3100_disconnect,
+	.suspend =	rte3100_suspend,
+	.resume =	rte3100_resume,
+	.reset_resume =	rte3100_reset_resume,
+	.pre_reset =	rte3100_pre_reset,
+	.post_reset =	rte3100_post_reset,
 	.supports_autosuspend = 1,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0)
 	.disable_hub_initiated_lpm = 1,
@@ -32577,9 +32577,9 @@ static struct usb_driver e3100u_driver = {
 };
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0)
-module_usb_driver(e3100u_driver);
+module_usb_driver(rte3100_driver);
 #else
-static int e3100u_cfgselector_probe(struct usb_device *udev)
+static int rte3100_cfgselector_probe(struct usb_device *udev)
 {
 	struct usb_host_config *c;
 	int i, num_configs;
@@ -32615,32 +32615,32 @@ static int e3100u_cfgselector_probe(struct usb_device *udev)
 	return 0;
 }
 
-static struct usb_device_driver e3100u_cfgselector_driver = {
+static struct usb_device_driver rte3100_cfgselector_driver = {
 	.name =		MODULENAME "-cfgselector",
-	.probe =	e3100u_cfgselector_probe,
-	.id_table =	e3100u_table,
+	.probe =	rte3100_cfgselector_probe,
+	.id_table =	rte3100_table,
 	.generic_subclass = 1,
 	.supports_autosuspend = 1,
 };
 
-static int __init e3100u_driver_init(void)
+static int __init rte3100_driver_init(void)
 {
 	int ret;
 
-	ret = usb_register_device_driver(&e3100u_cfgselector_driver, THIS_MODULE);
+	ret = usb_register_device_driver(&rte3100_cfgselector_driver, THIS_MODULE);
 	if (ret)
 		return ret;
-	return usb_register(&e3100u_driver);
+	return usb_register(&rte3100_driver);
 }
 
-static void __exit e3100u_driver_exit(void)
+static void __exit rte3100_driver_exit(void)
 {
-	usb_deregister(&e3100u_driver);
-	usb_deregister_device_driver(&e3100u_cfgselector_driver);
+	usb_deregister(&rte3100_driver);
+	usb_deregister_device_driver(&rte3100_cfgselector_driver);
 }
 
-module_init(e3100u_driver_init);
-module_exit(e3100u_driver_exit);
+module_init(rte3100_driver_init);
+module_exit(rte3100_driver_exit);
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0) */
 
 MODULE_AUTHOR(DRIVER_AUTHOR);

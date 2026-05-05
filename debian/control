@@ -1,4 +1,4 @@
-Source: killer-e3100u-dkms
+Source: killer-e3100-dkms
 Section: contrib/kernel
 Priority: optional
 Maintainer: Sam Bélanger <contact@astromangaming.ca>
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>=11~), dkms (<< 3.0.3-3~) | dh-sequence-dkms
 Standards-Version: 4.6.2.1
 Homepage: https://github.com/AstromanGaming/killer-e3100u-dkms
 
-Package: killer-e3100u-dkms
+Package: killer-e3100-dkms
 Architecture: any
 Multi-Arch: foreign
 Depends: dkms (>= 1.95), ${misc:Depends}
