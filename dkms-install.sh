@@ -8,8 +8,8 @@ else
 fi
 
 DRV_DIR="$(pwd)"
-DRV_NAME=r8152
-DRV_VERSION=2.21.4
+DRV_NAME=e3100u
+DRV_VERSION=1.0.0
 KERNEL_VERSION="${KERNEL_VERSION:-$(uname -r)}"
 
 cp -r ${DRV_DIR} /usr/src/${DRV_NAME}-${DRV_VERSION}
@@ -22,7 +22,7 @@ RESULT=$?
 echo "Finished running dkms install steps."
 
 echo "Copy the dedicated udev rules file..."
-cp udev/rules.d/50-usb-realtek-net.rules /etc/udev/rules.d/
+cp udev/rules.d/50-usb-killer-net.rules /etc/udev/rules.d/
 
 echo "Restarting udev..."
 udevadm control --reload-rules

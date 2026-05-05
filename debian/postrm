@@ -1,15 +1,17 @@
 #!/bin/sh
 # Copyright (C) 2022 Deokgyu Yang
 
+# Copyright (C) 2026 Sam Bélanger
+
 set -e
 
 msg() {
-	echo "realtek-r8152-dkms: $@"
+	echo "killer-e3100u-dkms: $@"
 }
 
 case "$1" in
 	purge)
-		rm -f /etc/udev/rules.d/50-usb-realtek-net.rules
+		rm -f /etc/udev/rules.d/50-usb-killer-net.rules
 
 		msg "Reload udev..."
 		[ -x "$(command -v udevadm)" ] \

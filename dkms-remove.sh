@@ -8,8 +8,8 @@ else
 fi
 
 DRV_DIR="$(pwd)"
-DRV_NAME=r8152
-DRV_VERSION=2.21.4
+DRV_NAME=e3100u
+DRV_VERSION=1.0.0
 
 dkms remove ${DRV_NAME}/${DRV_VERSION} --all
 rm -rf /usr/src/${DRV_NAME}-${DRV_VERSION}
@@ -22,7 +22,7 @@ else
 fi
 
 echo "Removing the dedicated udev rules file..."
-rm /etc/udev/rules.d/50-usb-realtek-net.rules
+rm /etc/udev/rules.d/50-usb-killer-net.rules
 
 echo "Restarting udev..."
 udevadm control --reload-rules

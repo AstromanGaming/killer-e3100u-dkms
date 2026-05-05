@@ -10,9 +10,9 @@
 #include <linux/in.h>
 #include <linux/acpi.h>
 
-#if defined(RTL8152_S5_WOL) && defined(CONFIG_PM)
+#if defined(E3100U_S5_WOL) && defined(CONFIG_PM)
 #include <linux/reboot.h>
-#endif /* defined(RTL8152_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(E3100U_S5_WOL) && defined(CONFIG_PM) */
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
 	#include <linux/mdio.h>
@@ -246,10 +246,10 @@
 	#endif
 	};
 
-	#define napi_enable(napi_ptr)			netif_poll_enable(container_of(napi_ptr, struct r8152, napi)->netdev)
-	#define napi_disable(napi_ptr)			netif_poll_disable(container_of(napi_ptr, struct r8152, napi)->netdev)
-	#define napi_schedule(napi_ptr)			netif_rx_schedule(container_of(napi_ptr, struct r8152, napi)->netdev)
-	#define napi_complete(napi_ptr)			netif_rx_complete(container_of(napi_ptr, struct r8152, napi)->netdev)
+	#define napi_enable(napi_ptr)			netif_poll_enable(container_of(napi_ptr, struct e3100u, napi)->netdev)
+	#define napi_disable(napi_ptr)			netif_poll_disable(container_of(napi_ptr, struct e3100u, napi)->netdev)
+	#define napi_schedule(napi_ptr)			netif_rx_schedule(container_of(napi_ptr, struct e3100u, napi)->netdev)
+	#define napi_complete(napi_ptr)			netif_rx_complete(container_of(napi_ptr, struct e3100u, napi)->netdev)
 	#define netif_napi_add(ndev, napi_ptr, function, weight_t) \
 		ndev->poll = function; \
 		ndev->weight = weight_t;
@@ -652,22 +652,22 @@
 	#define FALSE	0
 #endif
 
-enum rtl_cmd {
-	RTLTOOL_PLA_OCP_READ_DWORD = 0,
-	RTLTOOL_PLA_OCP_WRITE_DWORD,
-	RTLTOOL_USB_OCP_READ_DWORD,
-	RTLTOOL_USB_OCP_WRITE_DWORD,
-	RTLTOOL_PLA_OCP_READ,
-	RTLTOOL_PLA_OCP_WRITE,
-	RTLTOOL_USB_OCP_READ,
-	RTLTOOL_USB_OCP_WRITE,
-	RTLTOOL_USB_INFO,
-	RTL_ENABLE_USB_DIAG,
-	RTL_DISABLE_USB_DIAG,
-	RTLTOOL_PHY_OCP_READ,
-	RTLTOOL_PHY_OCP_WRITE,
+enum killer_cmd {
+	KILLERTOOL_PLA_OCP_READ_DWORD = 0,
+	KILLERTOOL_PLA_OCP_WRITE_DWORD,
+	KILLERTOOL_USB_OCP_READ_DWORD,
+	KILLERTOOL_USB_OCP_WRITE_DWORD,
+	KILLERTOOL_PLA_OCP_READ,
+	KILLERTOOL_PLA_OCP_WRITE,
+	KILLERTOOL_USB_OCP_READ,
+	KILLERTOOL_USB_OCP_WRITE,
+	KILLERTOOL_USB_INFO,
+	KILLER_ENABLE_USB_DIAG,
+	KILLER_DISABLE_USB_DIAG,
+	KILLERTOOL_PHY_OCP_READ,
+	KILLERTOOL_PHY_OCP_WRITE,
 
-	RTLTOOL_INVALID
+	KILLERTOOL_INVALID
 };
 
 struct usb_device_info {
@@ -678,7 +678,7 @@ struct usb_device_info {
 	char		devpath[16];
 };
 
-struct rtltool_cmd {
+struct killertool_cmd {
 	__u32	cmd;
 	__u32	offset;
 	__u32	byteen;

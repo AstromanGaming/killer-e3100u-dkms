@@ -5,16 +5,18 @@
 # Copyright (C) 2009 Alberto Milone
 # Copyright (C) 2020-2022 Deokgyu Yang
 
+# Copyright (C) 2026 Sam Bélanger
+
 set -e
 
-NAME=realtek-r8152
+NAME=killer-e3100u
 PACKAGE_NAME=$NAME-dkms
 DEB_NAME=$(echo $PACKAGE_NAME | sed 's,_,-,')
 CVERSION=`dpkg-query -W -f='${Version}' $DEB_NAME | awk -F "-" '{print $1}' | cut -d\: -f2`
 ARCH=`dpkg --print-architecture`
 
 msg() {
-	echo "realtek-r8152-dkms: $@"
+	echo "killer-e3100u-dkms: $@"
 }
 
 dkms_configure () {
@@ -34,7 +36,7 @@ dkms_configure () {
 
 udev_configure() {
 	msg "Installing udev rules to prevent from loading built-in old driver..."
-	cp -f /tmp/realtek-r8152-dkms/rules.d/50-usb-realtek-net.rules /etc/udev/rules.d/
+	cp -f /tmp/killer-e3100u-dkms/rules.d/50-usb-killer-net.rules /etc/udev/rules.d/
 
 	msg "Reload udev..."
 	[ -x "$(command -v udevadm)" ] \
@@ -42,7 +44,7 @@ udev_configure() {
 		|| msg "udevadm not found. Please reboot to take effect."
 
 	msg "Remove temporary files..."
-	rm -rf /tmp/realtek-r8152-driver
+	rm -rf /tmp/killer-e3100u-driver
 }
 
 case "$1" in

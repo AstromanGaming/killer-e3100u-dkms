@@ -5,9 +5,7 @@
 CONFIG_CTAP_SHORT = ON
 
 ifneq ($(KERNELRELEASE),)
-	obj-m	 := r8152.o
-#	ccflags-y += -DRTL8152_S5_WOL
-#	ccflags-y += -DRTL8152_DEBUG
+	obj-m	 := e3100u.o
 
 	ifneq (,$(filter OFF off, $(CONFIG_CTAP_SHORT)))
 		ccflags-y += -DCONFIG_CTAP_SHORT_OFF
@@ -23,8 +21,8 @@ else
 	KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 	PWD :=$(shell pwd)
 	TARGET_PATH := kernel/drivers/net/usb
-	INBOXDRIVER := $(shell find $(subst build,$(TARGET_PATH),$(KERNELDIR)) -name r8152.ko.* -type f)
-	RULEFILE = 50-usb-realtek-net.rules
+	INBOXDRIVER := $(shell find $(subst build,$(TARGET_PATH),$(KERNELDIR)) -name e3100u.ko.* -type f)
+	RULEFILE = 50-usb-killer-net.rules
 	RULEDIR = /etc/udev/rules.d/
 
 .PHONY: modules
@@ -40,17 +38,14 @@ clean:
 
 .PHONY: install
 install:
-ifneq ($(shell lsmod | grep r8153_ecm),)
-	rmmod r8153_ecm
-endif
-ifneq ($(shell lsmod | grep r8152),)
-	rmmod r8152
+ifneq ($(shell lsmod | grep e3100u),)
+	rmmod e3100u
 endif
 ifneq ($(INBOXDRIVER),)
 	rm -f $(INBOXDRIVER)
 endif
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) INSTALL_MOD_DIR=$(TARGET_PATH) modules_install
-	modprobe r8152
+	modprobe e3100u
 
 .PHONY: install_rules
 install_rules:

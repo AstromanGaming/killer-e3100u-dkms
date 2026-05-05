@@ -1,0 +1,13 @@
+# This is used to change the default configuration of the Intel Killer E3100U Ethernet USB adapter
+
+ACTION!="add", GOTO="usb_killer_net_end"
+SUBSYSTEM!="usb", GOTO="usb_killer_net_end"
+ENV{DEVTYPE}!="usb_device", GOTO="usb_killer_net_end"
+
+# Modify this to change the default value
+ENV{KILLER_MODE1}="1"
+
+# Intel/Rivet
+ATTR{idVendor}=="1a56", ATTR{idProduct}=="3100", ATTR{bConfigurationValue}!="$env{KILLER_MODE1}", ATTR{bConfigurationValue}="$env{KILLER_MODE1}"
+
+LABEL="usb_killer_net_end"

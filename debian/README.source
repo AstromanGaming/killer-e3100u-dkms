@@ -1,6 +1,9 @@
-realtek-r8152-dkms for Debian
+killer-e3100u-dkms for Debian
 
+By Deokgyu Yang <secugyu@gmail.com>  Wed, 26 Jan 2022 15:01:30 +0900:
+
+"
 The driver source can be found here:
  https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
-
- -- Deokgyu Yang <secugyu@gmail.com>  Wed, 26 Jan 2022 15:01:30 +0900
+"
+ -- Sam Bélanger <contact@astromangaming.ca>  Tue, 5 May 2026 18:00:00 -0400

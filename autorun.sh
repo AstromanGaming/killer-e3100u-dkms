@@ -9,10 +9,10 @@ if [ "$TARGET_PATH" = "" ]; then
 	TARGET_PATH=/lib/modules/$(uname -r)/kernel/drivers/net
 fi
 echo
-check=`lsmod | grep r8152`
+check=`lsmod | grep e3100u`
 if [ "$check" != "" ]; then
-        echo "rmmod r8152"
-        /sbin/rmmod r8152
+        echo "rmmod e3100u"
+        /sbin/rmmod e3100u
 fi
 
 echo "Build the module and install"
