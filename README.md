@@ -1,32 +1,20 @@
-# Realtek r8152 DKMS
+# Killer E3100U DKMS
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/awesometic/realtek-r8152-dkms?sort=semver&style=for-the-badge)
-
-This provides Realtek r8152 driver in DKMS way so that you can keep the latest driver even after the kernel upgrade.
+This provides the Killer E3100U (Realtek R8156X) driver in DKMS way so that you can keep the latest driver even after the kernel upgrade.
 
 ## Compatibility
 
-The r8152 driver supports the following USB Ethernet chipsets.
-
-> Refers to the official websites, you can check it at the bottom of this document
->
-> *For RTL8157 (5 GbE), you need 2.18.1 or above*
-> *For RTL8159 (10 GbE), you need 2.20.1 or above*
+The e3100u driver supports the following this USB Ethernet chipset.
 
 Chipset          | Interface       | Performance
 :----------------|:---------------:|:----------------:
-RTL8159          | USB 3.2 Gen 2x2 | 10 GbE
-RTL8157          | USB 3.2         | 5 GbE
-RTL8156 /B       | USB 3.0         | 2.5 GbE
-RTL8153 /B/C/D/E | USB 3.0         | 10/100/1000 MbE
-RTL8154 /B       | USB 2.0         | 10/100/1000 MbE
-RTL8152B         | USB 2.0         | 10/100M
+Killer E3100U    | USB 3.0         | 2.5 GbE
 
 ## Installation
 
-There are 3 ways to install this DKMS module. Choose one as your tastes.
+There are 2 ways to install this DKMS module. Choose one as your tastes.
 
-Those are not interfering with each other. So you can do all 3 methods but absolutely you don't need to.
+Those are not interfering with each other. So you can do all 2 methods but absolutely you don't need to.
 
 Installation using the Debian package is recommended for the sake of getting the newer driver.
 
@@ -39,33 +27,13 @@ Download the latest Debian package from the Release tab on the Github repository
 Then enter the following command.
 
 ```bash
-sudo dpkg -i realtek-r8152-dkms-2.21.4-1*.deb
+sudo dpkg -i killer-e3100u-dkms-*.deb
 ```
-
-> If multiple files selected by the wild card, you should type the specific version of the file.
->
-> ```bash
-> sudo dpkg -i realtek-r8152-dkms*.deb
-> ```
 
 If dependency error occurs, try to fix that with `apt` command.
 
 ```bash
 sudo apt install --fix-broken
-```
-
-#### Launchpad PPA (Recommended)
-
-Add the Launchpad PPA.
-
-```bash
-sudo add-apt-repository ppa:awesometic/ppa
-```
-
-Then install the package using `apt` tool.
-
-```bash
-sudo apt install realtek-r8152-dkms
 ```
 
 ### autorun.sh
@@ -102,7 +70,7 @@ dpkg-buildpackage -b -rfakeroot -us -uc
 
 ## LICENSE
 
-GPL-2 on Realtek driver and the debian packaing.
+GPL-2 on Realtek driver, the debian packaging and this fork.
 
 ## References
 
