@@ -1,6 +1,10 @@
-# Killer E3100U DKMS
+#### _(Under development)_
 
-This provides the Killer E3100U (Realtek RTL8156/B) driver in DKMS way so that you can keep the latest driver even after the kernel upgrade.
+# This is a Derived Project of https://github.com/awesometic/realtek-r8152-dkms
+
+## Killer E3100U DKMS
+
+This provides the Killer E3100U (Rebranded Realtek RTL8156/B) driver in DKMS way so that you can keep the latest driver even after the kernel upgrade.
 
 ## Compatibility
 
@@ -70,7 +74,7 @@ dpkg-buildpackage -b -rfakeroot -us -uc
 
 ## LICENSE
 
-GPL-2 on Realtek driver, the debian packaging and this fork.
+GPL-2 on Realtek driver, the debian packaging and this derived project.
 
 ## References
 
