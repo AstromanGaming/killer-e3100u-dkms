@@ -127,7 +127,7 @@
 #define PLA_BP_6		0xfc34
 #define PLA_BP_7		0xfc36
 #define PLA_BP_EN		0xfc38
-#define PLA_BP_8		0xfc38		/* RTL8153-OLDC */
+#define PLA_BP_8		0xfc38		/* RTL8153_oldC */
 #define PLA_BP_9		0xfc3a
 #define PLA_BP_10		0xfc3c
 #define PLA_BP_11		0xfc3e
@@ -156,12 +156,12 @@
 #define USB_LPM_CONFIG		0xcfd8
 #define USB_EFUSE		0xcfdb
 #define USB_ECM_OPTION		0xcfee
-#define USB_CSTMR		0xcfef	/* RTL8153-OLDA */
+#define USB_CSTMR		0xcfef	/* RTL8153_oldA */
 #define USB_MISC_2		0xcfff
 #define USB_ECM_OP		0xd26b
 #define USB_GPHY_CTRL		0xd284
 #define USB_SPEED_OPTION	0xd32a
-#define USB_FW_CTRL		0xd334	/* RTL8153B-OLD */
+#define USB_FW_CTRL		0xd334	/* RTL8153B_old */
 #define USB_FC_TIMER		0xd340
 #define USB_OUTSIDE_FW_VER	0xd3cc
 #define USB_USB_CTRL		0xd406
@@ -171,8 +171,8 @@
 #define USB_USB_TIMER		0xd428
 #define USB_RX_EARLY_TIMEOUT	0xd42c
 #define USB_RX_EARLY_SIZE	0xd42e
-#define USB_PM_CTRL_STATUS	0xd432	/* RTL8153-OLDA */
-#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B-OLD */
+#define USB_PM_CTRL_STATUS	0xd432	/* RTL8153_oldA */
+#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B_old */
 #define USB_TX_DMA		0xd434
 #define USB_UPT_RXDMA_OWN	0xd437
 #define USB_UPHY3_MDCMDIO	0xd480
@@ -181,7 +181,7 @@
 #define USB_BMU_RESET		0xd4b0
 #define USB_BMU_CONFIG		0xd4b4
 #define USB_U1U2_TIMER		0xd4da
-#define USB_FW_TASK		0xd4e8	/* RTL8153B-OLD */
+#define USB_FW_TASK		0xd4e8	/* RTL8153B_old */
 #define USB_RX_AGGR_NUM		0xd4ee
 #define USB_ADV_ADDR		0xd5d6
 #define USB_ADV_DATA		0xd5d8
@@ -208,8 +208,8 @@
 #define USB_BP_5		PLA_BP_5
 #define USB_BP_6		PLA_BP_6
 #define USB_BP_7		PLA_BP_7
-#define USB_BP_EN		PLA_BP_EN	/* RTL8153-OLDA */
-#define USB_BP_8		0xfc38		/* RTL8153B-OLD */
+#define USB_BP_EN		PLA_BP_EN	/* RTL8153_oldA */
+#define USB_BP_8		0xfc38		/* RTL8153B_old */
 #define USB_BP_9		0xfc3a
 #define USB_BP_10		0xfc3c
 #define USB_BP_11		0xfc3e
@@ -816,7 +816,7 @@ enum killer_register_content {
 #define BYTE_EN_END_MASK	0xf0
 
 #define RTE3100_RMS		(VLAN_ETH_FRAME_LEN + ETH_FCS_LEN)
-#define RTL8153-OLD_RMS		RTL8153-OLD_MAX_PACKET
+#define RTL8153_old_RMS		RTL8153_old_MAX_PACKET
 #define RTE3100_TX_TIMEOUT	(5 * HZ)
 #define mtu_to_size(m)		((m) + VLAN_ETH_HLEN + ETH_FCS_LEN)
 #define size_to_mtu(s)		((s) - VLAN_ETH_HLEN - ETH_FCS_LEN)
@@ -2083,12 +2083,12 @@ out:
 	return ret;
 }
 
-static int r8157-old_phy_read(struct e3100 *tp, u16 addr, u16 *data)
+static int r8157_old_phy_read(struct e3100 *tp, u16 addr, u16 *data)
 {
 	return killer_tgphy_access(tp, addr, data, false);
 }
 
-static int r8157-old_phy_write(struct e3100 *tp, u16 addr, u16 data)
+static int r8157_old_phy_write(struct e3100 *tp, u16 addr, u16 data)
 {
 	return killer_tgphy_access(tp, addr, &data, true);
 }
@@ -2987,7 +2987,7 @@ static void e3100_tx_len(struct e3100 *tp, void *tx_desc, u32 *len)
 	desc->opts1 |= cpu_to_le32(*len);
 }
 
-static void r8157-old_rx_len(struct e3100 *tp, void *desc, u32 *len)
+static void r8157_old_rx_len(struct e3100 *tp, void *desc, u32 *len)
 {
 	struct rx_desc_v2 *d = desc;
 
@@ -2996,7 +2996,7 @@ static void r8157-old_rx_len(struct e3100 *tp, void *desc, u32 *len)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 static bool
-r8157-old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
+r8157_old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u32 opts1 = le32_to_cpu(d->opts1);
@@ -3012,7 +3012,7 @@ r8157-old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 }
 
 static void
-r8157-old_vlan_put_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
+r8157_old_vlan_put_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u32 opts1 = le32_to_cpu(d->opts1);
@@ -3026,7 +3026,7 @@ r8157-old_vlan_put_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 
 #else
 static bool
-r8157-old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
+r8157_old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u32 opts1 = le32_to_cpu(d->opts1);
@@ -3046,7 +3046,7 @@ r8157-old_rx_vlan_tag(struct e3100 *tp, void *desc, struct sk_buff *skb)
 }
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 
-static int r8157-old_tx_csum(struct e3100 *tp, void *tx_desc, struct sk_buff *skb)
+static int r8157_old_tx_csum(struct e3100 *tp, void *tx_desc, struct sk_buff *skb)
 {
 	u32 mss = skb_shinfo(skb)->gso_size;
 	int ret = TX_CSUM_SUCCESS;
@@ -3067,7 +3067,7 @@ static int r8157-old_tx_csum(struct e3100 *tp, void *tx_desc, struct sk_buff *sk
 	return ret;
 }
 
-static void r8157-old_tx_len(struct e3100 *tp, void *tx_desc, u32 *len)
+static void r8157_old_tx_len(struct e3100 *tp, void *tx_desc, u32 *len)
 {
 	struct tx_desc_v2 *desc = tx_desc;
 
@@ -3515,7 +3515,7 @@ return_result:
 }
 
 static int
-r8157-old_rx_csum(struct e3100 *tp, void *desc, struct sk_buff *skb)
+r8157_old_rx_csum(struct e3100 *tp, void *desc, struct sk_buff *skb)
 {
 	struct rx_desc_v2 *d = desc;
 	u8 checksum = CHECKSUM_NONE;
@@ -4166,7 +4166,7 @@ free_skb:
 	return NETDEV_TX_OK;
 }
 
-static int r8152b-old_reset_packet_filter(struct e3100 *tp)
+static int r8152b_old_reset_packet_filter(struct e3100 *tp)
 {
 	int ret;
 
@@ -4403,7 +4403,7 @@ out:
 	return ret;
 }
 
-static inline void r8153b-old_rx_agg_chg_indicate(struct e3100 *tp)
+static inline void r8153b_old_rx_agg_chg_indicate(struct e3100 *tp)
 {
 	ocp_write_byte(tp, MCU_TYPE_USB, USB_UPT_RXDMA_OWN,
 		       OWN_UPDATE | OWN_CLEAR);
@@ -4413,7 +4413,7 @@ static int killer_enable(struct e3100 *tp)
 {
 	int ret;
 
-	ret = r8152b-old_reset_packet_filter(tp);
+	ret = r8152b_old_reset_packet_filter(tp);
 	if (ret < 0)
 		goto out;
 
@@ -4431,7 +4431,7 @@ static int killer_enable(struct e3100 *tp)
 	case KILLER_VER_07:
 		break;
 	default:
-		r8153b-old_rx_agg_chg_indicate(tp);
+		r8153b_old_rx_agg_chg_indicate(tp);
 		break;
 	}
 
@@ -4461,7 +4461,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_set_rx_early_timeout(struct e3100 *tp)
+static int r8153_old_set_rx_early_timeout(struct e3100 *tp)
 {
 	u32 ocp_data = tp->coalesce / 8;
 	int ret;
@@ -4478,7 +4478,7 @@ static int r8153-old_set_rx_early_timeout(struct e3100 *tp)
 	case KILLER_VER_08:
 	case KILLER_VER_09:
 	case KILLER_VER_14:
-		/* The RTL8153B-OLD uses USB_RX_EXTRA_AGGR_TMR for rx timeout
+		/* The RTL8153B_old uses USB_RX_EXTRA_AGGR_TMR for rx timeout
 		 * primarily. For USB_RX_EARLY_TIMEOUT, we fix it to 1264ns.
 		 */
 		ret = ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EARLY_TIMEOUT,
@@ -4517,7 +4517,7 @@ static u32 rx_reserved_size(struct e3100 *tp, u32 mtu)
 	return mtu_to_size(mtu) + tp->rx_desc.size + tp->rx_desc.align;
 }
 
-static int r8153-old_set_rx_early_size(struct e3100 *tp)
+static int r8153_old_set_rx_early_size(struct e3100 *tp)
 {
 	u32 ocp_data = tp->rx_buf_sz - rx_reserved_size(tp, tp->netdev->mtu);
 	int ret;
@@ -4556,7 +4556,7 @@ static int r8153-old_set_rx_early_size(struct e3100 *tp)
 	return ret;
 }
 
-static int rtl8153-old_enable(struct e3100 *tp)
+static int rtl8153_old_enable(struct e3100 *tp)
 {
 	int ret;
 
@@ -4567,10 +4567,10 @@ static int rtl8153-old_enable(struct e3100 *tp)
 	ret = killer_set_eee_plus(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_set_rx_early_timeout(tp);
+	ret = r8153_old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_set_rx_early_size(tp);
+	ret = r8153_old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
@@ -4869,7 +4869,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_mac_clk_speed_down(struct e3100 *tp, bool enable)
+static int r8153_old_mac_clk_speed_down(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -4909,7 +4909,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_u1u2en(struct e3100 *tp, bool enable)
+static int r8153_old_u1u2en(struct e3100 *tp, bool enable)
 {
 	u8 u1u2[8];
 
@@ -4922,7 +4922,7 @@ static int r8153-old_u1u2en(struct e3100 *tp, bool enable)
 			     u1u2);
 }
 
-static int r8153b-old_u1u2en(struct e3100 *tp, bool enable)
+static int r8153b_old_u1u2en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return ocp_word_set_bits(tp, MCU_TYPE_USB, USB_LPM_CONFIG,
@@ -4932,7 +4932,7 @@ static int r8153b-old_u1u2en(struct e3100 *tp, bool enable)
 					 LPM_U1U2_EN);
 }
 
-static int r8153-old_u2p3en(struct e3100 *tp, bool enable)
+static int r8153_old_u2p3en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return ocp_word_set_bits(tp, MCU_TYPE_USB, USB_U2P3_CTRL,
@@ -4942,7 +4942,7 @@ static int r8153-old_u2p3en(struct e3100 *tp, bool enable)
 					 U2P3_ENABLE);
 }
 
-static int r8157-old_u2p3en(struct e3100 *tp, bool enable)
+static int r8157_old_u2p3en(struct e3100 *tp, bool enable)
 {
 	if (enable)
 		return killer_ip_set_bits(tp, 0xc2c0, BIT(29));
@@ -4970,7 +4970,7 @@ static bool e3100ub_flash_used(struct e3100 *tp)
 		return false;
 }
 
-static int r8153b-old_ups_flags(struct e3100 *tp)
+static int r8153b_old_ups_flags(struct e3100 *tp)
 {
 	u32 ups_flags = 0;
 
@@ -5141,7 +5141,7 @@ static int killer_green_en(struct e3100 *tp, bool enable)
 	return ret;
 }
 
-static int r8153b-old_green_en(struct e3100 *tp, bool enable)
+static int r8153b_old_green_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5182,7 +5182,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_phy_status(struct e3100 *tp, u16 desired)
+static int r8153_old_phy_status(struct e3100 *tp, u16 desired)
 {
 	int i, ret;
 	u16 data;
@@ -5209,12 +5209,12 @@ static int r8153-old_phy_status(struct e3100 *tp, u16 desired)
 	return data;
 }
 
-static int r8153b-old_ups_en(struct e3100 *tp, bool enable)
+static int r8153b_old_ups_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153b-old_ups_flags(tp);
+		ret = r8153b_old_ups_flags(tp);
 
 		ret = ocp_byte_set_bits(tp, MCU_TYPE_USB, USB_POWER_CUT,
 					UPS_EN | USP_PREWAKE | PHASE2_EN);
@@ -5264,12 +5264,12 @@ out:
 	return ret;
 }
 
-static int r8153-oldc_ups_en(struct e3100 *tp, bool enable)
+static int r8153_oldc_ups_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153b-old_ups_flags(tp);
+		ret = r8153b_old_ups_flags(tp);
 		if (ret < 0)
 			goto out;
 
@@ -5412,7 +5412,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_power_cut_en(struct e3100 *tp, bool enable)
+static int r8153_old_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5431,7 +5431,7 @@ out:
 	return ret;
 }
 
-static int r8153b-old_power_cut_en(struct e3100 *tp, bool enable)
+static int r8153b_old_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5450,7 +5450,7 @@ out:
 	return ret;
 }
 
-static int r8157-old_power_cut_en(struct e3100 *tp, bool enable)
+static int r8157_old_power_cut_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5481,7 +5481,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_queue_wake(struct e3100 *tp, bool enable)
+static int r8153_old_queue_wake(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5557,28 +5557,28 @@ out:
 	return ret;
 }
 
-static int rtl8153-old_runtime_enable(struct e3100 *tp, bool enable)
+static int rtl8153_old_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
 		if (tp->version == KILLER_VER_06) {
-			ret = r8153-old_queue_wake(tp, true);
+			ret = r8153_old_queue_wake(tp, true);
 			if (ret < 0)
 				goto out;
 		}
-		ret = r8153-old_u1u2en(tp, false);
+		ret = r8153_old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_u2p3en(tp, false);
+		ret = r8153_old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
 		ret = killer_runtime_suspend_enable(tp, true);
 	} else {
 		if (tp->version == KILLER_VER_06) {
-			ret = r8153-old_queue_wake(tp, false);
+			ret = r8153_old_queue_wake(tp, false);
 			if (ret < 0)
 				goto out;
 		}
@@ -5593,32 +5593,32 @@ static int rtl8153-old_runtime_enable(struct e3100 *tp, bool enable)
 		case KILLER_VER_05:
 		case KILLER_VER_06:
 		default:
-			ret = r8153-old_u2p3en(tp, true);
+			ret = r8153_old_u2p3en(tp, true);
 			if (ret < 0)
 				goto out;
 			break;
 		}
 
-		ret = r8153-old_u1u2en(tp, true);
+		ret = r8153_old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int rtl8153-oldb_runtime_enable(struct e3100 *tp, bool enable)
+static int rtl8153_oldb_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153-old_queue_wake(tp, true);
+		ret = r8153_old_queue_wake(tp, true);
 		if (ret < 0)
 			goto out;
-		ret = r8153b-old_u1u2en(tp, false);
+		ret = r8153b_old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_u2p3en(tp, false);
+		ret = r8153_old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5626,13 +5626,13 @@ static int rtl8153-oldb_runtime_enable(struct e3100 *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153b-old_ups_en(tp, true);
+		ret = r8153b_old_ups_en(tp, true);
 	} else {
-		ret = r8153b-old_ups_en(tp, false);
+		ret = r8153b_old_ups_en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_queue_wake(tp, false);
+		ret = r8153_old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5640,32 +5640,32 @@ static int rtl8153-oldb_runtime_enable(struct e3100 *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-//		ret = r8153-old_u2p3en(tp, true);
+//		ret = r8153_old_u2p3en(tp, true);
 //		if (ret < 0)
 //			goto out;
 
 		if (tp->udev->speed >= USB_SPEED_SUPER)
-			ret = r8153b-old_u1u2en(tp, true);
+			ret = r8153b_old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int rtl8153-oldc_runtime_enable(struct e3100 *tp, bool enable)
+static int rtl8153_oldc_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
 	if (enable) {
-		ret = r8153-old_queue_wake(tp, true);
+		ret = r8153_old_queue_wake(tp, true);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153b-old_u1u2en(tp, false);
+		ret = r8153b_old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_u2p3en(tp, false);
+		ret = r8153_old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5673,13 +5673,13 @@ static int rtl8153-oldc_runtime_enable(struct e3100 *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-oldc_ups_en(tp, true);
+		ret = r8153_oldc_ups_en(tp, true);
 	} else {
-		ret = r8153-oldc_ups_en(tp, false);
+		ret = r8153_oldc_ups_en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_queue_wake(tp, false);
+		ret = r8153_old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5687,11 +5687,11 @@ static int rtl8153-oldc_runtime_enable(struct e3100 *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-//		ret = r8153-old_u2p3en(tp, true);
+//		ret = r8153_old_u2p3en(tp, true);
 //		if (ret < 0)
 //			goto out;
 
-		ret = r8153b-old_u1u2en(tp, true);
+		ret = r8153b_old_u1u2en(tp, true);
 	}
 
 out:
@@ -5703,15 +5703,15 @@ static int rte3100u_runtime_enable(struct e3100 *tp, bool enable)
 	int ret;
 
 	if (enable) {
-		ret = r8153-old_queue_wake(tp, true);
+		ret = r8153_old_queue_wake(tp, true);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153b-old_u1u2en(tp, false);
+		ret = r8153b_old_u1u2en(tp, false);
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_u2p3en(tp, false);
+		ret = r8153_old_u2p3en(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5724,7 +5724,7 @@ static int rte3100u_runtime_enable(struct e3100 *tp, bool enable)
 //		if (ret < 0)
 //			goto out;
 
-		ret = r8153-old_queue_wake(tp, false);
+		ret = r8153_old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -5732,31 +5732,31 @@ static int rte3100u_runtime_enable(struct e3100 *tp, bool enable)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_u2p3en(tp, true);
+		ret = r8153_old_u2p3en(tp, true);
 		if (ret < 0)
 			goto out;
 
 		if (tp->udev->speed >= USB_SPEED_SUPER)
-			ret = r8153b-old_u1u2en(tp, true);
+			ret = r8153b_old_u1u2en(tp, true);
 	}
 
 out:
 	return ret;
 }
 
-static int rtl8157-old_runtime_enable(struct e3100 *tp, bool enable)
+static int rtl8157_old_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
-	ret = r8153-old_queue_wake(tp, enable);
+	ret = r8153_old_queue_wake(tp, enable);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8157-old_u2p3en(tp, false);
+	ret = r8157_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -5785,7 +5785,7 @@ out:
 		return 0;
 }
 
-static int r8153-old_teredo_off(struct e3100 *tp)
+static int r8153_old_teredo_off(struct e3100 *tp)
 {
 	int ret;
 
@@ -6047,7 +6047,7 @@ static void patch4(struct e3100 *tp)
 	ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_USB_TIMER, BIT(15));
 }
 
-static void r8152b-old_firmware(struct e3100 *tp)
+static void r8152b_old_firmware(struct e3100 *tp)
 {
 	if (tp->version == KILLER_VER_01) {
 		int i;
@@ -6872,7 +6872,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_eee_en(struct e3100 *tp, bool enable)
+static int r8153_old_eee_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -6910,7 +6910,7 @@ static int e3100u_eee_en(struct e3100 *tp, bool enable)
 	int ret;
 
 	if (enable) {
-		ret = r8153-old_eee_en(tp, true);
+		ret = r8153_old_eee_en(tp, true);
 		if (ret < 0)
 			goto out;
 		ret = ocp_reg_write(tp, OCP_EEE_ADV2, tp->eee_adv2);
@@ -6939,7 +6939,7 @@ out:
 	return ret;
 }
 
-static int r8157-old_eee_en(struct e3100 *tp, bool enable)
+static int r8157_old_eee_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -7005,7 +7005,7 @@ static int killer_eee_enable(struct e3100 *tp, bool enable)
 	case KILLER_VER_08:
 	case KILLER_VER_09:
 	case KILLER_VER_14:
-		ret = r8153-old_eee_en(tp, enable);
+		ret = r8153_old_eee_en(tp, enable);
 		break;
 	case KILLER_VER_10:
 	case KILLER_VER_11:
@@ -7016,7 +7016,7 @@ static int killer_eee_enable(struct e3100 *tp, bool enable)
 		break;
 	case KILLER_VER_16:
 	case KILLER_VER_17:
-		ret = r8157-old_eee_en(tp, enable);
+		ret = r8157_old_eee_en(tp, enable);
 		break;
 	default:
 		ret = 0;
@@ -7044,7 +7044,7 @@ static int killer_disable_eee_bottom(struct e3100 *tp)
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8152b-old_enable_fc(struct e3100 *tp)
+static int r8152b_old_enable_fc(struct e3100 *tp)
 {
 	int ret;
 
@@ -7074,13 +7074,13 @@ static int rte3100_disable(struct e3100 *tp)
 		return ret;
 }
 
-static void r8152b-old_hw_phy_cfg(struct e3100 *tp)
+static void r8152b_old_hw_phy_cfg(struct e3100 *tp)
 {
-	r8152b-old_firmware(tp);
+	r8152b_old_firmware(tp);
 
 	killer_eee_enable(tp, tp->eee_en);
 	e3100_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
+	r8152b_old_enable_fc(tp);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
@@ -7119,7 +7119,7 @@ static int e3100ub_wait_loading_flash(struct e3100 *tp)
 	return ret;
 }
 
-static int r8152b-old_exit_oob(struct e3100 *tp)
+static int r8152b_old_exit_oob(struct e3100 *tp)
 {
 	int ret;
 
@@ -7130,7 +7130,7 @@ static int r8152b-old_exit_oob(struct e3100 *tp)
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_teredo_off(tp);
+	ret = r8153_old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 	ret = ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_NORAML);
@@ -7220,7 +7220,7 @@ out:
 	return ret;
 }
 
-static int r8152b-old_enter_oob(struct e3100 *tp)
+static int r8152b_old_enter_oob(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -7326,7 +7326,7 @@ out:
 	return ret;
 }
 
-static void r8153-old_wdt1_end(struct e3100 *tp)
+static void r8153_old_wdt1_end(struct e3100 *tp)
 {
 	int i, ret;
 
@@ -7522,7 +7522,7 @@ no_link:
 	return ret < 0 ? ret : 0;
 }
 
-static void r8153-old_firmware(struct e3100 *tp)
+static void r8153_old_firmware(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret;
@@ -7982,7 +7982,7 @@ static void r8153-old_firmware(struct e3100 *tp)
 		sram_write(tp, 0xb820, 0x0210);
 		killer_post_ram_code(tp, 0x8146, true);
 
-		r8153-old_wdt1_end(tp);
+		r8153_old_wdt1_end(tp);
 
 		killer_clear_bp(tp, MCU_TYPE_USB);
 
@@ -8325,7 +8325,7 @@ static void r8153-old_firmware(struct e3100 *tp)
 		sram_write(tp, 0xb820, 0x0210);
 		killer_post_ram_code(tp, 0x8146, true);
 
-		r8153-old_wdt1_end(tp);
+		r8153_old_wdt1_end(tp);
 
 		ocp_word_clr_bits(tp, MCU_TYPE_USB, USB_FW_FIX_EN0,
 				  FW_FIX_SUSPEND);
@@ -8651,7 +8651,7 @@ static void r8153-old_firmware(struct e3100 *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static void r8153b-old_firmware(struct e3100 *tp)
+static void r8153b_old_firmware(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret;
@@ -10812,7 +10812,7 @@ static void e3100u_firmware(struct e3100 *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static int r8153-old_aldps_en(struct e3100 *tp, bool enable)
+static int r8153_old_aldps_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -10841,7 +10841,7 @@ out:
 	return ret;
 }
 
-static int r8153b-old_mcu_spdown_en(struct e3100 *tp, bool enable)
+static int r8153b_old_mcu_spdown_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -10855,15 +10855,15 @@ static int r8153b-old_mcu_spdown_en(struct e3100 *tp, bool enable)
 	return ret;
 }
 
-static void r8153-old_hw_phy_cfg(struct e3100 *tp)
+static void r8153_old_hw_phy_cfg(struct e3100 *tp)
 {
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
 
-	r8153-old_firmware(tp);
+	r8153_old_firmware(tp);
 
 	if (tp->version == KILLER_VER_03)
 		ocp_reg_clr_bits(tp, OCP_EEE_CFG, CTAP_SHORT_EN);
@@ -10886,8 +10886,8 @@ static void r8153-old_hw_phy_cfg(struct e3100 *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
 
 	switch (tp->version) {
 	case KILLER_VER_03:
@@ -10896,7 +10896,7 @@ static void r8153-old_hw_phy_cfg(struct e3100 *tp)
 	case KILLER_VER_05:
 	case KILLER_VER_06:
 	default:
-		r8153-old_u2p3en(tp, true);
+		r8153_old_u2p3en(tp, true);
 		break;
 	}
 
@@ -10924,7 +10924,7 @@ static u32 e3100_efuse_read(struct e3100 *tp, u8 addr)
 	return ocp_data;
 }
 
-static void r8153b-old_hw_phy_cfg(struct e3100 *tp)
+static void r8153b_old_hw_phy_cfg(struct e3100 *tp)
 {
 	u32 ocp_data;
 	u16 data;
@@ -10933,7 +10933,7 @@ static void r8153b-old_hw_phy_cfg(struct e3100 *tp)
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
@@ -10941,23 +10941,23 @@ static void r8153b-old_hw_phy_cfg(struct e3100 *tp)
 	/* U1/U2/L1 idle timer. 500 us */
 	ocp_write_word(tp, MCU_TYPE_USB, USB_U1U2_TIMER, 500);
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
 	switch (ret) {
 	case PHY_STAT_PWRDN:
 	case PHY_STAT_EXT_INIT:
-		r8153b-old_firmware(tp);
+		r8153b_old_firmware(tp);
 		e3100_mdio_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 		break;
 	case PHY_STAT_LAN_ON:
 	default:
-		r8153b-old_firmware(tp);
+		r8153b_old_firmware(tp);
 		break;
 	}
 
-	r8153b-old_green_en(tp, test_bit(GREEN_ETHERNET, &tp->flags));
+	r8153b_old_green_en(tp, test_bit(GREEN_ETHERNET, &tp->flags));
 
 	sram_set_bits(tp, SRAM_GREEN_CFG, R_TUNE_EN);
 	ocp_reg_set_bits(tp, OCP_NCTL_CFG, PGA_RETURN_EN);
@@ -11019,22 +11019,22 @@ static void r8153b-old_hw_phy_cfg(struct e3100 *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
-//	r8153-old_u2p3en(tp, true);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
+//	r8153_old_u2p3en(tp, true);
 
 	set_bit(PHY_RESET, &tp->flags);
 	killer_set_dbg_info_state(tp, DGB_DRV_STATE_LOAD);
 }
 
-static void r8153-oldc_hw_phy_cfg(struct e3100 *tp)
+static void r8153_oldc_hw_phy_cfg(struct e3100 *tp)
 {
-	r8153b-old_hw_phy_cfg(tp);
+	r8153b_old_hw_phy_cfg(tp);
 
 	tp->ups_info.r_tune = true;
 }
 
-static int rtl8153-old_change_mtu(struct e3100 *tp)
+static int rtl8153_old_change_mtu(struct e3100 *tp)
 {
 	int ret;
 
@@ -11049,7 +11049,7 @@ out:
 	return ret;
 }
 
-static int r8153-old_lanwake_clr_en(struct e3100 *tp, bool enable)
+static int r8153_old_lanwake_clr_en(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -11073,14 +11073,14 @@ out:
 	return ret;
 }
 
-static int r8153-old_first_init(struct e3100 *tp)
+static int r8153_old_first_init(struct e3100 *tp)
 {
 	int ret;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_teredo_off(tp);
+	ret = r8153_old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11115,7 +11115,7 @@ static int r8153-old_first_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = rtl8153-old_change_mtu(tp);
+	ret = rtl8153_old_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11142,13 +11142,13 @@ static int r8153-old_first_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_lanwake_clr_en(tp, true);
+	ret = r8153_old_lanwake_clr_en(tp, true);
 
 out:
 	return ret;
 }
 
-static int r8153-old_enter_oob(struct e3100 *tp)
+static int r8153_old_enter_oob(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -11243,7 +11243,7 @@ static int r8153-old_enter_oob(struct e3100 *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = r8153-old_lanwake_clr_en(tp, false);
+	ret = r8153_old_lanwake_clr_en(tp, false);
 
 	if (err < 0)
 		return err;
@@ -11251,11 +11251,11 @@ static int r8153-old_enter_oob(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8153-old_disable(struct e3100 *tp)
+static int rtl8153_old_disable(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 	ret = killer_disable(tp);
@@ -11264,7 +11264,7 @@ static int rtl8153-old_disable(struct e3100 *tp)
 	ret = killer_reset_bmu(tp);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -11314,10 +11314,10 @@ static int rte3100u_enable(struct e3100 *tp)
 	ret = killer_set_eee_plus(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_set_rx_early_timeout(tp);
+	ret = r8153_old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_set_rx_early_size(tp);
+	ret = r8153_old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11392,7 +11392,7 @@ static int rte3100u_disable(struct e3100 *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = rtl8153-old_disable(tp);
+	ret = rtl8153_old_disable(tp);
 
 	if (err < 0)
 		return err;
@@ -11400,7 +11400,7 @@ static int rte3100u_disable(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8152b-old_enable(struct e3100 *tp)
+static int rtl8152b_old_enable(struct e3100 *tp)
 {
 	u16 speed;
 	int ret;
@@ -11418,10 +11418,10 @@ static int rtl8152b-old_enable(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_set_rx_early_timeout(tp);
+	ret = r8153_old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_set_rx_early_size(tp);
+	ret = r8153_old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11464,7 +11464,7 @@ out:
 	return ret;
 }
 
-static int rtl8157-old_enable(struct e3100 *tp)
+static int rtl8157_old_enable(struct e3100 *tp)
 {
 	u16 speed;
 	int ret;
@@ -11482,10 +11482,10 @@ static int rtl8157-old_enable(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_set_rx_early_timeout(tp);
+	ret = r8153_old_set_rx_early_timeout(tp);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_set_rx_early_size(tp);
+	ret = r8153_old_set_rx_early_size(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11825,7 +11825,7 @@ static int rte3100_up(struct e3100 *tp)
 	ret = e3100_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8152b-old_exit_oob(tp);
+	ret = r8152b_old_exit_oob(tp);
 	if (ret < 0)
 		goto out;
 	ret = e3100_aldps_en(tp, true);
@@ -11850,7 +11850,7 @@ static int rte3100_down(struct e3100 *tp)
 	ret = e3100_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8152b-old_enter_oob(tp);
+	ret = r8152b_old_enter_oob(tp);
 	if (ret < 0)
 		err = ret;
 	ret = e3100_aldps_en(tp, true);
@@ -11862,23 +11862,23 @@ static int rte3100_down(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8153-old_up(struct e3100 *tp)
+static int rtl8153_old_up(struct e3100 *tp)
 {
 	int ret;
 
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153-old_u1u2en(tp, false);
+	ret = r8153_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_first_init(tp);
+	ret = r8153_old_first_init(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11887,7 +11887,7 @@ static int rtl8153-old_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -11898,19 +11898,19 @@ static int rtl8153-old_up(struct e3100 *tp)
 	case KILLER_VER_05:
 	case KILLER_VER_06:
 	default:
-		ret = r8153-old_u2p3en(tp, true);
+		ret = r8153_old_u2p3en(tp, true);
 		if (ret < 0)
 			goto out;
 		break;
 	}
 
-	ret = r8153-old_u1u2en(tp, true);
+	ret = r8153_old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int rtl8153-old_down(struct e3100 *tp)
+static int rtl8153_old_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -11920,22 +11920,22 @@ static int rtl8153-old_down(struct e3100 *tp)
 		return -ENODEV;
 	}
 
-	ret = r8153-old_u1u2en(tp, false);
+	ret = r8153_old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_power_cut_en(tp, false);
+	ret = r8153_old_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_enter_oob(tp);
+	ret = r8153_old_enter_oob(tp);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -11943,47 +11943,47 @@ static int rtl8153-old_down(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8153-oldb_up(struct e3100 *tp)
+static int rtl8153_oldb_up(struct e3100 *tp)
 {
 	int ret;
 
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_first_init(tp);
+	ret = r8153_old_first_init(tp);
 	if (ret < 0)
 		goto out;
 	ret = ocp_write_dword(tp, MCU_TYPE_USB, USB_RX_BUF_TH, RX_THR_B);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_mcu_spdown_en(tp, false);
+	ret = r8153b_old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
-//	ret = r8153-old_u2p3en(tp, true);
+//	ret = r8153_old_u2p3en(tp, true);
 //	if (ret < 0)
 //		goto out;
 	if (tp->udev->speed >= USB_SPEED_SUPER)
-		ret = r8153b-old_u1u2en(tp, true);
+		ret = r8153b_old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int rtl8153-oldb_down(struct e3100 *tp)
+static int rtl8153_oldb_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -11993,25 +11993,25 @@ static int rtl8153-oldb_down(struct e3100 *tp)
 		return -ENODEV;
 	}
 
-	ret = r8153b-old_mcu_spdown_en(tp, true);
+	ret = r8153b_old_mcu_spdown_en(tp, true);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b-old_power_cut_en(tp, false);
+	ret = r8153b_old_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_enter_oob(tp);
+	ret = r8153_old_enter_oob(tp);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -12019,7 +12019,7 @@ static int rtl8153-oldb_down(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8153-oldc_change_mtu(struct e3100 *tp)
+static int rtl8153_oldc_change_mtu(struct e3100 *tp)
 {
 	int ret;
 
@@ -12055,27 +12055,27 @@ out:
 	return ret;
 }
 
-static int rtl8153-oldc_up(struct e3100 *tp)
+static int rtl8153_oldc_up(struct e3100 *tp)
 {
 	int ret;
 
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_teredo_off(tp);
+	ret = r8153_old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12110,7 +12110,7 @@ static int rtl8153-oldc_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = rtl8153-oldc_change_mtu(tp);
+	ret = rtl8153_oldc_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12148,17 +12148,17 @@ static int rtl8153-oldc_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_mcu_spdown_en(tp, false);
+	ret = r8153b_old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
-//	ret = r8153-old_u2p3en(tp, true);
+//	ret = r8153_old_u2p3en(tp, true);
 //	if (ret < 0)
 //		goto out;
-	ret = r8153b-old_u1u2en(tp, true);
+	ret = r8153b_old_u1u2en(tp, true);
 
 out:
 	return ret;
@@ -12197,20 +12197,20 @@ static int rte3100u_up(struct e3100 *tp)
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_teredo_off(tp);
+	ret = r8153_old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12261,7 +12261,7 @@ static int rte3100u_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_mcu_spdown_en(tp, false);
+	ret = r8153b_old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -12281,10 +12281,10 @@ static int rte3100u_up(struct e3100 *tp)
 			goto out;
 	}
 
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_u2p3en(tp, true);
+	ret = r8153_old_u2p3en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -12294,7 +12294,7 @@ static int rte3100u_up(struct e3100 *tp)
 		goto out;
 
 	if (tp->udev->speed >= USB_SPEED_SUPER)
-		ret = r8153b-old_u1u2en(tp, true);
+		ret = r8153b_old_u1u2en(tp, true);
 
 out:
 	return ret;
@@ -12310,19 +12310,19 @@ static int rte3100u_down(struct e3100 *tp)
 		return -ENODEV;
 	}
 
-	ret = r8153b-old_mcu_spdown_en(tp, true);
+	ret = r8153b_old_mcu_spdown_en(tp, true);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153b-old_power_cut_en(tp, false);
+	ret = r8153b_old_power_cut_en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 
@@ -12388,7 +12388,7 @@ static int rte3100u_down(struct e3100 *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -12396,7 +12396,7 @@ static int rte3100u_down(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8157-old_change_mtu(struct e3100 *tp)
+static int rtl8157_old_change_mtu(struct e3100 *tp)
 {
 	u32 max_pkt_size = mtu_to_size(tp->netdev->mtu);
 	u32 ocp_data;
@@ -12431,24 +12431,24 @@ out:
 	return ret;
 }
 
-static int rtl8157-old_up(struct e3100 *tp)
+static int rtl8157_old_up(struct e3100 *tp)
 {
 	int ret;
 
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		goto out;
 
 	ret = rxdy_gated_en(tp, true);
 	if (ret < 0)
 		goto out;
-	ret = r8153-old_teredo_off(tp);
+	ret = r8153_old_teredo_off(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12477,7 +12477,7 @@ static int rtl8157-old_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = rtl8157-old_change_mtu(tp);
+	ret = rtl8157_old_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12502,7 +12502,7 @@ static int rtl8157-old_up(struct e3100 *tp)
 			goto out;
 	}
 
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -12515,13 +12515,13 @@ static int rtl8157-old_up(struct e3100 *tp)
 		goto out;
 
 //	if (tp->udev->speed >= USB_SPEED_SUPER)
-//		ret = r8153b-old_u1u2en(tp, true);
+//		ret = r8153b_old_u1u2en(tp, true);
 
 out:
 	return ret;
 }
 
-static int rtl8157-old_down(struct e3100 *tp)
+static int rtl8157_old_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -12531,10 +12531,10 @@ static int rtl8157-old_down(struct e3100 *tp)
 		return -ENODEV;
 	}
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		err = ret;
-	ret = r8153-old_aldps_en(tp, false);
+	ret = r8153_old_aldps_en(tp, false);
 	if (ret < 0)
 		err = ret;
 
@@ -12601,7 +12601,7 @@ static int rtl8157-old_down(struct e3100 *tp)
 	if (ret < 0)
 		err = ret;
 
-	ret = r8153-old_aldps_en(tp, true);
+	ret = r8153_old_aldps_en(tp, true);
 
 	if (err < 0)
 		return err;
@@ -12632,7 +12632,7 @@ static bool rte3100_in_nway(struct e3100 *tp)
 		return true;
 }
 
-static bool rtl8153-old_in_nway(struct e3100 *tp)
+static bool rtl8153_old_in_nway(struct e3100 *tp)
 {
 	u16 phy_state;
 
@@ -13099,7 +13099,7 @@ out:
 	return ret;
 }
 
-static int r8152b-old_init(struct e3100 *tp)
+static int r8152b_old_init(struct e3100 *tp)
 {
 	int ret;
 
@@ -13133,7 +13133,7 @@ static int r8152b-old_init(struct e3100 *tp)
 	}
 #endif
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -13202,7 +13202,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8153-old_init(struct e3100 *tp)
+static int r8153_old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -13210,7 +13210,7 @@ static int r8153-old_init(struct e3100 *tp)
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
-	ret = r8153-old_u1u2en(tp, false);
+	ret = r8153_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13224,7 +13224,7 @@ static int r8153-old_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -13240,11 +13240,11 @@ static int r8153-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13291,7 +13291,7 @@ static int r8153-old_init(struct e3100 *tp)
 		if (ret < 0)
 			goto out;
 
-		ret = r8153-old_queue_wake(tp, false);
+		ret = r8153_old_queue_wake(tp, false);
 		if (ret < 0)
 			goto out;
 
@@ -13341,7 +13341,7 @@ static int r8153-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_power_cut_en(tp, false);
+	ret = r8153_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13349,17 +13349,17 @@ static int r8153-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_mac_clk_speed_down(tp, false);
+	ret = r8153_old_mac_clk_speed_down(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_u1u2en(tp, true);
+	ret = r8153_old_u1u2en(tp, true);
 	if (ret < 0)
 		goto out;
 
 	usb_enable_lpm(tp->udev);
 
-	ret = r8153-old_lanwake_clr_en(tp, true);
+	ret = r8153_old_lanwake_clr_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -13392,7 +13392,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8153b-old_init(struct e3100 *tp)
+static int r8153b_old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -13402,7 +13402,7 @@ static int r8153b-old_init(struct e3100 *tp)
 
 	killer_set_dbg_info_init(tp, 0xb);
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13421,7 +13421,7 @@ static int r8153b-old_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -13429,11 +13429,11 @@ static int r8153b-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13442,15 +13442,15 @@ static int r8153b-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_power_cut_en(tp, false);
+	ret = r8153b_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_ups_en(tp, false);
+	ret = r8153b_old_ups_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_queue_wake(tp, false);
+	ret = r8153_old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13467,7 +13467,7 @@ static int r8153b-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_lanwake_clr_en(tp, true);
+	ret = r8153_old_lanwake_clr_en(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -13476,7 +13476,7 @@ static int r8153b-old_init(struct e3100 *tp)
 		ocp_write_word(tp, MCU_TYPE_USB, USB_SSPHYLINK2, 0x0c8c);
 
 //	if (tp->udev->speed >= USB_SPEED_SUPER) {
-//		ret = r8153b-old_u1u2en(tp, true);
+//		ret = r8153b_old_u1u2en(tp, true);
 //		if (ret < 0)
 //			goto out;
 //	}
@@ -13484,11 +13484,11 @@ static int r8153b-old_init(struct e3100 *tp)
 	usb_enable_lpm(tp->udev);
 
 	/* MAC clock speed down */
-	ret = r8153-old_mac_clk_speed_down(tp, false);
+	ret = r8153_old_mac_clk_speed_down(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_mcu_spdown_en(tp, false);
+	ret = r8153b_old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13522,7 +13522,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8153-oldc_init(struct e3100 *tp)
+static int r8153_oldc_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -13532,7 +13532,7 @@ static int r8153-oldc_init(struct e3100 *tp)
 
 	killer_set_dbg_info_init(tp, 0xc);
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13550,7 +13550,7 @@ static int r8153-oldc_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -13558,11 +13558,11 @@ static int r8153-oldc_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13571,15 +13571,15 @@ static int r8153-oldc_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_power_cut_en(tp, false);
+	ret = r8153b_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-oldc_ups_en(tp, false);
+	ret = r8153_oldc_ups_en(tp, false);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_queue_wake(tp, false);
+	ret = r8153_old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -13597,16 +13597,16 @@ static int r8153-oldc_init(struct e3100 *tp)
 		goto out;
 
 	if (tp->udev->speed < USB_SPEED_SUPER)
-		ret = r8153b-old_u1u2en(tp, false);
+		ret = r8153b_old_u1u2en(tp, false);
 	else
-		ret = r8153b-old_u1u2en(tp, true);
+		ret = r8153b_old_u1u2en(tp, true);
 	if (ret < 0)
 		goto out;
 
 	usb_enable_lpm(tp->udev);
 
 	/* MAC clock speed down */
-	ret = r8153-old_mac_clk_speed_down(tp, true);
+	ret = r8153_old_mac_clk_speed_down(tp, true);
 	if (ret < 0)
 		goto out;
 
@@ -14936,7 +14936,7 @@ static void e3100u_patch_code(struct e3100 *tp)
 	killer_reset_ocp_base(tp);
 }
 
-static void r8157-old_patch_code(struct e3100 *tp)
+static void r8157_old_patch_code(struct e3100 *tp)
 {
 	if (tp->version == KILLER_VER_16) {
 		static u8 usb_patch_16[] = {
@@ -15192,7 +15192,7 @@ static void r8157-old_patch_code(struct e3100 *tp)
 	}
 }
 
-static void r8159-old_patch_code(struct e3100 *tp)
+static void r8159_old_patch_code(struct e3100 *tp)
 {
 }
 
@@ -26974,7 +26974,7 @@ static void e3100u_ram_code(struct e3100 *tp, bool power_cut)
 	killer_reset_ocp_base(tp);
 }
 
-static int r8157-old_firmware(struct e3100 *tp, bool power_cut)
+static int r8157_old_firmware(struct e3100 *tp, bool power_cut)
 {
 	int ret;
 
@@ -26993,7 +26993,7 @@ static void e3100u_hw_phy_cfg(struct e3100 *tp)
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
@@ -27010,12 +27010,12 @@ static void e3100u_hw_phy_cfg(struct e3100 *tp)
 	}
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -27222,9 +27222,9 @@ static void e3100u_hw_phy_cfg(struct e3100 *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
-	r8153-old_u2p3en(tp, true);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
+	r8153_old_u2p3en(tp, true);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
@@ -27255,7 +27255,7 @@ static void e3100ub_hw_phy_cfg(struct e3100 *tp)
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
@@ -27275,9 +27275,9 @@ static void e3100ub_hw_phy_cfg(struct e3100 *tp)
 	e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -27485,9 +27485,9 @@ static void e3100ub_hw_phy_cfg(struct e3100 *tp)
 
 	killer_eee_enable(tp, tp->eee_en);
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
-	r8153-old_u2p3en(tp, true);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
+	r8153_old_u2p3en(tp, true);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
@@ -27497,13 +27497,13 @@ static void e3100u_hw_phy_cfg_test(struct e3100 *tp)
 	u16 data;
 	int ret;
 
-	data = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	data = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
-	if (r8153-old_eee_en(tp, false) < 0)
+	if (r8153_old_eee_en(tp, false) < 0)
 		return;
 	ocp_reg_write(tp, OCP_EEE_ADV, 0);
 
@@ -27568,51 +27568,51 @@ static void e3100u_hw_phy_cfg_test(struct e3100 *tp)
 	ocp_reg_set_bits(tp, 0xbd38, BIT(13));
 
 //	if (tp->eee_en) {
-//		r8153-old_eee_en(tp, true);
+//		r8153_old_eee_en(tp, true);
 //		ocp_reg_write(tp, OCP_EEE_ADV, tp->eee_adv);
 //	}
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
-	r8153-old_u2p3en(tp, true);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
+	r8153_old_u2p3en(tp, true);
 }
 
-static void r8157-old_hw_phy_cfg(struct e3100 *tp)
+static void r8157_old_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
 	e3100ub_wait_loading_flash(tp);
 
-	r8157-old_patch_code(tp);
+	r8157_old_patch_code(tp);
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
 	switch (ret) {
 	case PHY_STAT_EXT_INIT:
-		r8157-old_firmware(tp, true);
+		r8157_old_firmware(tp, true);
 		ocp_reg_clr_bits(tp, 0xa466, BIT(0));
 		ocp_reg_clr_bits(tp, 0xa468, BIT(3) | BIT(1));
 		break;
 	case PHY_STAT_LAN_ON:
 	case PHY_STAT_PWRDN:
 	default:
-		r8157-old_firmware(tp, false);
+		r8157_old_firmware(tp, false);
 		break;
 	}
 
 	e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
 	/* disable EEE before updating the PHY parameters */
 	killer_eee_enable(tp, false);
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -27778,23 +27778,23 @@ static void r8157-old_hw_phy_cfg(struct e3100 *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static void r8159-old_hw_phy_cfg(struct e3100 *tp)
+static void r8159_old_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
 	e3100ub_wait_loading_flash(tp);
 
-	r8159-old_patch_code(tp);
+	r8159_old_patch_code(tp);
 
 	ocp_word_test_and_clr_bits(tp, MCU_TYPE_USB, USB_MISC_0, PCUT_STATUS);
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		return;
 
@@ -27814,9 +27814,9 @@ static void r8159-old_hw_phy_cfg(struct e3100 *tp)
 	e3100_mdio_test_and_clr_bit(tp, MII_BMCR, BMCR_PDOWN);
 
 	/* disable ALDPS before updating the PHY parameters */
-	r8153-old_aldps_en(tp, false);
+	r8153_old_aldps_en(tp, false);
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		return;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
@@ -28040,8 +28040,8 @@ static void r8159-old_hw_phy_cfg(struct e3100 *tp)
 	if (tp->eee_en)
 		killer_eee_enable(tp, true);
 
-	r8153-old_aldps_en(tp, true);
-	r8152b-old_enable_fc(tp);
+	r8153_old_aldps_en(tp, true);
+	r8152b_old_enable_fc(tp);
 
 	set_bit(PHY_RESET, &tp->flags);
 }
@@ -28067,7 +28067,7 @@ static int e3100u_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28081,7 +28081,7 @@ static int e3100u_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 
@@ -28095,12 +28095,12 @@ static int e3100u_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 	WARN_ON_ONCE(ret != PHY_STAT_LAN_ON);
 
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28114,7 +28114,7 @@ static int e3100u_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_power_cut_en(tp, false);
+	ret = r8153b_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28122,7 +28122,7 @@ static int e3100u_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_queue_wake(tp, false);
+	ret = r8153_old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28131,7 +28131,7 @@ static int e3100u_init(struct e3100 *tp)
 		goto out;
 
 	if (tp->udev->speed >= USB_SPEED_SUPER) {
-		ret = r8153b-old_u1u2en(tp, true);
+		ret = r8153b_old_u1u2en(tp, true);
 		if (ret < 0)
 			goto out;
 	}
@@ -28161,7 +28161,7 @@ static int e3100u_init(struct e3100 *tp)
 //	}
 
 
-	ret = r8153b-old_mcu_spdown_en(tp, false);
+	ret = r8153b_old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28257,7 +28257,7 @@ static int e3100ub_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28282,7 +28282,7 @@ static int e3100ub_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 	if (ret == PHY_STAT_EXT_INIT) {
@@ -28299,11 +28299,11 @@ static int e3100ub_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_u2p3en(tp, false);
+	ret = r8153_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28321,7 +28321,7 @@ static int e3100ub_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_power_cut_en(tp, false);
+	ret = r8153b_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28329,7 +28329,7 @@ static int e3100ub_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_queue_wake(tp, false);
+	ret = r8153_old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28338,7 +28338,7 @@ static int e3100ub_init(struct e3100 *tp)
 		goto out;
 
 	if (tp->udev->speed >= USB_SPEED_SUPER) {
-		ret = r8153b-old_u1u2en(tp, true);
+		ret = r8153b_old_u1u2en(tp, true);
 		if (ret < 0)
 			goto out;
 	}
@@ -28353,7 +28353,7 @@ static int e3100ub_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_mcu_spdown_en(tp, false);
+	ret = r8153b_old_mcu_spdown_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28394,7 +28394,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8157-old_init(struct e3100 *tp)
+static int r8157_old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -28421,7 +28421,7 @@ static int r8157-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28439,7 +28439,7 @@ static int r8157-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 	if (ret == PHY_STAT_EXT_INIT) {
@@ -28456,11 +28456,11 @@ static int r8157-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8157-old_u2p3en(tp, false);
+	ret = r8157_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28492,7 +28492,7 @@ static int r8157-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8157-old_power_cut_en(tp, false);
+	ret = r8157_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28500,7 +28500,7 @@ static int r8157-old_init(struct e3100 *tp)
 //	if (ret < 0)
 //		goto out;
 
-	ret = r8153-old_queue_wake(tp, false);
+	ret = r8153_old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28509,7 +28509,7 @@ static int r8157-old_init(struct e3100 *tp)
 		goto out;
 
 //	if (tp->udev->speed >= USB_SPEED_SUPER) {
-//		ret = r8153b-old_u1u2en(tp, true);
+//		ret = r8153b_old_u1u2en(tp, true);
 //		if (ret < 0)
 //			goto out;
 //	}
@@ -28580,7 +28580,7 @@ out:
 		return 0;
 }
 
-static int r8159-old_wait_backup_restore(struct e3100 *tp)
+static int r8159_old_wait_backup_restore(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret, i;
@@ -28608,7 +28608,7 @@ out:
 	return ret;
 }
 
-static int r8159-old_init(struct e3100 *tp)
+static int r8159_old_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -28635,7 +28635,7 @@ static int r8159-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153b-old_u1u2en(tp, false);
+	ret = r8153b_old_u1u2en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28649,7 +28649,7 @@ static int r8159-old_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8159-old_wait_backup_restore(tp);
+	ret = r8159_old_wait_backup_restore(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28671,7 +28671,7 @@ static int r8159-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, 0);
+	ret = r8153_old_phy_status(tp, 0);
 	if (ret < 0)
 		goto out;
 	if (ret == PHY_STAT_EXT_INIT) {
@@ -28688,11 +28688,11 @@ static int r8159-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8153-old_phy_status(tp, PHY_STAT_LAN_ON);
+	ret = r8153_old_phy_status(tp, PHY_STAT_LAN_ON);
 	if (ret < 0)
 		goto out;
 
-	ret = r8157-old_u2p3en(tp, false);
+	ret = r8157_old_u2p3en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28714,7 +28714,7 @@ static int r8159-old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8157-old_power_cut_en(tp, false);
+	ret = r8157_old_power_cut_en(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -28722,7 +28722,7 @@ static int r8159-old_init(struct e3100 *tp)
 //	if (ret < 0)
 //		goto out;
 
-	ret = r8153-old_queue_wake(tp, false);
+	ret = r8153_old_queue_wake(tp, false);
 	if (ret < 0)
 		goto out;
 
@@ -29921,7 +29921,7 @@ static int e3100_set_eee(struct e3100 *tp, struct ethtool_keee *eee)
 	return killer_eee_enable(tp, tp->eee_en);
 }
 
-static int r8153-old_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
+static int r8153_old_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
 	u16 val;
@@ -29957,7 +29957,7 @@ static int e3100u_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 	u16 val;
 	int ret;
 
-	ret = r8153-old_get_eee(tp, eee);
+	ret = r8153_old_get_eee(tp, eee);
 	if (ret < 0)
 		goto out;
 
@@ -30032,7 +30032,7 @@ static int e3100_set_eee(struct e3100 *tp, struct ethtool_eee *eee)
 	return killer_eee_enable(tp, tp->eee_en);
 }
 
-static int r8153-old_get_eee(struct e3100 *tp, struct ethtool_eee *eee)
+static int r8153_old_get_eee(struct e3100 *tp, struct ethtool_eee *eee)
 {
 	u32 lp, adv, supported = 0;
 	u16 val;
@@ -30065,7 +30065,7 @@ out:
 
 static int e3100u_get_eee(struct e3100 *tp, struct ethtool_keee *eee)
 {
-	return r8153-old_get_eee(tp, eee);
+	return r8153_old_get_eee(tp, eee);
 }
 
 static int e3100u_set_eee(struct e3100 *tp, struct ethtool_keee *eee)
@@ -30946,29 +30946,29 @@ static void rte3100_unload(struct e3100 *tp)
 	e3100_power_cut_en(tp, false);
 }
 
-static void rtl8153-old_unload(struct e3100 *tp)
+static void rtl8153_old_unload(struct e3100 *tp)
 {
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	r8153-old_power_cut_en(tp, false);
+	r8153_old_power_cut_en(tp, false);
 }
 
-static void rtl8153-oldb_unload(struct e3100 *tp)
+static void rtl8153_oldb_unload(struct e3100 *tp)
 {
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	if (!r8153b-old_power_cut_en(tp, false))
+	if (!r8153b_old_power_cut_en(tp, false))
 		killer_set_dbg_info_state(tp, DGB_DRV_STATE_UNLOAD);
 }
 
-static void rtl8157-old_unload(struct e3100 *tp)
+static void rtl8157_old_unload(struct e3100 *tp)
 {
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	r8153-old_power_cut_en(tp, false);
+	r8153_old_power_cut_en(tp, false);
 
 	/* Disable Interrupt Mitigation */
 	if (ocp_byte_clr_bits(tp, MCU_TYPE_USB, 0xcf04,
@@ -30996,32 +30996,32 @@ static int e3100_desc_init(struct e3100 *tp)
 	return 0;
 }
 
-static int r8157-old_desc_init(struct e3100 *tp)
+static int r8157_old_desc_init(struct e3100 *tp)
 {
 	tp->rx_desc.size = sizeof(struct rx_desc_v2);
 	tp->rx_desc.align = 16;
-	tp->rx_desc.vlan_tag = r8157-old_rx_vlan_tag;
-	tp->rx_desc.csum = r8157-old_rx_csum;
-	tp->rx_desc.len = r8157-old_rx_len;
+	tp->rx_desc.vlan_tag = r8157_old_rx_vlan_tag;
+	tp->rx_desc.csum = r8157_old_rx_csum;
+	tp->rx_desc.len = r8157_old_rx_len;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	tp->vlan_put_tag = r8157-old_vlan_put_tag;
+	tp->vlan_put_tag = r8157_old_vlan_put_tag;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0) */
 
 	tp->tx_desc.size = sizeof(struct tx_desc_v2);
 	tp->tx_desc.align = 16;
 	tp->tx_desc.vlan_tag = e3100_tx_vlan_tag;
-	tp->tx_desc.csum = r8157-old_tx_csum;
-	tp->tx_desc.len = r8157-old_tx_len;
+	tp->tx_desc.csum = r8157_old_tx_csum;
+	tp->tx_desc.len = r8157_old_tx_len;
 
 	return 0;
 }
 
-static void rtl8153-oldc_unload(struct e3100 *tp)
+static void rtl8153_oldc_unload(struct e3100 *tp)
 {
 	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
-	r8153-old_power_cut_en(tp, false);
+	r8153_old_power_cut_en(tp, false);
 	killer_set_dbg_info_state(tp, DGB_DRV_STATE_UNLOAD);
 }
 
@@ -31034,7 +31034,7 @@ static int killer_ops_init(struct e3100 *tp)
 	case KILLER_VER_01:
 	case KILLER_VER_02:
 	case KILLER_VER_07:
-		ops->init		= r8152b-old_init;
+		ops->init		= r8152b_old_init;
 		ops->enable		= rte3100_enable;
 		ops->disable		= rte3100_disable;
 		ops->up			= rte3100_up;
@@ -31045,7 +31045,7 @@ static int killer_ops_init(struct e3100 *tp)
 		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 		ops->in_nway		= rte3100_in_nway;
-		ops->hw_phy_cfg		= r8152b-old_hw_phy_cfg;
+		ops->hw_phy_cfg		= r8152b_old_hw_phy_cfg;
 		ops->autosuspend_en	= killer_runtime_suspend_enable;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
@@ -31059,20 +31059,20 @@ static int killer_ops_init(struct e3100 *tp)
 	case KILLER_VER_04:
 	case KILLER_VER_05:
 	case KILLER_VER_06:
-		ops->init		= r8153-old_init;
-		ops->enable		= rtl8153-old_enable;
-		ops->disable		= rtl8153-old_disable;
-		ops->up			= rtl8153-old_up;
-		ops->down		= rtl8153-old_down;
-		ops->unload		= rtl8153-old_unload;
+		ops->init		= r8153_old_init;
+		ops->enable		= rtl8153_old_enable;
+		ops->disable		= rtl8153_old_disable;
+		ops->up			= rtl8153_old_up;
+		ops->down		= rtl8153_old_down;
+		ops->unload		= rtl8153_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8153-old_get_eee;
+		ops->eee_get		= r8153_old_get_eee;
 		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
-		ops->hw_phy_cfg		= r8153-old_hw_phy_cfg;
-		ops->autosuspend_en	= rtl8153-old_runtime_enable;
-		ops->change_mtu		= rtl8153-old_change_mtu;
+		ops->in_nway		= rtl8153_old_in_nway;
+		ops->hw_phy_cfg		= r8153_old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8153_old_runtime_enable;
+		ops->change_mtu		= rtl8153_old_change_mtu;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		if (tp->udev->speed < USB_SPEED_SUPER)
@@ -31086,20 +31086,20 @@ static int killer_ops_init(struct e3100 *tp)
 
 	case KILLER_VER_08:
 	case KILLER_VER_09:
-		ops->init		= r8153b-old_init;
-		ops->enable		= rtl8153-old_enable;
-		ops->disable		= rtl8153-old_disable;
-		ops->up			= rtl8153-oldb_up;
-		ops->down		= rtl8153-oldb_down;
-		ops->unload		= rtl8153-oldb_unload;
+		ops->init		= r8153b_old_init;
+		ops->enable		= rtl8153_old_enable;
+		ops->disable		= rtl8153_old_disable;
+		ops->up			= rtl8153_oldb_up;
+		ops->down		= rtl8153_oldb_down;
+		ops->unload		= rtl8153_oldb_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8153-old_get_eee;
+		ops->eee_get		= r8153_old_get_eee;
 		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
-		ops->hw_phy_cfg		= r8153b-old_hw_phy_cfg;
-		ops->autosuspend_en	= rtl8153-oldb_runtime_enable;
-		ops->change_mtu		= rtl8153-old_change_mtu;
+		ops->in_nway		= rtl8153_old_in_nway;
+		ops->hw_phy_cfg		= r8153b_old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8153_oldb_runtime_enable;
+		ops->change_mtu		= rtl8153_old_change_mtu;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
@@ -31111,15 +31111,15 @@ static int killer_ops_init(struct e3100 *tp)
 	case KILLER_TEST_01:
 		ops->init		= e3100u_init;
 		ops->enable		= rte3100u_enable;
-		ops->disable		= rtl8153-old_disable;
+		ops->disable		= rtl8153_old_disable;
 		ops->up			= rte3100u_up;
 		ops->down		= rte3100u_down;
-		ops->unload		= rtl8153-old_unload;
+		ops->unload		= rtl8153_old_unload;
 //#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 //		ops->eee_get		= e3100u_get_eee;
 //		ops->eee_set		= e3100u_set_eee;
 //#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
+		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= e3100u_hw_phy_cfg_test;
 		ops->autosuspend_en	= rte3100u_runtime_enable;
 		ops->phy_read		= e3100_phy_read;
@@ -31140,12 +31140,12 @@ static int killer_ops_init(struct e3100 *tp)
 		ops->disable		= rte3100u_disable;
 		ops->up			= rte3100u_up;
 		ops->down		= rte3100u_down;
-		ops->unload		= rtl8153-old_unload;
+		ops->unload		= rtl8153_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100u_get_eee;
 		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
+		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= e3100u_hw_phy_cfg;
 		ops->autosuspend_en	= rte3100u_runtime_enable;
 		ops->change_mtu		= rte3100u_change_mtu;
@@ -31162,16 +31162,16 @@ static int killer_ops_init(struct e3100 *tp)
 		fallthrough;
 	case KILLER_VER_15:
 		ops->init		= e3100ub_init;
-		ops->enable		= rtl8152b-old_enable;
-		ops->disable		= rtl8153-old_disable;
+		ops->enable		= rtl8152b_old_enable;
+		ops->disable		= rtl8153_old_disable;
 		ops->up			= rte3100u_up;
 		ops->down		= rte3100u_down;
-		ops->unload		= rtl8153-old_unload;
+		ops->unload		= rtl8153_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100u_get_eee;
 		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
+		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= e3100ub_hw_phy_cfg;
 		ops->autosuspend_en	= rte3100u_runtime_enable;
 		ops->change_mtu		= rte3100u_change_mtu;
@@ -31185,20 +31185,20 @@ static int killer_ops_init(struct e3100 *tp)
 		break;
 
 	case KILLER_VER_14:
-		ops->init		= r8153-oldc_init;
-		ops->enable		= rtl8153-old_enable;
-		ops->disable		= rtl8153-old_disable;
-		ops->up			= rtl8153-oldc_up;
-		ops->down		= rtl8153-oldb_down;
-		ops->unload		= rtl8153-oldc_unload;
+		ops->init		= r8153_oldc_init;
+		ops->enable		= rtl8153_old_enable;
+		ops->disable		= rtl8153_old_disable;
+		ops->up			= rtl8153_oldc_up;
+		ops->down		= rtl8153_oldb_down;
+		ops->unload		= rtl8153_oldc_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
-		ops->eee_get		= r8153-old_get_eee;
+		ops->eee_get		= r8153_old_get_eee;
 		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
-		ops->hw_phy_cfg		= r8153-oldc_hw_phy_cfg;
-		ops->autosuspend_en	= rtl8153-oldc_runtime_enable;
-		ops->change_mtu		= rtl8153-oldc_change_mtu;
+		ops->in_nway		= rtl8153_old_in_nway;
+		ops->hw_phy_cfg		= r8153_oldc_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8153_oldc_runtime_enable;
+		ops->change_mtu		= rtl8153_oldc_change_mtu;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
@@ -31208,48 +31208,48 @@ static int killer_ops_init(struct e3100 *tp)
 		break;
 
 	case KILLER_VER_16:
-		ops->init		= r8157-old_init;
-		ops->enable		= rtl8157-old_enable;
-		ops->disable		= rtl8153-old_disable;
-		ops->up			= rtl8157-old_up;
-		ops->down		= rtl8157-old_down;
-		ops->unload		= rtl8157-old_unload;
+		ops->init		= r8157_old_init;
+		ops->enable		= rtl8157_old_enable;
+		ops->disable		= rtl8153_old_disable;
+		ops->up			= rtl8157_old_up;
+		ops->down		= rtl8157_old_down;
+		ops->unload		= rtl8157_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100u_get_eee;
 		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
-		ops->hw_phy_cfg		= r8157-old_hw_phy_cfg;
-		ops->autosuspend_en	= rtl8157-old_runtime_enable;
-		ops->change_mtu		= rtl8157-old_change_mtu;
-		ops->phy_read		= r8157-old_phy_read;
-		ops->phy_write		= r8157-old_phy_write;
+		ops->in_nway		= rtl8153_old_in_nway;
+		ops->hw_phy_cfg		= r8157_old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8157_old_runtime_enable;
+		ops->change_mtu		= rtl8157_old_change_mtu;
+		ops->phy_read		= r8157_old_phy_read;
+		ops->phy_write		= r8157_old_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
 		tp->support_2500full	= 1;
 		tp->support_5000full	= 1;
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
 		tp->eee_adv2		= MDIO_EEE_2_5GT | MDIO_EEE_5GT;
-		r8157-old_desc_init(tp);
+		r8157_old_desc_init(tp);
 		break;
 
 	case KILLER_VER_17:
-		ops->init		= r8159-old_init;
-		ops->enable		= rtl8157-old_enable;
-		ops->disable		= rtl8153-old_disable;
-		ops->up			= rtl8157-old_up;
-		ops->down		= rtl8157-old_down;
-		ops->unload		= rtl8157-old_unload;
+		ops->init		= r8159_old_init;
+		ops->enable		= rtl8157_old_enable;
+		ops->disable		= rtl8153_old_disable;
+		ops->up			= rtl8157_old_up;
+		ops->down		= rtl8157_old_down;
+		ops->unload		= rtl8157_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100u_get_eee;
 		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= rtl8153-old_in_nway;
-		ops->hw_phy_cfg		= r8159-old_hw_phy_cfg;
-		ops->autosuspend_en	= rtl8157-old_runtime_enable;
-		ops->change_mtu		= rtl8157-old_change_mtu;
-		ops->phy_read		= r8157-old_phy_read;
-		ops->phy_write		= r8157-old_phy_write;
+		ops->in_nway		= rtl8153_old_in_nway;
+		ops->hw_phy_cfg		= r8159_old_hw_phy_cfg;
+		ops->autosuspend_en	= rtl8157_old_runtime_enable;
+		ops->change_mtu		= rtl8157_old_change_mtu;
+		ops->phy_read		= r8157_old_phy_read;
+		ops->phy_write		= r8157_old_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
 		tp->support_2500full	= 1;
 		tp->support_5000full	= 1;
@@ -31257,7 +31257,7 @@ static int killer_ops_init(struct e3100 *tp)
 		tp->eee_en		= true;
 		tp->eee_adv		= MDIO_EEE_100TX | MDIO_EEE_1000T | MDIO_EEE_10GT;
 		tp->eee_adv2		= MDIO_EEE_2_5GT | MDIO_EEE_5GT;
-		r8157-old_desc_init(tp);
+		r8157_old_desc_init(tp);
 		break;
 
 	default:
@@ -32209,7 +32209,7 @@ static void killer_get_mapt_ver(struct e3100 *tp)
 	struct usb_device *udev = tp->udev;
 	u32 ocp_data;
 
-	/* test for -AD variant of RTL8153-OLD */
+	/* test for -AD variant of RTL8153_old */
 	if (ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0, &ocp_data) < 0)
 		return;
 
@@ -32223,7 +32223,7 @@ static void killer_get_mapt_ver(struct e3100 *tp)
 		}
 	}
 
-	/* test for RTL8153-OLD-BND and RTL8153-OLD-BD */
+	/* test for RTL8153_old-BND and RTL8153_old-BD */
 	if (ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1, &ocp_data) < 0)
 		return;
 
