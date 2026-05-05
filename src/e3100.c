@@ -30506,24 +30506,24 @@ static const struct ethtool_ops ops = {
 	.set_pauseparam = rte3100_set_pauseparam,
 };
 
-static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
+static int killertool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 {
 	struct net_device *netdev = tp->netdev;
-	struct rtltool_cmd my_cmd, *myptr;
+	struct killertool_cmd my_cmd, *myptr;
 	struct usb_device_info *uinfo;
 	struct usb_device *udev;
 	__le32	ocp_data;
 	void	*buffer;
 	int	ret;
 
-	myptr = (struct rtltool_cmd *)ifr->ifr_data;
+	myptr = (struct killertool_cmd *)ifr->ifr_data;
 	if (copy_from_user(&my_cmd, myptr, sizeof(my_cmd)))
 		return -EFAULT;
 
 	ret = 0;
 
 	switch (my_cmd.cmd) {
-	case RTLTOOL_PLA_OCP_READ_DWORD:
+	case KILLERTOOL_PLA_OCP_READ_DWORD:
 		ret = pla_ocp_read(tp, (u16)my_cmd.offset, sizeof(ocp_data),
 				   &ocp_data);
 		if (ret < 0)
@@ -30534,7 +30534,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 			ret = -EFAULT;
 		break;
 
-	case RTLTOOL_PLA_OCP_WRITE_DWORD:
+	case KILLERTOOL_PLA_OCP_WRITE_DWORD:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30544,7 +30544,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 				    sizeof(ocp_data), &ocp_data);
 		break;
 
-	case RTLTOOL_USB_OCP_READ_DWORD:
+	case KILLERTOOL_USB_OCP_READ_DWORD:
 		ret = usb_ocp_read(tp, (u16)my_cmd.offset, sizeof(ocp_data),
 				   &ocp_data);
 		if (ret < 0)
@@ -30555,7 +30555,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 			ret = -EFAULT;
 		break;
 
-	case RTLTOOL_USB_OCP_WRITE_DWORD:
+	case KILLERTOOL_USB_OCP_WRITE_DWORD:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30565,7 +30565,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 				    sizeof(ocp_data), &ocp_data);
 		break;
 
-	case RTLTOOL_PLA_OCP_READ:
+	case KILLERTOOL_PLA_OCP_READ:
 		buffer = kmalloc(my_cmd.data, GFP_KERNEL);
 		if (!buffer) {
 			ret = -ENOMEM;
@@ -30584,7 +30584,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case RTLTOOL_PLA_OCP_WRITE:
+	case KILLERTOOL_PLA_OCP_WRITE:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30606,7 +30606,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case RTLTOOL_USB_OCP_READ:
+	case KILLERTOOL_USB_OCP_READ:
 		buffer = kmalloc(my_cmd.data, GFP_KERNEL);
 		if (!buffer) {
 			ret = -ENOMEM;
@@ -30625,7 +30625,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case RTLTOOL_USB_OCP_WRITE:
+	case KILLERTOOL_USB_OCP_WRITE:
 		if (!tp->rtk_enable_diag && net_ratelimit())
 			netif_warn(tp, drv, netdev,
 				   "rtk diag isn't enable\n");
@@ -30647,7 +30647,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 		kfree(buffer);
 		break;
 
-	case RTLTOOL_PHY_OCP_READ:
+	case KILLERTOOL_PHY_OCP_READ:
 		if (!tp->rtk_enable_diag) {
 			netif_err(tp, drv, netdev, "rtk diag isn't enable\n");
 			ret = -EPERM;
@@ -30664,7 +30664,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 			ret = -EFAULT;
 		break;
 
-	case RTLTOOL_PHY_OCP_WRITE:
+	case KILLERTOOL_PHY_OCP_WRITE:
 		if (!tp->rtk_enable_diag) {
 			netif_err(tp, drv, netdev, "rtk diag isn't enable\n");
 			ret = -EPERM;
@@ -30675,7 +30675,7 @@ static int rtltool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 		ret = ocp_reg_write(tp, (u16)my_cmd.offset, (u16)ocp_data);
 		break;
 
-	case RTLTOOL_USB_INFO:
+	case KILLERTOOL_USB_INFO:
 		uinfo = (struct usb_device_info *)&my_cmd.nic_info;
 		udev = tp->udev;
 		uinfo->idVendor = __le16_to_cpu(udev->descriptor.idVendor);
@@ -30741,7 +30741,7 @@ static int rte3100_siocdevprivate(struct net_device *netdev, struct ifreq *rq,
 			ret = -EPERM;
 			break;
 		}
-		ret = rtltool_ioctl(tp, rq);
+		ret = killertool_ioctl(tp, rq);
 		break;
 
 	default:
@@ -30808,7 +30808,7 @@ static int rte3100_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 			ret = -EPERM;
 			break;
 		}
-		ret = rtltool_ioctl(tp, rq);
+		ret = killertool_ioctl(tp, rq);
 		break;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
 
