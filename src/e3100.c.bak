@@ -4950,7 +4950,7 @@ static int r8157_old_u2p3en(struct e3100 *tp, bool enable)
 		return killer_ip_clr_bits(tp, 0xc2c0, BIT(29));
 }
 
-static bool r8156b_flash_used(struct e3100 *tp)
+static bool e3100ub_flash_used(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int ret;
@@ -5362,7 +5362,7 @@ static int e3100u_ups_en(struct e3100 *tp, bool enable)
 			if (ret < 0)
 				goto out;
 
-			if (r8156b_flash_used(tp))
+			if (e3100ub_flash_used(tp))
 				ret = ocp_word_clr_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							GPHY_PATCH_DONE);
@@ -5396,7 +5396,7 @@ static int e3100u_ups_en(struct e3100 *tp, bool enable)
 			switch (tp->version) {
 			case KILLER_VER_13:
 			case KILLER_VER_15:
-				if (r8156b_flash_used(tp))
+				if (e3100ub_flash_used(tp))
 					ret = ocp_word_set_bits(tp,
 							MCU_TYPE_USB,
 							USB_GPHY_CTRL,
@@ -7098,11 +7098,11 @@ static void wait_oob_link_list_ready(struct e3100 *tp)
 	}
 }
 
-static int r8156b_wait_loading_flash(struct e3100 *tp)
+static int e3100ub_wait_loading_flash(struct e3100 *tp)
 {
 	int ret = 0;
 
-	if (r8156b_flash_used(tp)) {
+	if (e3100ub_flash_used(tp)) {
 		int i;
 
 		for (i = 0; i < 100; i++) {
@@ -16261,7 +16261,7 @@ static int killer_ram_code_speed_up(struct e3100 *tp, bool wait)
 			data = ram13;
 			len = sizeof(ram13);
 
-			if (r8156b_flash_used(tp)) {
+			if (e3100ub_flash_used(tp)) {
 				ret = ocp_word_set_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							BYPASS_FLASH);
@@ -18753,7 +18753,7 @@ static int killer_ram_code_speed_up(struct e3100 *tp, bool wait)
 			data = ram16;
 			len = sizeof(ram16);
 
-			if (r8156b_flash_used(tp)) {
+			if (e3100ub_flash_used(tp)) {
 				ret = ocp_word_set_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							BYPASS_FLASH);
@@ -23107,7 +23107,7 @@ static int killer_ram_code_speed_up(struct e3100 *tp, bool wait)
 			data = ram17;
 			len = sizeof(ram17);
 
-			if (r8156b_flash_used(tp)) {
+			if (e3100ub_flash_used(tp)) {
 				ret = ocp_word_set_bits(tp, MCU_TYPE_USB,
 							USB_GPHY_CTRL,
 							BYPASS_FLASH);
@@ -27229,7 +27229,7 @@ static void e3100u_hw_phy_cfg(struct e3100 *tp)
 	set_bit(PHY_RESET, &tp->flags);
 }
 
-static void r8156b_hw_phy_cfg(struct e3100 *tp)
+static void e3100ub_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
@@ -27247,7 +27247,7 @@ static void r8156b_hw_phy_cfg(struct e3100 *tp)
 		break;
 	case KILLER_VER_13:
 	case KILLER_VER_15:
-		r8156b_wait_loading_flash(tp);
+		e3100ub_wait_loading_flash(tp);
 		break;
 	default:
 		break;
@@ -27581,7 +27581,7 @@ static void r8157_old_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
-	r8156b_wait_loading_flash(tp);
+	e3100ub_wait_loading_flash(tp);
 
 	r8157_old_patch_code(tp);
 
@@ -27788,7 +27788,7 @@ static void r8159_old_hw_phy_cfg(struct e3100 *tp)
 {
 	int ret;
 
-	r8156b_wait_loading_flash(tp);
+	e3100ub_wait_loading_flash(tp);
 
 	r8159_old_patch_code(tp);
 
@@ -28219,7 +28219,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int r8156b_u2phy_backup(struct e3100 *tp)
+static int e3100ub_u2phy_backup(struct e3100 *tp)
 {
 	static u8 u2phy_backup[] = {
 		0x00, 0x00, 0x1b, 0x18,
@@ -28232,7 +28232,7 @@ static int r8156b_u2phy_backup(struct e3100 *tp)
 				 u2phy_backup, MCU_TYPE_USB);
 }
 
-static int r8156b_init(struct e3100 *tp)
+static int e3100ub_init(struct e3100 *tp)
 {
 	u32 ocp_data;
 	int i, ret;
@@ -28264,7 +28264,7 @@ static int r8156b_init(struct e3100 *tp)
 	switch (tp->version) {
 	case KILLER_VER_13:
 	case KILLER_VER_15:
-		ret = r8156b_wait_loading_flash(tp);
+		ret = e3100ub_wait_loading_flash(tp);
 		if (ret < 0)
 			goto out;
 		break;
@@ -28317,7 +28317,7 @@ static int r8156b_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156b_u2phy_backup(tp);
+	ret = e3100ub_u2phy_backup(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28435,7 +28435,7 @@ static int r8157_old_init(struct e3100 *tp)
 		msleep(20);
 	}
 
-	ret = r8156b_wait_loading_flash(tp);
+	ret = e3100ub_wait_loading_flash(tp);
 	if (ret < 0)
 		goto out;
 
@@ -28667,7 +28667,7 @@ static int r8159_old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = r8156b_wait_loading_flash(tp);
+	ret = e3100ub_wait_loading_flash(tp);
 	if (ret < 0)
 		goto out;
 
@@ -31161,7 +31161,7 @@ static int killer_ops_init(struct e3100 *tp)
 		tp->support_2500full	= 1;
 		fallthrough;
 	case KILLER_VER_15:
-		ops->init		= r8156b_init;
+		ops->init		= e3100ub_init;
 		ops->enable		= rtl8152b_old_enable;
 		ops->disable		= rtl8153_old_disable;
 		ops->up			= rte3100u_up;
@@ -31172,7 +31172,7 @@ static int killer_ops_init(struct e3100 *tp)
 		ops->eee_set		= e3100u_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 		ops->in_nway		= rtl8153_old_in_nway;
-		ops->hw_phy_cfg		= r8156b_hw_phy_cfg;
+		ops->hw_phy_cfg		= e3100ub_hw_phy_cfg;
 		ops->autosuspend_en	= rte3100u_runtime_enable;
 		ops->change_mtu		= rte3100u_change_mtu;
 		ops->phy_read		= e3100_phy_read;
@@ -32277,8 +32277,7 @@ static int rte3100_probe(struct usb_interface *intf,
 	tp->udev = udev;
 	tp->netdev = netdev;
 	tp->intf = intf;
-        tp->version = KILLER_VER_15; /* --- Mandatory enforcement of the KILLER_VER_15 variant --- */
-        dev_info(&tp->udev->dev, "Forced option: KILLER_VER_15\n");
+	tp->version = version;
 
 	tp->pipe_ctrl_in = usb_rcvctrlpipe(udev, 0);
 	tp->pipe_ctrl_out = usb_sndctrlpipe(udev, 0);
