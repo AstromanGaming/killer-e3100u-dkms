@@ -4,13 +4,13 @@ Priority: optional
 Maintainer: Sam Bélanger <contact@astromangaming.ca>
 Build-Depends: debhelper (>=11~), dkms (<< 3.0.3-3~) | dh-sequence-dkms
 Standards-Version: 4.6.2.1
-Homepage: https://github.com/AstromanGaming/killer-e3100u-dkms
+Homepage: https://github.com/AstromanGaming/killer-e3100-dkms
 
 Package: killer-e3100-dkms
 Architecture: any
 Multi-Arch: foreign
 Depends: dkms (>= 1.95), ${misc:Depends}
-Description: Intel Killer E3100U USB driver in DKMS format
-  This package provides the Intel Killer E3100U USB driver in DKMS way so that you can
-  use a Killer USB-type network interface card using the latest driver.
+Description: Intel Killer E3100/U USB driver in DKMS format
+  This package provides the Intel Killer E3100/U USB driver in DKMS way so that you can
+  use a Killer USB-type network interface(s) card(s) using the latest driver.
   Kernel sources or headers are required to compile this module.
