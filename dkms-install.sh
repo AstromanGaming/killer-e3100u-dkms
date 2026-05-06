@@ -9,7 +9,7 @@ fi
 
 DRV_DIR="$(pwd)"
 DRV_NAME=e3100
-DRV_VERSION=1.0.0
+DRV_VERSION=1.0.1
 KERNEL_VERSION="${KERNEL_VERSION:-$(uname -r)}"
 
 cp -r ${DRV_DIR} /usr/src/${DRV_NAME}-${DRV_VERSION}
