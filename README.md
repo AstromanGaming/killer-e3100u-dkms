@@ -14,9 +14,9 @@ Chipset          | Interface       |  Speed  | Estimated Performance |   Real Pe
 :----------------|:---------------:|:-------:|:---------------------:|:---------------------:
 Killer E3100U    | USB 3.1         | 2.5 GbE |    ~0.8-2.1 Gbit/s*   |    ~2.2-2.4 Gbit/s**
 
-##### _* If it were on the cdc_ncm driver_
+_* If it were on the cdc_ncm driver_
 
-##### _** Tested with iperf3_
+_** Tested with iperf3_
 
 ## Installation
 
