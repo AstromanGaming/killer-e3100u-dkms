@@ -1,3 +1,9 @@
+killer-e3100-dkms (1.0.1) stable; urgency=low
+
+  * Some fix
+
+ -- Sam Bélanger <contact@astromangaming.ca>  Tue, 6 May 2026 08:00:00 -0400
+
 killer-e3100-dkms (1.0.0) stable; urgency=medium
 
   * Initial release with Intel Killer E3100U 1.0.0 driver

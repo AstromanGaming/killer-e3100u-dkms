@@ -39,9 +39,9 @@
 
 /* Version Information */
 #define DRIVER_SUFFIX
-#define DRIVER_VERSION "1.0.1 "DRIVER_SUFFIX" (2026/5/6)"
+#define DRIVER_VERSION "1.0.0"DRIVER_SUFFIX" (2026/5/5)"
 #define DRIVER_AUTHOR "Sam Bélanger <contact@astromangaming.ca>"
-#define DRIVER_DESC "Intel Killer E3100/U USB Ethernet Adapter"
+#define DRIVER_DESC "Intel Killer E3100U USB Ethernet Adapter"
 #define MODULENAME "e3100"
 
 #define PATENTS		"This product is covered by one or more of the " \
@@ -127,7 +127,7 @@
 #define PLA_BP_6		0xfc34
 #define PLA_BP_7		0xfc36
 #define PLA_BP_EN		0xfc38
-#define PLA_BP_8		0xfc38		/* RTL8153C_OLD */
+#define PLA_BP_8		0xfc38		/* RTL8153_oldC */
 #define PLA_BP_9		0xfc3a
 #define PLA_BP_10		0xfc3c
 #define PLA_BP_11		0xfc3e
@@ -156,12 +156,12 @@
 #define USB_LPM_CONFIG		0xcfd8
 #define USB_EFUSE		0xcfdb
 #define USB_ECM_OPTION		0xcfee
-#define USB_CSTMR		0xcfef	/* RTL8153A_OLD */
+#define USB_CSTMR		0xcfef	/* RTL8153_oldA */
 #define USB_MISC_2		0xcfff
 #define USB_ECM_OP		0xd26b
 #define USB_GPHY_CTRL		0xd284
 #define USB_SPEED_OPTION	0xd32a
-#define USB_FW_CTRL		0xd334	/* RTL8153B_OLD */
+#define USB_FW_CTRL		0xd334	/* RTL8153B_old */
 #define USB_FC_TIMER		0xd340
 #define USB_OUTSIDE_FW_VER	0xd3cc
 #define USB_USB_CTRL		0xd406
@@ -171,8 +171,8 @@
 #define USB_USB_TIMER		0xd428
 #define USB_RX_EARLY_TIMEOUT	0xd42c
 #define USB_RX_EARLY_SIZE	0xd42e
-#define USB_PM_CTRL_STATUS	0xd432	/* RTL8153A_OLD */
-#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B_OLD */
+#define USB_PM_CTRL_STATUS	0xd432	/* RTL8153_oldA */
+#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B_old */
 #define USB_TX_DMA		0xd434
 #define USB_UPT_RXDMA_OWN	0xd437
 #define USB_UPHY3_MDCMDIO	0xd480
@@ -181,7 +181,7 @@
 #define USB_BMU_RESET		0xd4b0
 #define USB_BMU_CONFIG		0xd4b4
 #define USB_U1U2_TIMER		0xd4da
-#define USB_FW_TASK		0xd4e8	/* RTL8153B_OLD */
+#define USB_FW_TASK		0xd4e8	/* RTL8153B_old */
 #define USB_RX_AGGR_NUM		0xd4ee
 #define USB_ADV_ADDR		0xd5d6
 #define USB_ADV_DATA		0xd5d8
@@ -208,8 +208,8 @@
 #define USB_BP_5		PLA_BP_5
 #define USB_BP_6		PLA_BP_6
 #define USB_BP_7		PLA_BP_7
-#define USB_BP_EN		PLA_BP_EN	/* RTL8153A_OLD */
-#define USB_BP_8		0xfc38		/* RTL8153B_OLD */
+#define USB_BP_EN		PLA_BP_EN	/* RTL8153_oldA */
+#define USB_BP_8		0xfc38		/* RTL8153B_old */
 #define USB_BP_9		0xfc3a
 #define USB_BP_10		0xfc3c
 #define USB_BP_11		0xfc3e
@@ -631,7 +631,7 @@
 
 /* USB_UPS_CFG */
 #define SAW_CNT_1MS_MASK	0x0fff
-#define MID_REVERSE		BIT(5)	/* RTL8156A_OLD */
+#define MID_REVERSE		BIT(5)	/* RTL8156A */
 
 /* USB_UPS_FLAGS */
 #define UPS_FLAGS_R_TUNE		BIT(0)
@@ -793,20 +793,20 @@ enum killer_register_content {
 #define is_speed_2500(_speed)	(((_speed) & (_2500bps | LINK_STATUS)) == (_2500bps | LINK_STATUS))
 #define is_flow_control(_speed)	(((_speed) & (_tx_flow | _rx_flow)) == (_tx_flow | _rx_flow))
 
-#define e3100_MAX_TX		4
-#define e3100_MAX_RX		10
+#define RTE3100_MAX_TX		4
+#define RTE3100_MAX_RX		10
 #define INTBUFSIZE		2
 
-#define e3100_RX_MAX_PENDING	4096
-#define e3100_RXFG_HEADSZ	256
-#define e3100_TXFG_HEADSZ	256
+#define RTE3100_RX_MAX_PENDING	4096
+#define RTE3100_RXFG_HEADSZ	256
+#define RTE3100_TXFG_HEADSZ	256
 
 #define INTR_LINK		0x0004
 
-#define e3100_REQT_READ	0xc0
-#define e3100_REQT_WRITE	0x40
-#define e3100_REQ_GET_REGS	0x05
-#define e3100_REQ_SET_REGS	0x05
+#define RTE3100_REQT_READ	0xc0
+#define RTE3100_REQT_WRITE	0x40
+#define RTE3100_REQ_GET_REGS	0x05
+#define RTE3100_REQ_SET_REGS	0x05
 
 #define BYTE_EN_DWORD		0xff
 #define BYTE_EN_WORD		0x33
@@ -815,20 +815,20 @@ enum killer_register_content {
 #define BYTE_EN_START_MASK	0x0f
 #define BYTE_EN_END_MASK	0xf0
 
-#define e3100_RMS		(VLAN_ETH_FRAME_LEN + ETH_FCS_LEN)
+#define RTE3100_RMS		(VLAN_ETH_FRAME_LEN + ETH_FCS_LEN)
 #define RTL8153_old_RMS		RTL8153_old_MAX_PACKET
-#define e3100_TX_TIMEOUT	(5 * HZ)
+#define RTE3100_TX_TIMEOUT	(5 * HZ)
 #define mtu_to_size(m)		((m) + VLAN_ETH_HLEN + ETH_FCS_LEN)
 #define size_to_mtu(s)		((s) - VLAN_ETH_HLEN - ETH_FCS_LEN)
 
 #define KILLER_MAX_SG_NUM		(MAX_SKB_FRAGS + 1)
 
-/* e3100 flags */
-enum e3100_flags {
-	e3100_UNPLUG = 0,
-	e3100_SET_RX_MODE,
+/* rte3100 flags */
+enum rte3100_flags {
+	RTE3100_UNPLUG = 0,
+	RTE3100_SET_RX_MODE,
 	WORK_ENABLE,
-	e3100_LINK_CHG,
+	RTE3100_LINK_CHG,
 	SELECTIVE_SUSPEND,
 	PHY_RESET,
 	SCHEDULE_TASKLET,
@@ -976,7 +976,7 @@ struct e3100 {
 	struct usb_interface *intf;
 	struct net_device *netdev;
 	struct urb *intr_urb;
-	struct tx_agg tx_info[e3100_MAX_TX];
+	struct tx_agg tx_info[RTE3100_MAX_TX];
 	struct list_head rx_info, rx_used;
 	struct list_head rx_done, tx_free;
 	struct sk_buff_head tx_queue, rx_queue;
@@ -993,9 +993,9 @@ struct e3100 {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 	struct notifier_block pm_notifier;
 #endif
-#if defined(e3100_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 	struct notifier_block reboot_notifier;
-#endif /* defined(e3100_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 	struct tasklet_struct tx_tl;
 
 	struct killer_ops {
@@ -1153,7 +1153,7 @@ int get_registers(struct e3100 *tp, u16 value, u16 index, u16 size, void *data)
 		return -ENOMEM;
 
 	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_in,
-			      e3100_REQ_GET_REGS, e3100_REQT_READ,
+			      RTE3100_REQ_GET_REGS, RTE3100_REQT_READ,
 			      value, index, tmp, size, USB_CTRL_GET_TIMEOUT);
 	if (ret < 0)
 		memset(data, 0xff, size);
@@ -1176,7 +1176,7 @@ int set_registers(struct e3100 *tp, u16 value, u16 index, u16 size, void *data)
 		return -ENOMEM;
 
 	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_out,
-			      e3100_REQ_SET_REGS, e3100_REQT_WRITE,
+			      RTE3100_REQ_SET_REGS, RTE3100_REQT_WRITE,
 			      value, index, tmp, size, USB_CTRL_SET_TIMEOUT);
 
 	kfree(tmp);
@@ -1187,7 +1187,7 @@ int set_registers(struct e3100 *tp, u16 value, u16 index, u16 size, void *data)
 static void killer_set_unplug(struct e3100 *tp)
 {
 	if (tp->udev->state == USB_STATE_NOTATTACHED) {
-		set_bit(e3100_UNPLUG, &tp->flags);
+		set_bit(RTE3100_UNPLUG, &tp->flags);
 		smp_mb__after_atomic();
 	}
 }
@@ -1198,7 +1198,7 @@ static int generic_ocp_read(struct e3100 *tp, u16 index, u16 size,
 	u16 limit = 64;
 	int ret = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	/* both size and indix must be 4 bytes align */
@@ -1249,7 +1249,7 @@ static int generic_ocp_write(struct e3100 *tp, u16 index, u16 byteen,
 	u16 byteen_start, byteen_end, byen;
 	u16 limit = 512;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	/* both size and indix must be 4 bytes align */
@@ -1572,7 +1572,7 @@ static int read_mii_word(struct net_device *netdev, int phy_id, int reg)
 	struct e3100 *tp = netdev_priv(netdev);
 	int ret, lock;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (phy_id != E3100_PHY_ID)
@@ -1596,7 +1596,7 @@ void write_mii_word(struct net_device *netdev, int phy_id, int reg, int val)
 	struct e3100 *tp = netdev_priv(netdev);
 	int lock;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (phy_id != E3100_PHY_ID)
@@ -2097,10 +2097,10 @@ static int
 e3100_submit_rx(struct e3100 *tp, struct rx_agg *agg, gfp_t mem_flags);
 
 static int
-e3100_set_speed(struct e3100 *tp, u8 autoneg, u32 speed, u8 duplex,
+rte3100_set_speed(struct e3100 *tp, u8 autoneg, u32 speed, u8 duplex,
 		  u32 advertising);
 
-static int __e3100_set_mac_address(struct net_device *netdev,
+static int __rte3100_set_mac_address(struct net_device *netdev,
 				     struct sockaddr_storage *addr,
 				     bool in_resume)
 {
@@ -2135,9 +2135,9 @@ out1:
 	return ret;
 }
 
-static int e3100_set_mac_address(struct net_device *netdev, void *p)
+static int rte3100_set_mac_address(struct net_device *netdev, void *p)
 {
-	return __e3100_set_mac_address(netdev, p, false);
+	return __rte3100_set_mac_address(netdev, p, false);
 }
 
 static int killer_mapt_read(struct e3100 *tp, char *mac_obj_name,
@@ -2299,15 +2299,15 @@ static int set_ethernet_addr(struct e3100 *tp, bool in_resume)
 	if (tp->version == KILLER_VER_01)
 		eth_hw_addr_set(dev, ss.__data);
 	else
-		ret = __e3100_set_mac_address(dev, &ss, in_resume);
+		ret = __rte3100_set_mac_address(dev, &ss, in_resume);
 
 	return ret;
 }
 
-static inline struct net_device_stats *e3100_get_stats(struct net_device *dev)
+static inline struct net_device_stats *rte3100_get_stats(struct net_device *dev)
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	struct e3100 *tp = netdev_priv(dev);
+	struct rte3100 *tp = netdev_priv(dev);
 
 	return (struct net_device_stats *)&tp->stats;
 #else
@@ -2331,7 +2331,7 @@ static void read_bulk_callback(struct urb *urb)
 	if (!tp)
 		return;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!test_bit(WORK_ENABLE, &tp->flags))
@@ -2403,7 +2403,7 @@ static void write_bulk_callback(struct urb *urb)
 		return;
 
 	netdev = tp->netdev;
-	stats = e3100_get_stats(netdev);
+	stats = rte3100_get_stats(netdev);
 	if (status) {
 		if (net_ratelimit())
 			netif_warn(tp, tx_err, netdev,
@@ -2430,7 +2430,7 @@ static void write_bulk_callback(struct urb *urb)
 	if (!test_bit(WORK_ENABLE, &tp->flags))
 		return;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!skb_queue_empty_lockless(&tp->tx_queue))
@@ -2458,7 +2458,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 	if (status && net_ratelimit())
 		netif_warn(tp, tx_err, netdev, "Tx status %d\n", status);
 
-	stats = e3100_get_stats(netdev);
+	stats = rte3100_get_stats(netdev);
 
 	while (!skb_queue_empty(&agg->tx_skb)) {
 		struct sk_buff *skb = __skb_dequeue(&agg->tx_skb);
@@ -2492,7 +2492,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 	if (!test_bit(WORK_ENABLE, &tp->flags))
 		return;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!skb_queue_empty_lockless(&tp->tx_queue))
@@ -2513,7 +2513,7 @@ static void intr_callback(struct urb *urb)
 	if (!test_bit(WORK_ENABLE, &tp->flags))
 		return;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	switch (status) {
@@ -2542,13 +2542,13 @@ static void intr_callback(struct urb *urb)
 	d = urb->transfer_buffer;
 	if (INTR_LINK & __le16_to_cpu(d[0])) {
 		if (!netif_carrier_ok(tp->netdev)) {
-			set_bit(e3100_LINK_CHG, &tp->flags);
+			set_bit(RTE3100_LINK_CHG, &tp->flags);
 			schedule_delayed_work(&tp->schedule, 0);
 		}
 	} else {
 		if (netif_carrier_ok(tp->netdev)) {
 			netif_stop_queue(tp->netdev);
-			set_bit(e3100_LINK_CHG, &tp->flags);
+			set_bit(RTE3100_LINK_CHG, &tp->flags);
 			schedule_delayed_work(&tp->schedule, 0);
 		}
 	}
@@ -2641,7 +2641,7 @@ static void free_all_mem(struct e3100 *tp)
 
 	WARN_ON(atomic_read(&tp->rx_count));
 
-	for (i = 0; i < e3100_MAX_TX; i++) {
+	for (i = 0; i < RTE3100_MAX_TX; i++) {
 		usb_free_urb(tp->tx_info[i].urb);
 		tp->tx_info[i].urb = NULL;
 
@@ -2677,12 +2677,12 @@ static int alloc_all_mem(struct e3100 *tp)
 	skb_queue_head_init(&tp->rx_queue);
 	atomic_set(&tp->rx_count, 0);
 
-	for (i = 0; i < e3100_MAX_RX; i++) {
+	for (i = 0; i < RTE3100_MAX_RX; i++) {
 		if (!alloc_rx_agg(tp, GFP_KERNEL))
 			goto err1;
 	}
 
-	for (i = 0; i < e3100_MAX_TX; i++) {
+	for (i = 0; i < RTE3100_MAX_TX; i++) {
 		struct urb *urb;
 		u8 *buf;
 
@@ -2762,7 +2762,7 @@ static void killer_drop_tx_skb(struct e3100 *tp, struct sk_buff *skb)
 {
 	struct net_device_stats *stats;
 
-	stats = e3100_get_stats(tp->netdev);
+	stats = rte3100_get_stats(tp->netdev);
 	stats->tx_dropped++;
 	dev_kfree_skb_any(skb);
 }
@@ -3190,7 +3190,7 @@ out_tx_fill:
 	if (ret < 0) {
 		struct net_device_stats *stats;
 
-		stats = e3100_get_stats(netdev);
+		stats = rte3100_get_stats(netdev);
 		stats->tx_dropped += agg->skb_num;
 		netdev_completed_queue(netdev, agg->skb_num, agg->skb_bytes);
 	}
@@ -3543,7 +3543,7 @@ return_result:
 
 static inline bool rx_count_exceed(struct e3100 *tp)
 {
-	return atomic_read(&tp->rx_count) > e3100_MAX_RX;
+	return atomic_read(&tp->rx_count) > RTE3100_MAX_RX;
 }
 
 static int agg_offset(struct rx_agg *agg, void *addr)
@@ -3580,7 +3580,7 @@ static struct rx_agg *killer_get_free_rx(struct e3100 *tp, gfp_t mflags)
 
 	if (!agg_free && atomic_read(&tp->rx_count) < tp->rx_pending) {
 		agg_free = alloc_rx_agg(tp, mflags);
-		tp->rx_agg_free_ref += e3100_MAX_RX;
+		tp->rx_agg_free_ref += RTE3100_MAX_RX;
 	}
 
 	return agg_free;
@@ -3607,7 +3607,7 @@ static int rx_bottom(struct e3100 *tp, int budget)
 				break;
 
 			pkt_len = skb->len;
-			stats = e3100_get_stats(netdev);
+			stats = rte3100_get_stats(netdev);
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 			vlan_tci = killer_vlan_get_tag(skb);
 
@@ -3685,7 +3685,7 @@ static int rx_bottom(struct e3100 *tp, int budget)
 			if (urb->actual_length < len_used)
 				break;
 
-			stats = e3100_get_stats(netdev);
+			stats = rte3100_get_stats(netdev);
 
 			pkt_len -= ETH_FCS_LEN;
 			len = pkt_len;
@@ -3812,7 +3812,7 @@ static void tx_bottom(struct e3100 *tp)
 {
 	int res, i;
 
-	for (i = 0; i < e3100_MAX_TX; i++) {
+	for (i = 0; i < RTE3100_MAX_TX; i++) {
 		struct net_device *netdev = tp->netdev;
 		struct tx_agg *agg;
 
@@ -3856,7 +3856,7 @@ static void bottom_half(struct tasklet_struct *t)
 {
 	struct e3100 *tp = from_tasklet(tp, t, tx_tl);
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!test_bit(WORK_ENABLE, &tp->flags))
@@ -3932,7 +3932,7 @@ int e3100_submit_rx(struct e3100 *tp, struct rx_agg *agg, gfp_t mem_flags)
 	int ret;
 
 	/* The rx would be stopped, so skip submitting */
-	if (test_bit(e3100_UNPLUG, &tp->flags) ||
+	if (test_bit(RTE3100_UNPLUG, &tp->flags) ||
 	    !test_bit(WORK_ENABLE, &tp->flags) || !netif_carrier_ok(tp->netdev))
 		return 0;
 
@@ -3979,9 +3979,9 @@ static void killer_drop_queued_tx(struct e3100 *tp)
 }
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
-static void e3100_tx_timeout(struct net_device *netdev)
+static void rte3100_tx_timeout(struct net_device *netdev)
 #else
-static void e3100_tx_timeout(struct net_device *netdev, unsigned int txqueue)
+static void rte3100_tx_timeout(struct net_device *netdev, unsigned int txqueue)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0) */
 {
 	struct e3100 *tp = netdev_priv(netdev);
@@ -3994,14 +3994,14 @@ static void e3100_tx_timeout(struct net_device *netdev, unsigned int txqueue)
 		   tp->tx_back, tp->tx_submit, skb_queue_len(&tp->tx_queue));
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	for (i = 0; i < e3100_MAX_TX; i++)
+	for (i = 0; i < RTE3100_MAX_TX; i++)
 		usb_unlink_urb(tp->tx_info[i].urb);
 #else
 	usb_queue_reset_device(tp->intf);
 #endif
 }
 
-static void e3100_set_rx_mode(struct net_device *netdev)
+static void rte3100_set_rx_mode(struct net_device *netdev)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	u32 mc_filter[2];	/* Multicast hash filter */
@@ -4010,13 +4010,13 @@ static void e3100_set_rx_mode(struct net_device *netdev)
 
 	if (in_atomic()) {
 		if (netif_carrier_ok(netdev)) {
-			set_bit(e3100_SET_RX_MODE, &tp->flags);
+			set_bit(RTE3100_SET_RX_MODE, &tp->flags);
 			schedule_delayed_work(&tp->schedule, 0);
 		}
 		return;
 	}
 
-	clear_bit(e3100_SET_RX_MODE, &tp->flags);
+	clear_bit(RTE3100_SET_RX_MODE, &tp->flags);
 
 	if (!netif_carrier_ok(netdev))
 		return;
@@ -4098,7 +4098,7 @@ static bool killer_gso_check(struct net_device *dev, struct sk_buff *skb)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4)
 
 static netdev_features_t
-e3100_features_check(struct sk_buff *skb, struct net_device *dev,
+rte3100_features_check(struct sk_buff *skb, struct net_device *dev,
 		       netdev_features_t features)
 {
 	u32 mss = skb_shinfo(skb)->gso_size;
@@ -4114,7 +4114,7 @@ e3100_features_check(struct sk_buff *skb, struct net_device *dev,
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4) */
 
-static netdev_tx_t e3100_start_xmit(struct sk_buff *skb,
+static netdev_tx_t rte3100_start_xmit(struct sk_buff *skb,
 				      struct net_device *netdev)
 {
 	struct e3100 *tp = netdev_priv(netdev);
@@ -4133,7 +4133,7 @@ static netdev_tx_t e3100_start_xmit(struct sk_buff *skb,
 			nskb = segs;
 			segs = segs->next;
 			nskb->next = NULL;
-			e3100_start_xmit(nskb, netdev);
+			rte3100_start_xmit(nskb, netdev);
 		} while (segs);
 
 free_skb:
@@ -4180,7 +4180,7 @@ out:
 	return ret;
 }
 
-static int e3100_nic_reset(struct e3100 *tp)
+static int rte3100_nic_reset(struct e3100 *tp)
 {
 	int i, ret;
 
@@ -4262,7 +4262,7 @@ static void set_tx_qlen(struct e3100 *tp)
 					    tp->tx_desc.size);
 }
 
-static u16 e3100_get_speed(struct e3100 *tp)
+static u16 rte3100_get_speed(struct e3100 *tp)
 {
 	u32 ocp_data;
 
@@ -4287,7 +4287,7 @@ static int killer_set_eee_plus(struct e3100 *tp)
 	if (tp->version == KILLER_VER_17)
 		return killer_eee_plus_en(tp, false);
 
-	if (e3100_get_speed(tp) & _10bps)
+	if (rte3100_get_speed(tp) & _10bps)
 		return killer_eee_plus_en(tp, true);
 	else
 		return killer_eee_plus_en(tp, false);
@@ -4324,8 +4324,8 @@ static int killer_start_rx(struct e3100 *tp)
 	list_for_each_entry_safe(agg, agg_next, &tmp_list, info_list) {
 		INIT_LIST_HEAD(&agg->list);
 
-		/* Only e3100_MAX_RX rx_agg need to be submitted. */
-		if (++i > e3100_MAX_RX) {
+		/* Only RTE3100_MAX_RX rx_agg need to be submitted. */
+		if (++i > RTE3100_MAX_RX) {
 			spin_lock_irqsave(&tp->rx_lock, flags);
 			list_add_tail(&agg->list, &tp->rx_used);
 			spin_unlock_irqrestore(&tp->rx_lock, flags);
@@ -4443,11 +4443,11 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100_enable(struct e3100 *tp)
+static int rte3100_enable(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -4478,7 +4478,7 @@ static int r8153_old_set_rx_early_timeout(struct e3100 *tp)
 	case KILLER_VER_08:
 	case KILLER_VER_09:
 	case KILLER_VER_14:
-		/* The RTL8153B_OLD uses USB_RX_EXTRA_AGGR_TMR for rx timeout
+		/* The RTL8153B_old uses USB_RX_EXTRA_AGGR_TMR for rx timeout
 		 * primarily. For USB_RX_EARLY_TIMEOUT, we fix it to 1264ns.
 		 */
 		ret = ocp_write_word(tp, MCU_TYPE_USB, USB_RX_EARLY_TIMEOUT,
@@ -4560,7 +4560,7 @@ static int rtl8153_old_enable(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -4574,7 +4574,7 @@ static int rtl8153_old_enable(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = killer_set_ifg(tp, e3100_get_speed(tp));
+	ret = killer_set_ifg(tp, rte3100_get_speed(tp));
 	if (ret < 0)
 		goto out;
 
@@ -4605,7 +4605,7 @@ static int killer_disable(struct e3100 *tp)
 	int i, ret, err = 0;
 	u32 ocp_data;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -4617,7 +4617,7 @@ static int killer_disable(struct e3100 *tp)
 
 	killer_drop_queued_tx(tp);
 
-	for (i = 0; i < e3100_MAX_TX; i++)
+	for (i = 0; i < RTE3100_MAX_TX; i++)
 		usb_kill_urb(tp->tx_info[i].urb);
 
 	ret = rxdy_gated_en(tp, true);
@@ -4640,7 +4640,7 @@ static int killer_disable(struct e3100 *tp)
 
 	killer_stop_rx(tp);
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 
 	if (err < 0)
 		return err;
@@ -4715,7 +4715,7 @@ static int killer_rx_vlan_en(struct e3100 *tp, bool enable)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 
 static void
-e3100_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
+rte3100_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 {
 	struct e3100 *tp = netdev_priv(dev);
 
@@ -4738,7 +4738,7 @@ e3100_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
 
-static void e3100_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
+static void rte3100_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 {
 	struct e3100 *tp = netdev_priv(dev);
 
@@ -4749,7 +4749,7 @@ static void e3100_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 
 #else
 
-static int e3100_set_features(struct net_device *dev,
+static int rte3100_set_features(struct net_device *dev,
 				netdev_features_t features)
 {
 	netdev_features_t changed = features ^ dev->features;
@@ -5202,7 +5202,7 @@ static int r8153_old_phy_status(struct e3100 *tp, u16 desired)
 		}
 
 		msleep(20);
-		if (test_bit(e3100_UNPLUG, &tp->flags))
+		if (test_bit(RTE3100_UNPLUG, &tp->flags))
 			break;
 	}
 
@@ -5255,7 +5255,7 @@ static int r8153b_old_ups_en(struct e3100 *tp, bool enable)
 
 			tp->killer_ops.hw_phy_cfg(tp);
 
-			ret = e3100_set_speed(tp, tp->autoneg, tp->speed,
+			ret = rte3100_set_speed(tp, tp->autoneg, tp->speed,
 						tp->duplex, tp->advertising);
 		}
 	}
@@ -5312,7 +5312,7 @@ static int r8153_oldc_ups_en(struct e3100 *tp, bool enable)
 
 			tp->killer_ops.hw_phy_cfg(tp);
 
-			ret = e3100_set_speed(tp, tp->autoneg, tp->speed,
+			ret = rte3100_set_speed(tp, tp->autoneg, tp->speed,
 						tp->duplex, tp->advertising);
 			if (ret < 0)
 				goto out;
@@ -5390,7 +5390,7 @@ static int e3100u_ups_en(struct e3100 *tp, bool enable)
 		if (ocp_data & PCUT_STATUS) {
 			tp->killer_ops.hw_phy_cfg(tp);
 
-			ret = e3100_set_speed(tp, tp->autoneg, tp->speed,
+			ret = rte3100_set_speed(tp, tp->autoneg, tp->speed,
 						tp->duplex, tp->advertising);
 		} else {
 			switch (tp->version) {
@@ -5652,7 +5652,7 @@ out:
 	return ret;
 }
 
-static int rtl8153c_old_runtime_enable(struct e3100 *tp, bool enable)
+static int rtl8153_oldc_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -5698,7 +5698,7 @@ out:
 	return ret;
 }
 
-static int e3100u_runtime_enable(struct e3100 *tp, bool enable)
+static int rte3100u_runtime_enable(struct e3100 *tp, bool enable)
 {
 	int ret;
 
@@ -7033,7 +7033,7 @@ static int killer_disable_eee_bottom(struct e3100 *tp)
 	int i, ret = -EINVAL;
 
 	for (i = 0; i < 50; i++) {
-		if (!(e3100_get_speed(tp) & LINK_STATUS)) {
+		if (!(rte3100_get_speed(tp) & LINK_STATUS)) {
 			ret = ocp_word_clr_bits(tp, MCU_TYPE_PLA, PLA_EEE_CR,
 						EEE_RX_EN);
 			break;
@@ -7056,7 +7056,7 @@ static int r8152b_old_enable_fc(struct e3100 *tp)
 	return ret;
 }
 
-static int e3100_disable(struct e3100 *tp)
+static int rte3100_disable(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -7156,7 +7156,7 @@ static int r8152b_old_exit_oob(struct e3100 *tp)
 
 	wait_oob_link_list_ready(tp);
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -7208,7 +7208,7 @@ static int r8152b_old_exit_oob(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, e3100_RMS);
+	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, RTE3100_RMS);
 	if (ret < 0)
 		goto out;
 
@@ -7253,7 +7253,7 @@ static int r8152b_old_enter_oob(struct e3100 *tp)
 
 	wait_oob_link_list_ready(tp);
 
-	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, e3100_RMS);
+	ret = ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, RTE3100_RMS);
 	if (ret < 0)
 		err = ret;
 
@@ -7470,7 +7470,7 @@ static int killer_fc_pause_pkt_en(struct e3100 *tp)
 		if (ret < 0)
 			break;
 
-		speed = e3100_get_speed(tp);
+		speed = rte3100_get_speed(tp);
 		num_pause_pkts = 0xa;
 		ratio = 10000;
 
@@ -11088,7 +11088,7 @@ static int r8153_old_first_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 	ret = killer_reset_bmu(tp);
@@ -11123,7 +11123,7 @@ static int r8153_old_first_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -11299,12 +11299,12 @@ out:
 	return ret;
 }
 
-static int e3100u_enable(struct e3100 *tp)
+static int rte3100u_enable(struct e3100 *tp)
 {
 	u16 speed;
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = e3100u_fc_parameter(tp);
@@ -11334,7 +11334,7 @@ static int e3100u_enable(struct e3100 *tp)
 		break;
 	}
 
-	speed = e3100_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 	ret = killer_set_ifg(tp, speed);
 	if (ret < 0)
 		goto out;
@@ -11381,7 +11381,7 @@ out:
 	return ret;
 }
 
-static int e3100u_disable(struct e3100 *tp)
+static int rte3100u_disable(struct e3100 *tp)
 {
 	int ret, err = 0;
 
@@ -11405,7 +11405,7 @@ static int rtl8152b_old_enable(struct e3100 *tp)
 	u16 speed;
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -11425,7 +11425,7 @@ static int rtl8152b_old_enable(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	speed = e3100_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 	ret = killer_set_ifg(tp, speed);
 	if (ret < 0)
 		goto out;
@@ -11469,7 +11469,7 @@ static int rtl8157_old_enable(struct e3100 *tp)
 	u16 speed;
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	set_tx_qlen(tp);
@@ -11489,7 +11489,7 @@ static int rtl8157_old_enable(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	speed = e3100_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 	ret = killer_set_ifg(tp, speed);
 	if (ret < 0)
 		goto out;
@@ -11500,7 +11500,7 @@ out:
 	return ret;
 }
 
-static int e3100_set_speed(struct e3100 *tp, u8 autoneg, u32 speed, u8 duplex,
+static int rte3100_set_speed(struct e3100 *tp, u8 autoneg, u32 speed, u8 duplex,
 			     u32 advertising)
 {
 	u16 bmcr;
@@ -11695,7 +11695,7 @@ static bool killer_speed_down(struct e3100 *tp)
 	bool ret = false;
 	int r;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return ret;
 
 	if (!(tp->saved_wolopts & WAKE_ANY)) {
@@ -11815,11 +11815,11 @@ out1:
 	return ret;
 }
 
-static int e3100_up(struct e3100 *tp)
+static int rte3100_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = e3100_aldps_en(tp, false);
@@ -11834,11 +11834,11 @@ out:
 	return ret;
 }
 
-static int e3100_down(struct e3100 *tp)
+static int rte3100_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -11866,7 +11866,7 @@ static int rtl8153_old_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = r8153_old_u1u2en(tp, false);
@@ -11914,7 +11914,7 @@ static int rtl8153_old_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -11947,7 +11947,7 @@ static int rtl8153_oldb_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = r8153b_old_u1u2en(tp, false);
@@ -11987,7 +11987,7 @@ static int rtl8153_oldb_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -12019,7 +12019,7 @@ static int rtl8153_oldb_down(struct e3100 *tp)
 		return ret;
 }
 
-static int rtl8153c_old_change_mtu(struct e3100 *tp)
+static int rtl8153_oldc_change_mtu(struct e3100 *tp)
 {
 	int ret;
 
@@ -12055,11 +12055,11 @@ out:
 	return ret;
 }
 
-static int rtl8153c_old_up(struct e3100 *tp)
+static int rtl8153_oldc_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = r8153b_old_u1u2en(tp, false);
@@ -12083,7 +12083,7 @@ static int rtl8153c_old_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 	ret = killer_reset_bmu(tp);
@@ -12110,11 +12110,11 @@ static int rtl8153c_old_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = rtl8153c_old_change_mtu(tp);
+	ret = rtl8153_oldc_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12164,7 +12164,7 @@ out:
 	return ret;
 }
 
-static int e3100u_change_mtu(struct e3100 *tp)
+static int rte3100u_change_mtu(struct e3100 *tp)
 {
 	u32 max_pkt_size = mtu_to_size(tp->netdev->mtu);
 	int ret;
@@ -12190,11 +12190,11 @@ out:
 	return ret;
 }
 
-static int e3100u_up(struct e3100 *tp)
+static int rte3100u_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = r8153b_old_u1u2en(tp, false);
@@ -12218,7 +12218,7 @@ static int e3100u_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 	ret = killer_reset_bmu(tp);
@@ -12238,7 +12238,7 @@ static int e3100u_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100u_change_mtu(tp);
+	ret = rte3100u_change_mtu(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12300,11 +12300,11 @@ out:
 	return ret;
 }
 
-static int e3100u_down(struct e3100 *tp)
+static int rte3100u_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -12435,7 +12435,7 @@ static int rtl8157_old_up(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = r8153b_old_u1u2en(tp, false);
@@ -12456,7 +12456,7 @@ static int rtl8157_old_up(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	ret = e3100_nic_reset(tp);
+	ret = rte3100_nic_reset(tp);
 	if (ret < 0)
 		goto out;
 
@@ -12525,7 +12525,7 @@ static int rtl8157_old_down(struct e3100 *tp)
 {
 	int ret, err = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 		return -ENODEV;
@@ -12609,7 +12609,7 @@ static int rtl8157_old_down(struct e3100 *tp)
 		return ret;
 }
 
-static bool e3100_in_nway(struct e3100 *tp)
+static bool rte3100_in_nway(struct e3100 *tp)
 {
 	u32 nway_state;
 
@@ -12662,7 +12662,7 @@ static void set_carrier(struct e3100 *tp)
 	struct napi_struct *napi = &tp->napi;
 	u16 speed;
 
-	speed = e3100_get_speed(tp);
+	speed = rte3100_get_speed(tp);
 
 	if (speed & LINK_STATUS) {
 		if (!netif_carrier_ok(netdev)) {
@@ -12671,7 +12671,7 @@ static void set_carrier(struct e3100 *tp)
 			napi_disable(napi);
 			netif_carrier_on(netdev);
 			killer_start_rx(tp);
-			e3100_set_rx_mode(netdev);
+			rte3100_set_rx_mode(netdev);
 			napi_enable(napi);
 			netif_wake_queue(netdev);
 			netif_info(tp, link, netdev, "carrier on\n");
@@ -12697,7 +12697,7 @@ static inline void __killer_work_func(struct e3100 *tp)
 	/* If the device is unplugged or !netif_running(), the workqueue
 	 * doesn't need to wake the device, and could return directly.
 	 */
-	if (test_bit(e3100_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
 		return;
 
 	if (usb_autopm_get_interface(tp->intf) < 0)
@@ -12714,11 +12714,11 @@ static inline void __killer_work_func(struct e3100 *tp)
 		goto out1;
 	}
 
-	if (test_and_clear_bit(e3100_LINK_CHG, &tp->flags))
+	if (test_and_clear_bit(RTE3100_LINK_CHG, &tp->flags))
 		set_carrier(tp);
 
-	if (test_bit(e3100_SET_RX_MODE, &tp->flags))
-		e3100_set_rx_mode(tp->netdev);
+	if (test_bit(RTE3100_SET_RX_MODE, &tp->flags))
+		rte3100_set_rx_mode(tp->netdev);
 
 	/* don't schedule tasket before linking */
 	if (test_and_clear_bit(SCHEDULE_TASKLET, &tp->flags) &&
@@ -12735,7 +12735,7 @@ out1:
 	usb_autopm_put_interface(tp->intf);
 
 link_chg_only:
-	if (test_and_clear_bit(e3100_LINK_CHG, &tp->flags)) {
+	if (test_and_clear_bit(RTE3100_LINK_CHG, &tp->flags)) {
 		int lock;
 
 		rtnl_lock();
@@ -12750,7 +12750,7 @@ link_chg_only:
 
 static inline void __killer_hw_phy_work_func(struct e3100 *tp)
 {
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (usb_autopm_get_interface(tp->intf) < 0)
@@ -12760,7 +12760,7 @@ static inline void __killer_hw_phy_work_func(struct e3100 *tp)
 
 	tp->killer_ops.hw_phy_cfg(tp);
 
-	e3100_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
+	rte3100_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
 			  tp->advertising);
 
 	mutex_unlock(&tp->control);
@@ -12830,7 +12830,7 @@ static int killer_notifier(struct notifier_block *nb, unsigned long action,
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP) */
 
-#if defined(e3100_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 static int killer_s5_wol(struct e3100 *tp)
 {
 	struct usb_device *udev = tp->udev;
@@ -12917,7 +12917,7 @@ int killer_reboot_notifier(struct notifier_block *nb, unsigned long action,
 
 	return NOTIFY_DONE;
 }
-#endif /* defined(e3100_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 
 static int rtk_disable_diag(struct e3100 *tp)
 {
@@ -12938,7 +12938,7 @@ static int rtk_disable_diag(struct e3100 *tp)
 	return 0;
 }
 
-static int e3100_open(struct net_device *netdev)
+static int rte3100_open(struct net_device *netdev)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	int res = 0;
@@ -12972,7 +12972,7 @@ static int e3100_open(struct net_device *netdev)
 	smp_mb__after_atomic();
 
 	if (test_and_clear_bit(RECOVER_SPEED, &tp->flags))
-		e3100_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
+		rte3100_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
 				  tp->advertising);
 
 	res = usb_submit_urb(tp->intr_urb, GFP_KERNEL);
@@ -12993,10 +12993,10 @@ static int e3100_open(struct net_device *netdev)
 	tp->pm_notifier.notifier_call = killer_notifier;
 	register_pm_notifier(&tp->pm_notifier);
 #endif
-#if defined(e3100_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 	tp->reboot_notifier.notifier_call = killer_reboot_notifier;
 	register_reboot_notifier(&tp->reboot_notifier);
-#endif /* defined(e3100_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 	return 0;
 
 out_unwork:
@@ -13010,14 +13010,14 @@ out:
 	return res;
 }
 
-static int e3100_close(struct net_device *netdev)
+static int rte3100_close(struct net_device *netdev)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	int res = 0;
 
-#if defined(e3100_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 	unregister_reboot_notifier(&tp->reboot_notifier);
-#endif /* defined(e3100_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 	unregister_pm_notifier(&tp->pm_notifier);
 #endif
@@ -13036,7 +13036,7 @@ static int e3100_close(struct net_device *netdev)
 	}
 
 	res = usb_autopm_get_interface(tp->intf);
-	if (res < 0 || test_bit(e3100_UNPLUG, &tp->flags)) {
+	if (res < 0 || test_bit(RTE3100_UNPLUG, &tp->flags)) {
 		killer_drop_queued_tx(tp);
 		killer_stop_rx(tp);
 	} else {
@@ -13044,16 +13044,16 @@ static int e3100_close(struct net_device *netdev)
 
 		tp->killer_ops.down(tp);
 
-#if defined(e3100_S5_WOL) && defined(CONFIG_PM)
+#if defined(RTE3100_S5_WOL) && defined(CONFIG_PM)
 		if (killer_s5_wol(tp) < 0)
 			netif_info(tp, drv, tp->netdev,
 				   "S5 WOL is not enabled\n");
 		else
 			netif_info(tp, drv, tp->netdev, "Enable S5 WOL\n");
-#endif /* defined(e3100_S5_WOL) && defined(CONFIG_PM) */
+#endif /* defined(RTE3100_S5_WOL) && defined(CONFIG_PM) */
 
 		if (tp->version == KILLER_VER_01)
-			e3100_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
+			rte3100_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
 		else
 			killer_speed_down(tp);
 
@@ -13103,7 +13103,7 @@ static int r8152b_old_init(struct e3100 *tp)
 {
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 #if 0
@@ -13207,7 +13207,7 @@ static int r8153_old_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = r8153_old_u1u2en(tp, false);
@@ -13295,7 +13295,7 @@ static int r8153_old_init(struct e3100 *tp)
 		if (ret < 0)
 			goto out;
 
-		if (e3100_get_speed(tp) & LINK_STATUS)
+		if (rte3100_get_speed(tp) & LINK_STATUS)
 			ret = ocp_word_set_bits(tp, MCU_TYPE_PLA,
 						PLA_EXTRA_STATUS,
 						CUR_LINK_OK | POLL_LINK_CHG);
@@ -13397,7 +13397,7 @@ static int r8153b_old_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0xb);
@@ -13458,7 +13458,7 @@ static int r8153b_old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -13527,7 +13527,7 @@ static int r8153_oldc_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0xc);
@@ -13587,7 +13587,7 @@ static int r8153_oldc_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28051,7 +28051,7 @@ static int e3100u_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = ocp_byte_clr_bits(tp, MCU_TYPE_USB, USB_ECM_OP, EN_ALL_SPEED);
@@ -28180,7 +28180,7 @@ static int e3100u_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28237,7 +28237,7 @@ static int r8156b_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = ocp_byte_clr_bits(tp, MCU_TYPE_USB, USB_ECM_OP, EN_ALL_SPEED);
@@ -28357,7 +28357,7 @@ static int r8156b_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28399,7 +28399,7 @@ static int r8157_old_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0x1);
@@ -28530,7 +28530,7 @@ static int r8157_old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28613,7 +28613,7 @@ static int r8159_old_init(struct e3100 *tp)
 	u32 ocp_data;
 	int i, ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	killer_set_dbg_info_init(tp, 0x9);
@@ -28741,7 +28741,7 @@ static int r8159_old_init(struct e3100 *tp)
 	if (ret < 0)
 		goto out;
 
-	if (e3100_get_speed(tp) & LINK_STATUS)
+	if (rte3100_get_speed(tp) & LINK_STATUS)
 		ret = ocp_word_set_bits(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS,
 					CUR_LINK_OK | POLL_LINK_CHG);
 	else
@@ -28918,7 +28918,7 @@ static bool killer_vendor_mode(struct usb_interface *intf)
 }
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0) */
 
-static int e3100_pre_reset(struct usb_interface *intf)
+static int rte3100_pre_reset(struct usb_interface *intf)
 {
 	struct e3100 *tp = usb_get_intfdata(intf);
 	struct net_device *netdev;
@@ -28947,7 +28947,7 @@ static int e3100_pre_reset(struct usb_interface *intf)
 	return 0;
 }
 
-static int e3100_post_reset(struct usb_interface *intf)
+static int rte3100_post_reset(struct usb_interface *intf)
 {
 	struct e3100 *tp = usb_get_intfdata(intf);
 	struct net_device *netdev;
@@ -28980,7 +28980,7 @@ static int e3100_post_reset(struct usb_interface *intf)
 		mutex_lock(&tp->control);
 		tp->killer_ops.enable(tp);
 		killer_start_rx(tp);
-		e3100_set_rx_mode(netdev);
+		rte3100_set_rx_mode(netdev);
 		mutex_unlock(&tp->control);
 	}
 
@@ -28998,7 +28998,7 @@ static int e3100_post_reset(struct usb_interface *intf)
 static bool delay_autosuspend(struct e3100 *tp)
 {
 	bool sw_linking = !!netif_carrier_ok(tp->netdev);
-	bool hw_linking = !!(e3100_get_speed(tp) & LINK_STATUS);
+	bool hw_linking = !!(rte3100_get_speed(tp) & LINK_STATUS);
 
 	/* This means a linking change occurs and the driver doesn't detect it,
 	 * yet. If the driver has disabled tx/rx and hw is linking on, the
@@ -29018,7 +29018,7 @@ static bool delay_autosuspend(struct e3100 *tp)
 		return false;
 }
 
-static int e3100_runtime_resume(struct e3100 *tp)
+static int rte3100_runtime_resume(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 
@@ -29032,7 +29032,7 @@ static int e3100_runtime_resume(struct e3100 *tp)
 		smp_mb__after_atomic();
 
 		if (netif_carrier_ok(netdev)) {
-			if (e3100_get_speed(tp) & LINK_STATUS) {
+			if (rte3100_get_speed(tp) & LINK_STATUS) {
 				killer_start_rx(tp);
 			} else {
 				netif_carrier_off(netdev);
@@ -29063,7 +29063,7 @@ static int e3100_runtime_resume(struct e3100 *tp)
 	return 0;
 }
 
-static int e3100_system_resume(struct e3100 *tp)
+static int rte3100_system_resume(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 
@@ -29076,7 +29076,7 @@ static int e3100_system_resume(struct e3100 *tp)
 		set_bit(WORK_ENABLE, &tp->flags);
 		smp_mb__after_atomic();
 		if (test_and_clear_bit(RECOVER_SPEED, &tp->flags))
-			e3100_set_speed(tp, tp->autoneg, tp->speed,
+			rte3100_set_speed(tp, tp->autoneg, tp->speed,
 					  tp->duplex, tp->advertising);
 		usb_submit_urb(tp->intr_urb, GFP_NOIO);
 	}
@@ -29084,7 +29084,7 @@ static int e3100_system_resume(struct e3100 *tp)
 	return 0;
 }
 
-static int e3100_runtime_suspend(struct e3100 *tp)
+static int rte3100_runtime_suspend(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 	int ret = 0;
@@ -29145,7 +29145,7 @@ out2:
 		}
 
 		if (delay_autosuspend(tp)) {
-			e3100_runtime_resume(tp);
+			rte3100_runtime_resume(tp);
 			ret = -EBUSY;
 		}
 	}
@@ -29154,7 +29154,7 @@ out1:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100_system_suspend(struct e3100 *tp)
+static int rte3100_system_suspend(struct e3100 *tp)
 {
 	struct net_device *netdev = tp->netdev;
 
@@ -29173,7 +29173,7 @@ static int e3100_system_suspend(struct e3100 *tp)
 		tp->killer_ops.down(tp);
 
 		if (tp->version == KILLER_VER_01)
-			e3100_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
+			rte3100_set_speed(tp, AUTONEG_ENABLE, 0, 0, 3);
 		else
 			killer_speed_down(tp);
 
@@ -29184,7 +29184,7 @@ static int e3100_system_suspend(struct e3100 *tp)
 	return 0;
 }
 
-static int e3100_suspend(struct usb_interface *intf, pm_message_t message)
+static int rte3100_suspend(struct usb_interface *intf, pm_message_t message)
 {
 	struct e3100 *tp = usb_get_intfdata(intf);
 	int ret;
@@ -29192,16 +29192,16 @@ static int e3100_suspend(struct usb_interface *intf, pm_message_t message)
 	mutex_lock(&tp->control);
 
 	if (PMSG_IS_AUTO(message))
-		ret = e3100_runtime_suspend(tp);
+		ret = rte3100_runtime_suspend(tp);
 	else
-		ret = e3100_system_suspend(tp);
+		ret = rte3100_system_suspend(tp);
 
 	mutex_unlock(&tp->control);
 
 	return ret;
 }
 
-static int e3100_resume(struct usb_interface *intf)
+static int rte3100_resume(struct usb_interface *intf)
 {
 	struct e3100 *tp = usb_get_intfdata(intf);
 	int ret;
@@ -29211,16 +29211,16 @@ static int e3100_resume(struct usb_interface *intf)
 	killer_reset_ocp_base(tp);
 
 	if (test_bit(SELECTIVE_SUSPEND, &tp->flags))
-		ret = e3100_runtime_resume(tp);
+		ret = rte3100_runtime_resume(tp);
 	else
-		ret = e3100_system_resume(tp);
+		ret = rte3100_system_resume(tp);
 
 	mutex_unlock(&tp->control);
 
 	return ret;
 }
 
-static int e3100_reset_resume(struct usb_interface *intf)
+static int rte3100_reset_resume(struct usb_interface *intf)
 {
 	struct e3100 *tp = usb_get_intfdata(intf);
 
@@ -29229,10 +29229,10 @@ static int e3100_reset_resume(struct usb_interface *intf)
 	tp->killer_ops.init(tp);
 	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
 	set_ethernet_addr(tp, true);
-	return e3100_resume(intf);
+	return rte3100_resume(intf);
 }
 
-static void e3100_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+static void rte3100_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
 {
 	struct e3100 *tp = netdev_priv(dev);
 
@@ -29252,7 +29252,7 @@ static void e3100_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
 	usb_autopm_put_interface(tp->intf);
 }
 
-static int e3100_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+static int rte3100_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
 {
 	struct e3100 *tp = netdev_priv(dev);
 	int ret;
@@ -29280,21 +29280,21 @@ out_set_wol:
 	return ret;
 }
 
-static u32 e3100_get_msglevel(struct net_device *dev)
+static u32 rte3100_get_msglevel(struct net_device *dev)
 {
 	struct e3100 *tp = netdev_priv(dev);
 
 	return tp->msg_enable;
 }
 
-static void e3100_set_msglevel(struct net_device *dev, u32 value)
+static void rte3100_set_msglevel(struct net_device *dev, u32 value)
 {
 	struct e3100 *tp = netdev_priv(dev);
 
 	tp->msg_enable = value;
 }
 
-static void e3100_get_drvinfo(struct net_device *netdev,
+static void rte3100_get_drvinfo(struct net_device *netdev,
 				struct ethtool_drvinfo *info)
 {
 	struct e3100 *tp = netdev_priv(netdev);
@@ -29306,7 +29306,7 @@ static void e3100_get_drvinfo(struct net_device *netdev,
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0)
 static
-int e3100_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
+int rte3100_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	u16 bmcr, bmsr;
@@ -29440,7 +29440,7 @@ int e3100_get_settings(struct net_device *netdev, struct ethtool_cmd *cmd)
 
 
 	if (netif_running(netdev) && netif_carrier_ok(netdev)) {
-		u16 speed = e3100_get_speed(tp);
+		u16 speed = rte3100_get_speed(tp);
 
 		if (speed & _100bps)
 			cmd->speed = SPEED_100;
@@ -29468,7 +29468,7 @@ out:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
+static int rte3100_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 {
 	struct e3100 *tp = netdev_priv(dev);
 	u32 advertising = 0;
@@ -29497,7 +29497,7 @@ static int e3100_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 
 	mutex_lock(&tp->control);
 
-	ret = e3100_set_speed(tp, cmd->autoneg, cmd->speed, cmd->duplex,
+	ret = rte3100_set_speed(tp, cmd->autoneg, cmd->speed, cmd->duplex,
 				advertising);
 	if (!ret) {
 		tp->autoneg = cmd->autoneg;
@@ -29516,7 +29516,7 @@ out:
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0) */
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
-static int e3100_get_link_ksettings(struct net_device *netdev,
+static int rte3100_get_link_ksettings(struct net_device *netdev,
 				      struct ethtool_link_ksettings *cmd)
 {
 	struct e3100 *tp = netdev_priv(netdev);
@@ -29695,7 +29695,7 @@ static int e3100_get_link_ksettings(struct net_device *netdev,
 	}
 
 	if (netif_running(netdev) && netif_carrier_ok(netdev)) {
-		u16 speed = e3100_get_speed(tp);
+		u16 speed = rte3100_get_speed(tp);
 
 		if (speed & _100bps)
 			cmd->base.speed = SPEED_100;
@@ -29726,7 +29726,7 @@ out1:
 	return (ret < 0) ? ret : 0;
 }
 
-static int e3100_set_link_ksettings(struct net_device *dev,
+static int rte3100_set_link_ksettings(struct net_device *dev,
 				      const struct ethtool_link_ksettings *cmd)
 {
 	struct e3100 *tp = netdev_priv(dev);
@@ -29775,7 +29775,7 @@ static int e3100_set_link_ksettings(struct net_device *dev,
 
 	mutex_lock(&tp->control);
 
-	ret = e3100_set_speed(tp, cmd->base.autoneg, cmd->base.speed,
+	ret = rte3100_set_speed(tp, cmd->base.autoneg, cmd->base.speed,
 				cmd->base.duplex, advertising);
 	if (!ret) {
 		tp->autoneg = cmd->base.autoneg;
@@ -29793,7 +29793,7 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0) */
 
-static const char e3100_gstrings[][ETH_GSTRING_LEN] = {
+static const char rte3100_gstrings[][ETH_GSTRING_LEN] = {
 	"tx_packets",
 	"rx_packets",
 	"tx_errors",
@@ -29812,23 +29812,23 @@ static const char e3100_gstrings[][ETH_GSTRING_LEN] = {
 };
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)
-static int e3100_get_sset_count(struct net_device *dev)
+static int rte3100_get_sset_count(struct net_device *dev)
 {
-	return ARRAY_SIZE(e3100_gstrings);
+	return ARRAY_SIZE(rte3100_gstrings);
 }
 #else
-static int e3100_get_sset_count(struct net_device *dev, int sset)
+static int rte3100_get_sset_count(struct net_device *dev, int sset)
 {
 	switch (sset) {
 	case ETH_SS_STATS:
-		return ARRAY_SIZE(e3100_gstrings);
+		return ARRAY_SIZE(rte3100_gstrings);
 	default:
 		return -EOPNOTSUPP;
 	}
 }
 #endif
 
-static void e3100_get_ethtool_stats(struct net_device *dev,
+static void rte3100_get_ethtool_stats(struct net_device *dev,
 				      struct ethtool_stats *stats, u64 *data)
 {
 	struct e3100 *tp = netdev_priv(dev);
@@ -29870,11 +29870,11 @@ static void e3100_get_ethtool_stats(struct net_device *dev,
 	data[14] = tp->tx_back;
 }
 
-static void e3100_get_strings(struct net_device *dev, u32 stringset, u8 *data)
+static void rte3100_get_strings(struct net_device *dev, u32 stringset, u8 *data)
 {
 	switch (stringset) {
 	case ETH_SS_STATS:
-		memcpy(data, e3100_gstrings, sizeof(e3100_gstrings));
+		memcpy(data, rte3100_gstrings, sizeof(rte3100_gstrings));
 		break;
 	}
 }
@@ -30134,7 +30134,7 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 
-static int e3100_nway_reset(struct net_device *dev)
+static int rte3100_nway_reset(struct net_device *dev)
 {
 	struct e3100 *tp = netdev_priv(dev);
 	int ret;
@@ -30155,7 +30155,7 @@ out:
 	return ret;
 }
 
-static int e3100_get_coalesce(struct net_device *netdev,
+static int rte3100_get_coalesce(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 				struct ethtool_coalesce *coalesce)
 #else
@@ -30180,7 +30180,7 @@ static int e3100_get_coalesce(struct net_device *netdev,
 	return 0;
 }
 
-static int e3100_set_coalesce(struct net_device *netdev,
+static int rte3100_set_coalesce(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 				struct ethtool_coalesce *coalesce)
 #else
@@ -30224,7 +30224,7 @@ static int e3100_set_coalesce(struct net_device *netdev,
 			tp->killer_ops.enable(tp);
 			killer_start_rx(tp);
 			napi_enable(&tp->napi);
-			e3100_set_rx_mode(netdev);
+			rte3100_set_rx_mode(netdev);
 			netif_wake_queue(netdev);
 		}
 	}
@@ -30236,7 +30236,7 @@ static int e3100_set_coalesce(struct net_device *netdev,
 	return ret;
 }
 
-static int e3100_ethtool_begin(struct net_device *netdev)
+static int rte3100_ethtool_begin(struct net_device *netdev)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 
@@ -30247,7 +30247,7 @@ static int e3100_ethtool_begin(struct net_device *netdev)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
-static int e3100_get_tunable(struct net_device *netdev,
+static int rte3100_get_tunable(struct net_device *netdev,
 			       const struct ethtool_tunable *tunable, void *d)
 {
 	struct e3100 *tp = netdev_priv(netdev);
@@ -30266,7 +30266,7 @@ static int e3100_get_tunable(struct net_device *netdev,
 	return 0;
 }
 
-static int e3100_set_tunable(struct net_device *netdev,
+static int rte3100_set_tunable(struct net_device *netdev,
 			       const struct ethtool_tunable *tunable,
 			       const void *d)
 {
@@ -30324,7 +30324,7 @@ static int e3100_set_tunable(struct net_device *netdev,
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
 
-static void e3100_get_ringparam(struct net_device *netdev,
+static void rte3100_get_ringparam(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,17,0)
 				  struct ethtool_ringparam *ring)
 #else
@@ -30335,11 +30335,11 @@ static void e3100_get_ringparam(struct net_device *netdev,
 {
 	struct e3100 *tp = netdev_priv(netdev);
 
-	ring->rx_max_pending = e3100_RX_MAX_PENDING;
+	ring->rx_max_pending = RTE3100_RX_MAX_PENDING;
 	ring->rx_pending = tp->rx_pending;
 }
 
-static int e3100_set_ringparam(struct net_device *netdev,
+static int rte3100_set_ringparam(struct net_device *netdev,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,17,0)
 				 struct ethtool_ringparam *ring)
 #else
@@ -30350,7 +30350,7 @@ static int e3100_set_ringparam(struct net_device *netdev,
 {
 	struct e3100 *tp = netdev_priv(netdev);
 
-	if (ring->rx_pending < e3100_MAX_RX)
+	if (ring->rx_pending < RTE3100_MAX_RX)
 		return -EINVAL;
 
 	if (tp->rx_pending != ring->rx_pending) {
@@ -30368,7 +30368,7 @@ static int e3100_set_ringparam(struct net_device *netdev,
 	return 0;
 }
 
-static void e3100_get_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
+static void rte3100_get_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	int bmcr, lcladv, rmtadv;
@@ -30408,7 +30408,7 @@ static void e3100_get_pauseparam(struct net_device *netdev, struct ethtool_pause
 		pause->tx_pause = 1;
 }
 
-static int e3100_set_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
+static int rte3100_set_pauseparam(struct net_device *netdev, struct ethtool_pauseparam *pause)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	u16 old, new1;
@@ -30461,20 +30461,20 @@ static const struct ethtool_ops ops = {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0)
 	.supported_coalesce_params = ETHTOOL_COALESCE_USECS,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0) */
-	.get_drvinfo = e3100_get_drvinfo,
+	.get_drvinfo = rte3100_get_drvinfo,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0)
-	.get_settings = e3100_get_settings,
-	.set_settings = e3100_set_settings,
+	.get_settings = rte3100_get_settings,
+	.set_settings = rte3100_set_settings,
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0) */
 	.get_link = ethtool_op_get_link,
-	.nway_reset = e3100_nway_reset,
-	.get_msglevel = e3100_get_msglevel,
-	.set_msglevel = e3100_set_msglevel,
-	.get_wol = e3100_get_wol,
-	.set_wol = e3100_set_wol,
-	.get_strings = e3100_get_strings,
-	.get_sset_count = e3100_get_sset_count,
-	.get_ethtool_stats = e3100_get_ethtool_stats,
+	.nway_reset = rte3100_nway_reset,
+	.get_msglevel = rte3100_get_msglevel,
+	.set_msglevel = rte3100_set_msglevel,
+	.get_wol = rte3100_get_wol,
+	.set_wol = rte3100_set_wol,
+	.get_strings = rte3100_get_strings,
+	.get_sset_count = rte3100_get_sset_count,
+	.get_ethtool_stats = rte3100_get_ethtool_stats,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)
 	.get_tx_csum = ethtool_op_get_tx_csum,
 	.set_tx_csum = ethtool_op_set_tx_csum,
@@ -30485,25 +30485,25 @@ static const struct ethtool_ops ops = {
 	.set_tso = ethtool_op_set_tso,
 #endif
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0) */
-	.get_coalesce = e3100_get_coalesce,
-	.set_coalesce = e3100_set_coalesce,
+	.get_coalesce = rte3100_get_coalesce,
+	.set_coalesce = rte3100_set_coalesce,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 	.get_eee = killer_ethtool_get_eee,
 	.set_eee = killer_ethtool_set_eee,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
-	.get_link_ksettings = e3100_get_link_ksettings,
-	.set_link_ksettings = e3100_set_link_ksettings,
+	.get_link_ksettings = rte3100_get_link_ksettings,
+	.set_link_ksettings = rte3100_set_link_ksettings,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0) */
-	.begin = e3100_ethtool_begin,
+	.begin = rte3100_ethtool_begin,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
-	.get_tunable = e3100_get_tunable,
-	.set_tunable = e3100_set_tunable,
+	.get_tunable = rte3100_get_tunable,
+	.set_tunable = rte3100_set_tunable,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
-	.get_ringparam = e3100_get_ringparam,
-	.set_ringparam = e3100_set_ringparam,
-	.get_pauseparam = e3100_get_pauseparam,
-	.set_pauseparam = e3100_set_pauseparam,
+	.get_ringparam = rte3100_get_ringparam,
+	.set_ringparam = rte3100_set_ringparam,
+	.get_pauseparam = rte3100_get_pauseparam,
+	.set_pauseparam = rte3100_set_pauseparam,
 };
 
 static int killertool_ioctl(struct e3100 *tp, struct ifreq *ifr)
@@ -30722,13 +30722,13 @@ static int killertool_ioctl(struct e3100 *tp, struct ifreq *ifr)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0)
-static int e3100_siocdevprivate(struct net_device *netdev, struct ifreq *rq,
+static int rte3100_siocdevprivate(struct net_device *netdev, struct ifreq *rq,
 				  void __user *data, int cmd)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = usb_autopm_get_interface(tp->intf);
@@ -30755,13 +30755,13 @@ out:
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0) */
 
-static int e3100_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+static int rte3100_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
 {
 	struct e3100 *tp = netdev_priv(netdev);
 	struct mii_ioctl_data *data = if_mii(rq);
 	int ret;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	ret = usb_autopm_get_interface(tp->intf);
@@ -30822,7 +30822,7 @@ out:
 	return ret;
 }
 
-static int e3100_change_mtu(struct net_device *dev, int new_mtu)
+static int rte3100_change_mtu(struct net_device *dev, int new_mtu)
 {
 	struct e3100 *tp = netdev_priv(dev);
 	int ret;
@@ -30899,7 +30899,7 @@ static int e3100_change_mtu(struct net_device *dev, int new_mtu)
 			killer_start_rx(tp);
 			tasklet_enable(&tp->tx_tl);
 			napi_enable(&tp->napi);
-			e3100_set_rx_mode(dev);
+			rte3100_set_rx_mode(dev);
 			netif_wake_queue(dev);
 		}
 	}
@@ -30912,35 +30912,35 @@ static int e3100_change_mtu(struct net_device *dev, int new_mtu)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
-static const struct net_device_ops e3100_netdev_ops = {
-	.ndo_open		= e3100_open,
-	.ndo_stop		= e3100_close,
+static const struct net_device_ops rte3100_netdev_ops = {
+	.ndo_open		= rte3100_open,
+	.ndo_stop		= rte3100_close,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
-	.ndo_do_ioctl		= e3100_ioctl,
+	.ndo_do_ioctl		= rte3100_ioctl,
 #else
-	.ndo_siocdevprivate	= e3100_siocdevprivate,
-	.ndo_eth_ioctl		= e3100_ioctl,
+	.ndo_siocdevprivate	= rte3100_siocdevprivate,
+	.ndo_eth_ioctl		= rte3100_ioctl,
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0) */
-	.ndo_start_xmit		= e3100_start_xmit,
-	.ndo_tx_timeout		= e3100_tx_timeout,
+	.ndo_start_xmit		= rte3100_start_xmit,
+	.ndo_tx_timeout		= rte3100_tx_timeout,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	.ndo_vlan_rx_register	= e3100_vlan_rx_register,
+	.ndo_vlan_rx_register	= rte3100_vlan_rx_register,
 #else
-	.ndo_set_features	= e3100_set_features,
+	.ndo_set_features	= rte3100_set_features,
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
-	.ndo_set_rx_mode	= e3100_set_rx_mode,
-	.ndo_set_mac_address	= e3100_set_mac_address,
-	.ndo_change_mtu		= e3100_change_mtu,
+	.ndo_set_rx_mode	= rte3100_set_rx_mode,
+	.ndo_set_mac_address	= rte3100_set_mac_address,
+	.ndo_change_mtu		= rte3100_change_mtu,
 	.ndo_validate_addr	= eth_validate_addr,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4)
-	.ndo_features_check	= e3100_features_check,
+	.ndo_features_check	= rte3100_features_check,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4) */
 };
 #endif
 
-static void e3100_unload(struct e3100 *tp)
+static void rte3100_unload(struct e3100 *tp)
 {
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	e3100_power_cut_en(tp, false);
@@ -30948,7 +30948,7 @@ static void e3100_unload(struct e3100 *tp)
 
 static void rtl8153_old_unload(struct e3100 *tp)
 {
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	r8153_old_power_cut_en(tp, false);
@@ -30956,7 +30956,7 @@ static void rtl8153_old_unload(struct e3100 *tp)
 
 static void rtl8153_oldb_unload(struct e3100 *tp)
 {
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	if (!r8153b_old_power_cut_en(tp, false))
@@ -30965,7 +30965,7 @@ static void rtl8153_oldb_unload(struct e3100 *tp)
 
 static void rtl8157_old_unload(struct e3100 *tp)
 {
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	r8153_old_power_cut_en(tp, false);
@@ -31016,9 +31016,9 @@ static int r8157_old_desc_init(struct e3100 *tp)
 	return 0;
 }
 
-static void rtl8153c_old_unload(struct e3100 *tp)
+static void rtl8153_oldc_unload(struct e3100 *tp)
 {
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return;
 
 	r8153_old_power_cut_en(tp, false);
@@ -31035,16 +31035,16 @@ static int killer_ops_init(struct e3100 *tp)
 	case KILLER_VER_02:
 	case KILLER_VER_07:
 		ops->init		= r8152b_old_init;
-		ops->enable		= e3100_enable;
-		ops->disable		= e3100_disable;
-		ops->up			= e3100_up;
-		ops->down		= e3100_down;
-		ops->unload		= e3100_unload;
+		ops->enable		= rte3100_enable;
+		ops->disable		= rte3100_disable;
+		ops->up			= rte3100_up;
+		ops->down		= rte3100_down;
+		ops->unload		= rte3100_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100_get_eee;
 		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
-		ops->in_nway		= e3100_in_nway;
+		ops->in_nway		= rte3100_in_nway;
 		ops->hw_phy_cfg		= r8152b_old_hw_phy_cfg;
 		ops->autosuspend_en	= killer_runtime_suspend_enable;
 		ops->phy_read		= e3100_phy_read;
@@ -31110,10 +31110,10 @@ static int killer_ops_init(struct e3100 *tp)
 
 	case KILLER_TEST_01:
 		ops->init		= e3100u_init;
-		ops->enable		= e3100u_enable;
+		ops->enable		= rte3100u_enable;
 		ops->disable		= rtl8153_old_disable;
-		ops->up			= e3100u_up;
-		ops->down		= e3100u_down;
+		ops->up			= rte3100u_up;
+		ops->down		= rte3100u_down;
 		ops->unload		= rtl8153_old_unload;
 //#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 //		ops->eee_get		= e3100u_get_eee;
@@ -31121,7 +31121,7 @@ static int killer_ops_init(struct e3100 *tp)
 //#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= e3100u_hw_phy_cfg_test;
-		ops->autosuspend_en	= e3100u_runtime_enable;
+		ops->autosuspend_en	= rte3100u_runtime_enable;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
@@ -31136,10 +31136,10 @@ static int killer_ops_init(struct e3100 *tp)
 		fallthrough;
 	case KILLER_VER_10:
 		ops->init		= e3100u_init;
-		ops->enable		= e3100u_enable;
-		ops->disable		= e3100u_disable;
-		ops->up			= e3100u_up;
-		ops->down		= e3100u_down;
+		ops->enable		= rte3100u_enable;
+		ops->disable		= rte3100u_disable;
+		ops->up			= rte3100u_up;
+		ops->down		= rte3100u_down;
 		ops->unload		= rtl8153_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100u_get_eee;
@@ -31147,8 +31147,8 @@ static int killer_ops_init(struct e3100 *tp)
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= e3100u_hw_phy_cfg;
-		ops->autosuspend_en	= e3100u_runtime_enable;
-		ops->change_mtu		= e3100u_change_mtu;
+		ops->autosuspend_en	= rte3100u_runtime_enable;
+		ops->change_mtu		= rte3100u_change_mtu;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
@@ -31164,8 +31164,8 @@ static int killer_ops_init(struct e3100 *tp)
 		ops->init		= r8156b_init;
 		ops->enable		= rtl8152b_old_enable;
 		ops->disable		= rtl8153_old_disable;
-		ops->up			= e3100u_up;
-		ops->down		= e3100u_down;
+		ops->up			= rte3100u_up;
+		ops->down		= rte3100u_down;
 		ops->unload		= rtl8153_old_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= e3100u_get_eee;
@@ -31173,8 +31173,8 @@ static int killer_ops_init(struct e3100 *tp)
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= r8156b_hw_phy_cfg;
-		ops->autosuspend_en	= e3100u_runtime_enable;
-		ops->change_mtu		= e3100u_change_mtu;
+		ops->autosuspend_en	= rte3100u_runtime_enable;
+		ops->change_mtu		= rte3100u_change_mtu;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 48 * 1024;
@@ -31188,17 +31188,17 @@ static int killer_ops_init(struct e3100 *tp)
 		ops->init		= r8153_oldc_init;
 		ops->enable		= rtl8153_old_enable;
 		ops->disable		= rtl8153_old_disable;
-		ops->up			= rtl8153c_old_up;
+		ops->up			= rtl8153_oldc_up;
 		ops->down		= rtl8153_oldb_down;
-		ops->unload		= rtl8153c_old_unload;
+		ops->unload		= rtl8153_oldc_unload;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 		ops->eee_get		= r8153_old_get_eee;
 		ops->eee_set		= e3100_set_eee;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 		ops->in_nway		= rtl8153_old_in_nway;
 		ops->hw_phy_cfg		= r8153_oldc_hw_phy_cfg;
-		ops->autosuspend_en	= rtl8153c_old_runtime_enable;
-		ops->change_mtu		= rtl8153c_old_change_mtu;
+		ops->autosuspend_en	= rtl8153_oldc_runtime_enable;
+		ops->change_mtu		= rtl8153_oldc_change_mtu;
 		ops->phy_read		= e3100_phy_read;
 		ops->phy_write		= e3100_phy_write;
 		tp->rx_buf_sz		= 32 * 1024;
@@ -31282,7 +31282,7 @@ static u8 __killer_get_hw_ver(struct usb_device *udev)
 
 	for (i = 0, ret = 0; i < 3 && ret != 4; i++)
 		ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-				      e3100_REQ_GET_REGS, e3100_REQT_READ,
+				      RTE3100_REQ_GET_REGS, RTE3100_REQT_READ,
 				      PLA_TCR0, MCU_TYPE_PLA, tmp, sizeof(*tmp),
 				      USB_CTRL_GET_TIMEOUT);
 
@@ -31358,8 +31358,8 @@ static u8 __killer_get_hw_ver(struct usb_device *udev)
 	return version;
 }
 
-u8 e3100_get_version(struct usb_interface *intf);
-u8 e3100_get_version(struct usb_interface *intf)
+u8 rte3100_get_version(struct usb_interface *intf);
+u8 rte3100_get_version(struct usb_interface *intf)
 {
 	u8 version;
 
@@ -31369,9 +31369,9 @@ u8 e3100_get_version(struct usb_interface *intf)
 
 	return version;
 }
-EXPORT_SYMBOL_GPL(e3100_get_version);
+EXPORT_SYMBOL_GPL(rte3100_get_version);
 
-#ifdef e3100_DEBUG
+#ifdef RTE3100_DEBUG
 
 static ssize_t
 ocp_show(struct device *dev, struct device_attribute *attr, char *buf)
@@ -31797,7 +31797,7 @@ static struct attribute_group rtk_dbg_grp = {
 	.bin_attrs = rtk_bin_attrs,
 };
 
-#endif /* e3100_DEBUG */
+#endif /* RTE3100_DEBUG */
 
 static ssize_t temperature_show(struct device *dev,
 				struct device_attribute *attr, char *buf)
@@ -31876,7 +31876,7 @@ static ssize_t rx_copybreak_store(struct device *dev,
 	if (rx_copybreak < ETH_ZLEN)
 		return -EINVAL;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (tp->rx_copybreak != rx_copybreak) {
@@ -31927,7 +31927,7 @@ static ssize_t tx_copybreak_store(struct device *dev,
 	if (tx_copybreak < ETH_ZLEN)
 		return -EINVAL;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (tp->tx_copybreak != tx_copybreak) {
@@ -31970,7 +31970,7 @@ static ssize_t fc_pause_on_store(struct device *dev,
 	u32 pause_on, pause_off, tmp;
 	int ret = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (sscanf(buf, "%u\n", &pause_on) != 1)
@@ -32015,7 +32015,7 @@ static ssize_t fc_pause_on_store(struct device *dev,
 				killer_start_rx(tp);
 				tasklet_enable(&tp->tx_tl);
 				napi_enable(&tp->napi);
-				e3100_set_rx_mode(netdev);
+				rte3100_set_rx_mode(netdev);
 				netif_wake_queue(netdev);
 			}
 		}
@@ -32057,7 +32057,7 @@ static ssize_t fc_pause_off_store(struct device *dev,
 	u32 pause_on, pause_off, tmp;
 	int ret = 0;
 
-	if (test_bit(e3100_UNPLUG, &tp->flags))
+	if (test_bit(RTE3100_UNPLUG, &tp->flags))
 		return -ENODEV;
 
 	if (sscanf(buf, "%u\n", &pause_off) != 1)
@@ -32102,7 +32102,7 @@ static ssize_t fc_pause_off_store(struct device *dev,
 				killer_start_rx(tp);
 				tasklet_enable(&tp->tx_tl);
 				napi_enable(&tp->napi);
-				e3100_set_rx_mode(netdev);
+				rte3100_set_rx_mode(netdev);
 				netif_wake_queue(netdev);
 			}
 		}
@@ -32179,7 +32179,7 @@ static struct attribute_group rtk_adv_grp = {
 	.attrs = rtk_adv_attrs,
 };
 
-static bool e3100_supports_lenovo_macpassthru(struct usb_device *udev)
+static bool rte3100_supports_lenovo_macpassthru(struct usb_device *udev)
 {
 	int parent_vendor_id = le16_to_cpu(udev->parent->descriptor.idVendor);
 	int product_id = le16_to_cpu(udev->descriptor.idProduct);
@@ -32232,10 +32232,10 @@ static void killer_get_mapt_ver(struct e3100 *tp)
 		return;
 	}
 
-	tp->lenovo_macpassthru = e3100_supports_lenovo_macpassthru(udev);
+	tp->lenovo_macpassthru = rte3100_supports_lenovo_macpassthru(udev);
 }
 
-static int e3100_probe(struct usb_interface *intf,
+static int rte3100_probe(struct usb_interface *intf,
 			 const struct usb_device_id *id)
 {
 	struct usb_device *udev = interface_to_usbdev(intf);
@@ -32245,7 +32245,7 @@ static int e3100_probe(struct usb_interface *intf,
 	int ret;
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0)
-	version = e3100_get_version(intf);
+	version = rte3100_get_version(intf);
 	if (version == KILLER_VER_UNKNOWN)
 		return -ENODEV;
 
@@ -32258,7 +32258,7 @@ static int e3100_probe(struct usb_interface *intf,
 	if (!killer_check_vendor_ok(intf))
 		return -ENODEV;
 
-	version = e3100_get_version(intf);
+	version = rte3100_get_version(intf);
 	if (version == KILLER_VER_UNKNOWN)
 		return -ENODEV;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0) */
@@ -32312,24 +32312,24 @@ static int e3100_probe(struct usb_interface *intf,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,3) */
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	netdev->open = e3100_open;
-	netdev->stop = e3100_close;
-	netdev->get_stats = e3100_get_stats;
-	netdev->hard_start_xmit = e3100_start_xmit;
-	netdev->tx_timeout = e3100_tx_timeout;
-	netdev->change_mtu = e3100_change_mtu;
-	netdev->set_mac_address = e3100_set_mac_address;
-	netdev->do_ioctl = e3100_ioctl;
-	netdev->set_multicast_list = e3100_set_rx_mode;
-	netdev->vlan_rx_register = e3100_vlan_rx_register;
+	netdev->open = rte3100_open;
+	netdev->stop = rte3100_close;
+	netdev->get_stats = rte3100_get_stats;
+	netdev->hard_start_xmit = rte3100_start_xmit;
+	netdev->tx_timeout = rte3100_tx_timeout;
+	netdev->change_mtu = rte3100_change_mtu;
+	netdev->set_mac_address = rte3100_set_mac_address;
+	netdev->do_ioctl = rte3100_ioctl;
+	netdev->set_multicast_list = rte3100_set_rx_mode;
+	netdev->vlan_rx_register = rte3100_vlan_rx_register;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	netdev->vlan_rx_kill_vid = e3100_vlan_rx_kill_vid;
+	netdev->vlan_rx_kill_vid = rte3100_vlan_rx_kill_vid;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22) */
 #else
-	netdev->netdev_ops = &e3100_netdev_ops;
+	netdev->netdev_ops = &rte3100_netdev_ops;
 #endif /* HAVE_NET_DEVICE_OPS */
 
-	netdev->watchdog_timeo = e3100_TX_TIMEOUT;
+	netdev->watchdog_timeo = RTE3100_TX_TIMEOUT;
 
 	netdev->features |= NETIF_F_RXCSUM | NETIF_F_IP_CSUM | NETIF_F_SG |
 			    NETIF_F_TSO | NETIF_F_FRAGLIST | NETIF_F_IPV6_CSUM |
@@ -32439,9 +32439,9 @@ static int e3100_probe(struct usb_interface *intf,
 
 	tp->duplex = DUPLEX_FULL;
 
-	tp->rx_copybreak = e3100_RXFG_HEADSZ;
-	tp->tx_copybreak = e3100_TXFG_HEADSZ;
-	tp->rx_pending = 10 * e3100_MAX_RX;
+	tp->rx_copybreak = RTE3100_RXFG_HEADSZ;
+	tp->tx_copybreak = RTE3100_TXFG_HEADSZ;
+	tp->rx_pending = 10 * RTE3100_MAX_RX;
 
 	intf->needs_remote_wakeup = 1;
 
@@ -32487,7 +32487,7 @@ static int e3100_probe(struct usb_interface *intf,
 		goto out3;
 	}
 
-#ifdef e3100_DEBUG
+#ifdef RTE3100_DEBUG
 	ret = sysfs_create_group(&netdev->dev.kobj, &rtk_dbg_grp);
 	if (ret < 0) {
 		netif_err(tp, probe, netdev, "create rtk_dbg_grp fail\n");
@@ -32497,7 +32497,7 @@ static int e3100_probe(struct usb_interface *intf,
 
 	return 0;
 
-#ifdef e3100_DEBUG
+#ifdef RTE3100_DEBUG
 out4:
 	sysfs_remove_group(&netdev->dev.kobj, &rtk_adv_grp);
 #endif
@@ -32514,7 +32514,7 @@ out:
 	return ret;
 }
 
-static void e3100_disconnect(struct usb_interface *intf)
+static void rte3100_disconnect(struct usb_interface *intf)
 {
 	struct e3100 *tp = usb_get_intfdata(intf);
 
@@ -32522,7 +32522,7 @@ static void e3100_disconnect(struct usb_interface *intf)
 	if (tp) {
 		struct net_device *netdev = tp->netdev;
 
-#ifdef e3100_DEBUG
+#ifdef RTE3100_DEBUG
 		sysfs_remove_group(&netdev->dev.kobj, &rtk_dbg_grp);
 #endif
 		sysfs_remove_group(&netdev->dev.kobj, &rtk_adv_grp);
@@ -32551,25 +32551,25 @@ static void e3100_disconnect(struct usb_interface *intf)
 }
 
 /* table of devices that work with this driver */
-static const struct usb_device_id e3100_table[] = {
+static const struct usb_device_id rte3100_table[] = {
 	/* Rivet */
 	KILLER_USB_DEVICE(VENDOR_ID_KILLER, 0x3100),
 
 	{}
 };
 
-MODULE_DEVICE_TABLE(usb, e3100_table);
+MODULE_DEVICE_TABLE(usb, rte3100_table);
 
-static struct usb_driver e3100_driver = {
+static struct usb_driver rte3100_driver = {
 	.name =		MODULENAME,
-	.id_table =	e3100_table,
-	.probe =	e3100_probe,
-	.disconnect =	e3100_disconnect,
-	.suspend =	e3100_suspend,
-	.resume =	e3100_resume,
-	.reset_resume =	e3100_reset_resume,
-	.pre_reset =	e3100_pre_reset,
-	.post_reset =	e3100_post_reset,
+	.id_table =	rte3100_table,
+	.probe =	rte3100_probe,
+	.disconnect =	rte3100_disconnect,
+	.suspend =	rte3100_suspend,
+	.resume =	rte3100_resume,
+	.reset_resume =	rte3100_reset_resume,
+	.pre_reset =	rte3100_pre_reset,
+	.post_reset =	rte3100_post_reset,
 	.supports_autosuspend = 1,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0)
 	.disable_hub_initiated_lpm = 1,
@@ -32577,9 +32577,9 @@ static struct usb_driver e3100_driver = {
 };
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0)
-module_usb_driver(e3100_driver);
+module_usb_driver(rte3100_driver);
 #else
-static int e3100_cfgselector_probe(struct usb_device *udev)
+static int rte3100_cfgselector_probe(struct usb_device *udev)
 {
 	struct usb_host_config *c;
 	int i, num_configs;
@@ -32615,32 +32615,32 @@ static int e3100_cfgselector_probe(struct usb_device *udev)
 	return 0;
 }
 
-static struct usb_device_driver e3100_cfgselector_driver = {
+static struct usb_device_driver rte3100_cfgselector_driver = {
 	.name =		MODULENAME "-cfgselector",
-	.probe =	e3100_cfgselector_probe,
-	.id_table =	e3100_table,
+	.probe =	rte3100_cfgselector_probe,
+	.id_table =	rte3100_table,
 	.generic_subclass = 1,
 	.supports_autosuspend = 1,
 };
 
-static int __init e3100_driver_init(void)
+static int __init rte3100_driver_init(void)
 {
 	int ret;
 
-	ret = usb_register_device_driver(&e3100_cfgselector_driver, THIS_MODULE);
+	ret = usb_register_device_driver(&rte3100_cfgselector_driver, THIS_MODULE);
 	if (ret)
 		return ret;
-	return usb_register(&e3100_driver);
+	return usb_register(&rte3100_driver);
 }
 
-static void __exit e3100_driver_exit(void)
+static void __exit rte3100_driver_exit(void)
 {
-	usb_deregister(&e3100_driver);
-	usb_deregister_device_driver(&e3100_cfgselector_driver);
+	usb_deregister(&rte3100_driver);
+	usb_deregister_device_driver(&rte3100_cfgselector_driver);
 }
 
-module_init(e3100_driver_init);
-module_exit(e3100_driver_exit);
+module_init(rte3100_driver_init);
+module_exit(rte3100_driver_exit);
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,7,0) */
 
 MODULE_AUTHOR(DRIVER_AUTHOR);

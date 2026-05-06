@@ -1,4 +1,4 @@
-# This is used to change the default configuration of the Intel Killer E3100U Ethernet USB adapter
+# This is used to change the default configuration(s) of the(se) Intel Killer E3100/U Ethernet USB adapter(s)
 
 ACTION!="add", GOTO="usb_killer_net_end"
 SUBSYSTEM!="usb", GOTO="usb_killer_net_end"
