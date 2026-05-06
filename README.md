@@ -79,3 +79,4 @@ GPL-2 on Realtek driver, the debian packaging and this derived project.
 ## References
 
 - [Realtek r8152 driver downloads](https://www.realtek.com/Download/List?cate_id=585)
+- https://community.intel.com/t5/Ethernet-Products/Question-about-Killer-E3100U-driver-version-in-Device-Manager/m-p/1513286
