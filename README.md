@@ -30,13 +30,13 @@ Installation using the Debian package is recommended for the sake of getting the
 
 Download the latest Debian package from the Release tab on the Github repository.
 
-Then enter the following command.
+Then enter the following command:
 
 ```bash
 sudo dpkg -i killer-e3100-dkms-*.deb
 ```
 
-If dependency error occurs, try to fix that with `apt` command.
+If dependency error occurs, try to fix that with `apt` command:
 
 ```bash
 sudo apt install --fix-broken
@@ -46,7 +46,7 @@ sudo apt install --fix-broken
 
 Using the `autorun.sh` script that Realtek provides on their original driver package. This is **not installed as a DKMS**, only efforts to the current kernel.
 
-Download or clone this repository and move to the extracted directory, then run the script.
+Download or clone this repository and move to the extracted directory, then run the script:
 
 ```bash
 sudo ./autorun.sh
@@ -56,7 +56,7 @@ sudo ./autorun.sh
 
 This script is from aircrack-ng team. You can install the DKMS module by a simple command.
 
-Download or clone this repository and move to the extracted directory, then run the script.
+Download or clone this repository and move to the extracted directory, then run the script:
 
 ```bash
 sudo ./dkms-install.sh
@@ -64,7 +64,7 @@ sudo ./dkms-install.sh
 
 ## Debian package build
 
-You can build yourself this after installing some dependencies including `dkms`.
+You can build yourself this after installing some dependencies including `dkms`:
 
 ```bash
 sudo apt install devscripts debmake debhelper build-essential dkms dh-dkms
