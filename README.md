@@ -8,7 +8,7 @@ This provides the Killer E3100/U (Rebranded Realtek RTL8156/B) driver in DKMS wa
 
 ## Compatibility
 
-The e3100u driver support this USB Ethernet chipset.
+The E3100/U driver support this USB Ethernet chipset.
 
 Chipset          | Interface       | Performance
 :----------------|:---------------:|:----------------:
