@@ -12,7 +12,9 @@ The E3100/U driver support this USB Ethernet chipset.
 
 Chipset          | Interface       | Performance
 :----------------|:---------------:|:----------------:
-Killer E3100U    | USB 3.1         | 2.5 GbE
+Killer E3100U    | USB 3.1         | 2.5 GbE*
+
+_*Compared to the cdc_ncm driver_
 
 ## Installation
 
