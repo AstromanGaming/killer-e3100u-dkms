@@ -12,7 +12,7 @@ The E3100/U driver support this USB Ethernet chipset:
 
 Chipset          | Interface       |  Speed  | Estimated Performance |   Real Performance
 :----------------|:---------------:|:-------:|:---------------------:|:---------------------:
-Killer E3100U    | USB 3.1         | 2.5 GbE |    ~0.8-1.3 Gbit/s*   |    ~2.2-2.4 Gbit/s**
+Killer E3100U    | USB 3.1         | 2.5 GbE |    ~0.8-1.9 Gbit/s*   |    ~2.2-2.4 Gbit/s**
 
 _* If it were on the cdc_ncm driver_
 
